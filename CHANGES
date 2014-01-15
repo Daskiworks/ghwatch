@@ -1,9 +1,10 @@
-v1.1 (TODO)
-- List of repositories unread notifications are available for is shown in navigation drawer (small devices) or left side panel (large devices)
-- Listed repository can be selected to show notifications from it only
-- Show 'updated_at' timestamp for GitHub notification in notifications list
-- Progress dialog shown when notification view URL is loaded from GitHub server can be cancelled now by back button
-- Various small GUI improvements (info text show and hidden some actions if no notifications available etc.)
+v1.1 (Jan 15, 2014)
+- List of repositories unread notifications are available for is shown in navigation drawer (small devices) or left side panel (large devices, tablets).
+- Repository may be selected to filter notifications.
+- All unread notifications from selected repository may be marked as read. 
+- Show 'updated_at' timestamp for GitHub notification in notifications list.
+- Progress dialog shown when notification view URL is loaded from GitHub server can be cancelled now by back button.
+- Various small GUI improvements (info text show and some actions are hidden if no notifications available etc.).
 
 v1.0 (Jan 2, 2014)
 - first release with basic features
