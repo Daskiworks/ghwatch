@@ -1,3 +1,8 @@
+v1.2 (unreleased yet)
+- List of Watched repositories, show or unwatch repository from list
+- Show GitHub API request info in Preferences
+- Minor bugfix and info text improvements
+
 v1.1 (Jan 15, 2014)
 - List of repositories unread notifications are available for is shown in navigation drawer (small devices) or left side panel (large devices, tablets).
 - Repository may be selected to filter notifications.
