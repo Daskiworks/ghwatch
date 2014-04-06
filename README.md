@@ -34,7 +34,7 @@ Main features
   
 *Unread notifications list view*
 
-* Shows list of unread GitHub notifications
+* Shows list of unread GitHub notifications - **improved in 1.3**
 * Swipe right to mark notification as read
 * Click notification to view details - Detail informations are shown by GitHub web (which is mobile friendly) or using GitHub android application, so you see all necessary details and performs distinct actions (eg. reply in discussions etc.) directly.
 * Shows list of repositories some notifications are available for with notifications count
@@ -44,15 +44,25 @@ Main features
 * Mark all unread notifications from selected repository as read by one action
 * Manually refresh unread notifications list from server
 
-*Watched repositories list view* - **new in 1.2**
+*Watched repositories list view*
 
 * Shows list of repositories watched on GitHub
 * Click repository to view details - Detail informations are shown by GitHub web (which is mobile friendly) or using GitHub android application, so you see all necessary details and performs distinct actions directly.
 * Context menu to Unwatch repository
 * Manually refresh list of watched repositories from server
 
-*GitHub API request info* - **new in 1.2**
+*GitHub API request info*
 
 * Available from Preferences
 * Shows info about GitHub API limit (limit, remaining, reset timestamp)
 * Shows info about last GitHub API call 
+
+*Support GH::watch Development dialog* - **new in 1.3**
+
+Dialog where you can take some actions to support GH::watch development:
+
+* Rate app in Google Play
+* Share App info over social media
+* Donate small amount to the developer - In App payment
+* Report a Bug
+* Add Feature request 

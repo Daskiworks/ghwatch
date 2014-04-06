@@ -1,3 +1,7 @@
+v1.3 (Apr 6th, 2014)
+- Show notification reason in list (subscribed, mentioned, participating)
+- 'Support Development' dialog (InApp billing perm)  
+
 v1.2 (Mar 15th, 2014)
 - List of Watched repositories with possibility to show or unwatch repository
 - GitHub API request info shown in Preferences
