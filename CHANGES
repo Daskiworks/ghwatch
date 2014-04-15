@@ -1,3 +1,7 @@
+v1.4 (Apr 15th, 2014)
+- patched Back button on initial Login dialog. Thanks Lukas Koranda for report.
+- other small improvements
+
 v1.3 (Apr 6th, 2014)
 - Show notification reason in list (subscribed, mentioned, participating)
 - 'Support Development' dialog (InApp billing perm)  
