@@ -1,6 +1,7 @@
-v1.5 (ToDo)
-- added 'Notification filter' which allows you to reduce number of fired android notifications - configurable on global and per repository basis.
-- other small GUI improvements
+v1.5 (May 3rd, 2014)
+- added 'Notification filter' which allows you to reduce number of fired android notifications 
+  based on reason you received them (Everything, Participating only, Nothing). It is configurable 
+  in global Preferences and can be overridden on 'Per watched repository' basis in 'Watched Repositories' view.
 
 v1.4 (Apr 15th, 2014)
 - patched Back button on initial Login dialog. Thanks Lukas Koranda for report.
