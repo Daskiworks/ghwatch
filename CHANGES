@@ -1,3 +1,7 @@
+v1.6 (May 17th, 2014)
+- background check for new notifications do full update once a hour (instead of optimized incremental update) to get 
+  around current problem with GitHub API, when incremental update doesn't return any changes even if any exist.
+
 v1.5 (May 3rd, 2014)
 - added 'Notification filter' which allows you to reduce number of fired android notifications 
   based on reason you received them (Everything, Participating only, Nothing). It is configurable 

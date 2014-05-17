@@ -29,7 +29,7 @@ Main features
 ###New GitHub notification detection
 
 * Configurable pooling interval
-* GitHub API limit saving pooling method used
+* GitHub API limit saving pooling method used (with full check once a hour to prevent problems) - **improved in 1.6**
 
 ###Android notification
 * Android notification is fired when new unread GithHub notification is detected
