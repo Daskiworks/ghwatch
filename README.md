@@ -21,13 +21,11 @@ Main features
 -------------
 
 ###Authentication
-
 * OAuth used
 * No GithHub password stored on device
 * You can revoke access from GitHub website at any time
 
 ###New GitHub notification detection
-
 * Configurable pooling interval
 * GitHub API limit saving pooling method used (with full check once a hour to prevent problems) - **improved in 1.6**
 
@@ -35,14 +33,20 @@ Main features
 * Android notification is fired when new unread GithHub notification is detected
 * Notifications filter can be set in global Preferences and 'per watched repository' level. 
   This allows you to flexibly configure which type of GitHub notifications will be 
-  fired as Android notifications. Available types are 'everything', 'participating only', 'nothing'. - **new in 1.5**    
+  fired as Android notifications. Available types are 'everything', 'participating only', 'nothing'.    
 * Can be disabled at all
 * Configurable sound
 * Configurable vibration
 * Inbox style Big view when more GitHub notifications available
   
+###Homescreen and Lockscreen widget
+**New in 1.7**
+* Shows number of unread Github notifications
+* Number is highlighted if there are some new unread notifications from your last view of app. So you can use widget as less obtrusive 
+  way instead of Android notifications.
+* Resizeable  
+  
 ###Unread notifications list view
-
 * Shows list of unread GitHub notifications
 * Shows notification type (Issue, Pull Request, ...) 
 * Shows reason why you received notification (subscribed, author, comment, ...)
@@ -58,7 +62,6 @@ Main features
 * Manually refresh unread notifications list from server
 
 ###Watched repositories list view
-
 * Shows list of repositories you watch on GitHub
 * Click repository to view details - Detail informations are shown 
   by GitHub web (which is mobile friendly) or using GitHub android 
@@ -66,19 +69,23 @@ Main features
 * Context menu to Unwatch repository
 * Manually refresh list of watched repositories from server
 * Notification Filter shown for each repository, you can overwrite 
-  globally set filter on per repository basis there - **new in 1.5**
+  globally set filter on per repository basis there
 
 ###GitHub API request info
-
 * Available from Preferences
 * Shows info about GitHub API limit (limit, remaining, reset timestamp)
 * Shows info about last GitHub API call 
 
 ###Support GH::watch Development dialog
-
 * Dialog where you can take some actions to support GH::watch development
   * Rate app in Google Play
   * Share App info over social media
   * Donate small amount to the developer - In App payment
   * Report a Bug
-  * Add Feature request 
+  * Add Feature request
+  
+Changelog
+---------
+
+See [CHANGES](CHANGES) file content.
+   

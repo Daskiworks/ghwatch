@@ -1,3 +1,8 @@
+v1.7
+- added homescreen and lockscreen widget showing number of unread Github notifications. Number is highlighted 
+  if there are some new unread notifications from your last view of app. So you can use this as less obtrusive 
+  way instead of Android notifications.
+
 v1.6 (May 17th, 2014)
 - background check for new notifications do full update once a hour (instead of optimized incremental update) to get 
   around current problem with GitHub API, when incremental update doesn't return any changes even if any exist.
