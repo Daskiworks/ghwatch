@@ -1,4 +1,4 @@
-v1.7
+v1.7 (May 24th, 2014)
 - added homescreen and lockscreen widget showing number of unread Github notifications. Number is highlighted 
   if there are some new unread notifications from your last view of app. So you can use this as less obtrusive 
   way instead of Android notifications.
