@@ -24,10 +24,12 @@ Main features
 * OAuth used
 * No GithHub password stored on device
 * You can revoke access from GitHub website at any time
+* Support for GitHub two-factor authentication - **new in 1.8**
+* Info about logged in user in navigation drawer - **new in 1.8**
 
 ###New GitHub notification detection
 * Configurable pooling interval
-* GitHub API limit saving pooling method used (with full check once a hour to prevent problems) - **improved in 1.6**
+* GitHub API limit saving pooling method used (with full check once a six hours to prevent problems) - **changed in 1.8**
 
 ###Android notification
 * Android notification is fired when new unread GithHub notification is detected
@@ -40,7 +42,6 @@ Main features
 * Inbox style Big view when more GitHub notifications available
   
 ###Homescreen and Lockscreen widget
-**New in 1.7**
 * Shows number of unread Github notifications
 * Number is highlighted if there are some new unread notifications from your last view of app. So you can use widget as less obtrusive 
   way instead of Android notifications.
