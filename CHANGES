@@ -1,3 +1,9 @@
+v1.9 (TODO)
+- android notification now contains action to directly mark GitHub notification as read
+- unread notifications counter in widget decreases if notif has been read on other devices (check once a 6 hours only to save battery and data plan), thx squilter for report
+- click on widget/notification opens list of unread notifications always 
+- no animation between StartActivity and MainActivity if user is logged in already 
+
 v1.8 (Aug 26th, 2014)
 - support for GitHub two-factor authentication 
 - updated more colorful app design
