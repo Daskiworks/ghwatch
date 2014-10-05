@@ -89,7 +89,7 @@ Main features
 Changelog
 ---------
 
-See [CHANGES](CHANGES) file content.
+See [CHANGES.md](CHANGES.md) file content.
 
 License for source code
 -----------------------
