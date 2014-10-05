@@ -1,3 +1,13 @@
 .project
+
 /.README.md.html
+
 /.CHANGES.md.html
+
+/bin
+
+/gen
+
+/local.properties 
+/.DEVEL_RELEASE_STEPS.md.html
+/.DEVEL_NOTES.md.html
