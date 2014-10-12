@@ -16,6 +16,7 @@
 package com.daskiworks.ghwatch;
 
 import android.app.ActionBar;
+import android.app.backup.BackupManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -50,9 +51,13 @@ public class SettingsActivity extends ActivityBase implements OnSharedPreference
   private SettingsFragment sf = null;
   AuthenticationManager authenticationManager;
 
+  private BackupManager mBackupManager;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    mBackupManager = new BackupManager(this);
     // Display the fragment as the main content.
     sf = new SettingsFragment();
     getFragmentManager().beginTransaction().replace(android.R.id.content, sf).commit();
@@ -110,7 +115,7 @@ public class SettingsActivity extends ActivityBase implements OnSharedPreference
       notifFilterPref.setSummary(notifFilterPref.getEntry());
       ActivityTracker.sendEvent(this, ActivityTracker.CAT_PREF, "notif_filter", notifFilterPref.getEntry().toString(), 0L);
     }
-
+    mBackupManager.dataChanged();
   }
 
   public static class SettingsFragment extends PreferenceFragment {

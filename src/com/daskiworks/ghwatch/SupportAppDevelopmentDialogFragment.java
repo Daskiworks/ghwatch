@@ -20,6 +20,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.PendingIntent;
+import android.app.backup.BackupManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -55,6 +56,7 @@ public class SupportAppDevelopmentDialogFragment extends DialogFragment {
     long lastShowTimestamp = PreferencesUtils.getLong(activity, SupportAppDevelopmentDialogFragment.PREF_LAST_SUPPORT_SHOW_TIMESTAMP, 0);
     if (lastShowTimestamp == 0) {
       storeTimestampOfLastShow(activity, System.currentTimeMillis() - (AUTO_SHOW_PERIOD - AUTO_SHOW_FIRST));
+      (new BackupManager(activity)).dataChanged();
     } else {
       return lastShowTimestamp <= (System.currentTimeMillis() - AUTO_SHOW_PERIOD);
     }

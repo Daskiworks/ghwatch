@@ -31,9 +31,14 @@
 
     <application
         android:allowBackup="true"
+        android:backupAgent="MyBackupAgent"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        
+        <meta-data android:name="com.google.android.backup.api_key"
+            android:value="AEdPqrEAAAAIWtyxxTQi0HXwj-q98ZaWCgU34m9nxI35NXxUHQ" />
+        
         <activity android:name=".StartActivity" android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

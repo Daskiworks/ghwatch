@@ -15,6 +15,7 @@
  */
 package com.daskiworks.ghwatch.backend;
 
+import android.app.backup.BackupManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -67,6 +68,20 @@ public class PreferencesUtils {
   }
 
   /**
+   * Patch preferences after restored from cloud - remove preferences which shouldn't be restored on new device.
+   * 
+   * @param context
+   */
+  public static void patchAfterRestore(Context context) {
+    SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(context);
+    SharedPreferences.Editor editor = wmbPreference.edit();
+    editor.remove(PREF_WIDGET_UNREAD_EXISTS);
+    editor.remove(PREF_WIDGET_UNREAD_HIGHLIGHT);
+    editor.remove(PREF_SERVER_ACCOUNT);
+    editor.commit();
+  }
+
+  /**
    * Read Notification Filter setting for defined repository.
    * 
    * @param context to read preference over
@@ -105,6 +120,7 @@ public class PreferencesUtils {
    */
   public static void setNotificationFilterForRepository(Context context, String repositoryName, String value) {
     storeString(context, getNotificationFilterRepositoryPrefName(repositoryName), value);
+    (new BackupManager(context)).dataChanged();
   }
 
   protected static String getNotificationFilterRepositoryPrefName(String repositoryName) {

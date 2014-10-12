@@ -16,6 +16,7 @@
 package com.daskiworks.ghwatch;
 
 import android.app.Activity;
+import android.app.backup.BackupManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -57,6 +58,7 @@ public class StartActivity extends Activity implements LoginDialogListener {
       editor.putBoolean("FIRSTRUN", false);
       editor.putLong("FIRSTRUNTIMESTAMP", System.currentTimeMillis());
       editor.commit();
+      (new BackupManager(this)).dataChanged();
     }
 
     if (AuthenticationManager.getInstance().loadCurrentUser(this) != null) {
