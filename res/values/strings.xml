@@ -26,7 +26,7 @@
     <string name="action_all_read">Mark Everything as Read</string>
     <string name="action_mark_read">Mark as Read</string>
     <string name="action_view">View</string>
-    <string name="action_mute_thread">Mute Thread</string>
+    <string name="action_mute_thread">Unsubscribe</string>
     <string name="action_unwatch">Unwatch</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_ok">OK</string>
@@ -87,7 +87,7 @@
     <string name="message_confirm_notifications_all_mark_read">Do you really want to mark all GitHub notifications as read? This can\'t be undone!\n\nYou can mark particular notification as read by swiping it out to the right.</string>
     <string name="message_confirm_notifications_all_mark_read_repo">Do you really want to mark all GitHub notifications from selected Repository as read? This can\'t be undone!\n\nYou can mark particular notification as read by swiping it out to the right.</string>
     <string name="message_notification_marked_read">Notification marked as read on GitHub server successfuly.</string>
-    <string name="message_notification_thread_muted">Notification thread muted on GitHub server successfuly.</string>
+    <string name="message_notification_thread_muted">Notification thread unsubscribed on GitHub server successfuly.</string>
     <string name="message_notifications_all_marked_read">All notifications marked as read on GitHub server successfuly.</string>
     <string name="progress_get_view_url_title">Loading view URL from server</string>
 
