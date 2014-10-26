@@ -1,7 +1,7 @@
 GH::watch changelog
 ===================
 
-## v1.10 (ToDo)
+## v1.10 (Oct 26th, 2014)
 - #45 - "Pull to refresh" patter used for lists of unread notifications an watched repositories 
 - #42 - backup app settings in the cloud to be restored after device reset or on new device 
 - small texts polishing
