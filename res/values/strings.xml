@@ -81,7 +81,7 @@
 
     <!-- Notifications list page -->
     <string name="notifications_list_title">Unread Notifications</string>
-    <string name="message_no_unread_notifications">No any unread notifications available. Do you watch any GitHub Repository? Pull down to refresh.</string>
+    <string name="message_no_unread_notifications">No any unread notifications available. Pull down to refresh.</string>
     <string name="message_staled_data">Displayed data may be staled!</string>
     <string name="message_confirm_notifications_all_mark_read_title">Mark all notifications as read?</string>
     <string name="message_confirm_notifications_all_mark_read">Do you really want to mark all GitHub notifications as read? This can\'t be undone!\n\nYou can mark particular notification as read by swiping it out to the right.</string>
