@@ -106,20 +106,21 @@
             android:orientation="horizontal" >
 
             <Button
-                android:id="@+id/button_feature"
-                style="?android:attr/button"
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:text="@string/dialog_sad_button_feature" />
-
-            <Button
                 android:id="@+id/button_bug"
                 style="?android:attr/button"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:text="@string/dialog_sad_button_bug" />
+            
+            <Button
+                android:id="@+id/button_src"
+                style="?android:attr/button"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:text="@string/dialog_sad_button_src" />
+            
         </LinearLayout>
 
     </LinearLayout>

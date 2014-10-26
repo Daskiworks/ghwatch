@@ -169,8 +169,8 @@
     
     <!-- Support App Development dialog -->
     <string name="dialog_sad_title">Support Development</string>
-    <string name="dialog_sad_button_close">No, Thanks</string>
-    <string name="dialog_sad_intro_text">You can consider these possibilities to support development of the application if GH::watch seems useful to you. Thanks in advance.</string>
+    <string name="dialog_sad_button_close">Not now, Thanks</string>
+    <string name="dialog_sad_intro_text">Do you like this app? Support its development please. Thanks in advance.</string>
     <string name="dialog_sad_title_social">Spread the world</string>
     <string name="dialog_sad_button_rate">Rate in Google Play</string>
     <string name="dialog_sad_button_share">Share App Info</string>
@@ -181,8 +181,8 @@
     <string name="message_err_billing_unavailable">Sorry, but billing service is not available.</string>
     <string name="message_err_billing_error">Sorry, but billing service doesn\'t work properly.</string>
     <string name="dialog_sad_title_participate">Participate in Development</string>
-    <string name="dialog_sad_button_bug">Bug Report</string>
-    <string name="dialog_sad_button_feature">Feature Request</string>
+    <string name="dialog_sad_button_bug">Bug Report or Feature Request</string>
+    <string name="dialog_sad_button_src">Contribute to the source code</string>
     
     
     <!-- About dialog -->

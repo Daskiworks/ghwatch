@@ -151,12 +151,12 @@ public class SupportAppDevelopmentDialogFragment extends DialogFragment {
       }
     });
 
-    view.findViewById(R.id.button_feature).setOnClickListener(new View.OnClickListener() {
+    view.findViewById(R.id.button_src).setOnClickListener(new View.OnClickListener() {
 
       @Override
       public void onClick(View v) {
-        ActivityTracker.sendEvent(getActivity(), ActivityTracker.CAT_UI, "app_support_feature", null, 0L);
-        openBrowser("https://github.com/Daskiworks/ghwatch/issues");
+        ActivityTracker.sendEvent(getActivity(), ActivityTracker.CAT_UI, "app_support_sourcecode", null, 0L);
+        openBrowser("https://github.com/Daskiworks/ghwatch");
       }
 
     });
@@ -165,7 +165,7 @@ public class SupportAppDevelopmentDialogFragment extends DialogFragment {
 
       @Override
       public void onClick(View v) {
-        ActivityTracker.sendEvent(getActivity(), ActivityTracker.CAT_UI, "app_support_bug", null, 0L);
+        ActivityTracker.sendEvent(getActivity(), ActivityTracker.CAT_UI, "app_support_bug_feature", null, 0L);
         openBrowser("https://github.com/Daskiworks/ghwatch/issues");
       }
 
