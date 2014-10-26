@@ -183,6 +183,9 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
     }
   }
 
+  /**
+   * Called when "Swipe to refresh" is finished.
+   */
   @Override
   public void onRefresh() {
     ActivityTracker.sendEvent(this, ActivityTracker.CAT_UI, "unread_notifications_refresh", "", 0L);
@@ -341,6 +344,7 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
         dataLoader = null;
         swipeLayout.setRefreshing(false);
         swipeLayout2.setRefreshing(false);
+        invalidateOptionsMenu();
       }
     }
   }
