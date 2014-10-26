@@ -211,16 +211,17 @@ public class WatchedRepositoriesActivity extends ActivityBase implements LoginDi
           }
 
           if (viewData.repositories.size() == 0) {
-            findViewById(R.id.list_empty_text).setVisibility(View.VISIBLE);
+            swipeLayout2.setVisibility(View.VISIBLE);
             swipeLayout.setVisibility(View.GONE);
           } else {
-            findViewById(R.id.list_empty_text).setVisibility(View.GONE);
+            swipeLayout2.setVisibility(View.GONE);
             swipeLayout.setVisibility(View.VISIBLE);
           }
         }
       } finally {
         dataLoader = null;
         swipeLayout.setRefreshing(false);
+        swipeLayout2.setRefreshing(false);
       }
     }
   }

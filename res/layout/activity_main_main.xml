@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2014 contributors as indicated by the @authors tag.
+<!--
+   Copyright 2014 contributors as indicated by the @authors tag.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -12,30 +13,45 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
- -->
- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+-->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
     <android.support.v4.widget.SwipeRefreshLayout
-	    xmlns:android="http://schemas.android.com/apk/res/android"
-	    android:id="@+id/swipe_container"
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent">
-	    <ListView
-	        android:id="@+id/list"
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent" >
-	    </ListView>
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipe_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+        </ListView>
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <TextView
-        android:id="@+id/list_empty_text"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:gravity="center"
-        android:text="@string/message_no_unread_notifications"
-        android:visibility="gone" />
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipe_container_2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" >
+
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:padding="16dp" >
+
+            <TextView
+                android:id="@+id/list_empty_text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/message_no_unread_notifications" />
+        </ScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

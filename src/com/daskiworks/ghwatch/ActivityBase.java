@@ -77,6 +77,7 @@ public abstract class ActivityBase extends Activity {
    * Swipe layout support. A {@link #initSwipeLayout(OnRefreshListener)} must be called in {@link #onCreate(Bundle)} of activity.
    */
   protected SwipeRefreshLayout swipeLayout;
+  protected SwipeRefreshLayout swipeLayout2;
 
   /**
    * Init SwipeRefreshLayout in the activity. A {@link #swipeLayout} is filled with object.
@@ -85,8 +86,17 @@ public abstract class ActivityBase extends Activity {
    */
   protected void initSwipeLayout(OnRefreshListener listener) {
     swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
-    swipeLayout.setOnRefreshListener(listener);
-    swipeLayout.setColorSchemeResources(android.R.color.holo_red_light, R.color.apptheme_color, android.R.color.holo_orange_light, R.color.apptheme_color);
+    if (swipeLayout != null) {
+      swipeLayout.setOnRefreshListener(listener);
+      swipeLayout.setColorSchemeResources(android.R.color.holo_red_light, R.color.apptheme_color, android.R.color.holo_orange_light, R.color.apptheme_color);
+    }
+
+    swipeLayout2 = (SwipeRefreshLayout) findViewById(R.id.swipe_container_2);
+    if (swipeLayout2 != null) {
+      swipeLayout2.setOnRefreshListener(listener);
+      swipeLayout2.setColorSchemeResources(android.R.color.holo_red_light, R.color.apptheme_color, android.R.color.holo_orange_light, R.color.apptheme_color);
+    }
+
   }
 
   /**
