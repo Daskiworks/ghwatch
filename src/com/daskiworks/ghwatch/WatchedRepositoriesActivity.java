@@ -15,24 +15,18 @@
  */
 package com.daskiworks.ghwatch;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.ListView;
 
 import com.daskiworks.ghwatch.LoginDialogFragment.LoginDialogListener;
@@ -51,15 +45,13 @@ import com.daskiworks.ghwatch.model.WatchedRepositoriesViewData;
  * @author Vlastimil Elias <vlastimil.elias@worldonline.cz>
  * 
  */
-public class WatchedRepositoriesActivity extends ActivityBase implements LoginDialogListener {
+public class WatchedRepositoriesActivity extends ActivityBase implements LoginDialogListener, OnRefreshListener {
 
   private static final String TAG = WatchedRepositoriesActivity.class.getSimpleName();
 
   // common fields
   private DataLoaderTask dataLoader;
 
-  // view components
-  private Menu mainMenu;
   private ListView repositoriesListView;
   private WatchedRepositoryListAdapter repositoriesListAdapter;
 
@@ -77,11 +69,14 @@ public class WatchedRepositoriesActivity extends ActivityBase implements LoginDi
     imageLoader = ImageLoader.getInstance(getApplicationContext());
     watchedRepositoriesService = new WatchedRepositoriesService(getBaseContext());
 
-    navigationDrawerInit(NAV_DRAWER_ITEM_WATCHED_REPOS);
+    initNavigationDrawer(NAV_DRAWER_ITEM_WATCHED_REPOS);
 
     // initialization of main content
     repositoriesListView = (ListView) findViewById(R.id.list);
     repositoriesListView.setVerticalFadingEdgeEnabled(true);
+
+    initSwipeLayout(this);
+
     ActivityTracker.sendView(this, TAG);
   }
 
@@ -96,11 +91,8 @@ public class WatchedRepositoriesActivity extends ActivityBase implements LoginDi
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    mainMenu = menu;
     MenuInflater inflater = getMenuInflater();
     inflater.inflate(R.menu.watched_repos_activity_actions, menu);
-    if (dataLoader != null)
-      animateRefreshButton();
     return super.onCreateOptionsMenu(menu);
   }
 
@@ -113,6 +105,12 @@ public class WatchedRepositoriesActivity extends ActivityBase implements LoginDi
   }
 
   @Override
+  public void onRefresh() {
+    ActivityTracker.sendEvent(this, ActivityTracker.CAT_UI, "watched_repositories_refresh", "", 0L);
+    refreshList(ViewDataReloadStrategy.ALWAYS, false);
+  }
+
+  @Override
   public boolean onOptionsItemSelected(MenuItem item) {
 
     if (super.onOptionsItemSelected(item)) {
@@ -120,10 +118,6 @@ public class WatchedRepositoriesActivity extends ActivityBase implements LoginDi
     }
 
     switch (item.getItemId()) {
-    case R.id.action_refresh:
-      refreshList(ViewDataReloadStrategy.ALWAYS, false);
-      ActivityTracker.sendEvent(this, ActivityTracker.CAT_UI, "watched_repositories_refresh", "", 0L);
-      return true;
     default:
       return false;
     }
@@ -132,22 +126,6 @@ public class WatchedRepositoriesActivity extends ActivityBase implements LoginDi
   public void refreshList(ViewDataReloadStrategy reloadStrateg, boolean supressErrorMessages) {
     if (dataLoader == null)
       (dataLoader = new DataLoaderTask(reloadStrateg, supressErrorMessages)).execute();
-  }
-
-  @SuppressLint("InflateParams")
-  protected void animateRefreshButton() {
-    if (mainMenu != null) {
-      MenuItem item = mainMenu.findItem(R.id.action_refresh);
-      if (item != null && item.getActionView() == null) {
-        LayoutInflater inflater = (LayoutInflater) getApplication().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        ImageView iv = (ImageView) inflater.inflate(R.layout.action_refresh_rotate, null);
-        iv.setScaleType(ScaleType.CENTER);
-        Animation rotation = AnimationUtils.loadAnimation(this, R.anim.refresh_rotate);
-        rotation.setRepeatCount(Animation.INFINITE);
-        iv.startAnimation(rotation);
-        item.setActionView(iv);
-      }
-    }
   }
 
   private final class RepositoriesListItemMenuClickListener implements WatchedRepositoryListAdapter.OnItemMenuClickedListener {
@@ -204,7 +182,7 @@ public class WatchedRepositoriesActivity extends ActivityBase implements LoginDi
     @Override
     protected void onPreExecute() {
       super.onPreExecute();
-      animateRefreshButton();
+      swipeLayout.setRefreshing(true);
     }
 
     @Override
@@ -234,22 +212,15 @@ public class WatchedRepositoriesActivity extends ActivityBase implements LoginDi
 
           if (viewData.repositories.size() == 0) {
             findViewById(R.id.list_empty_text).setVisibility(View.VISIBLE);
-            repositoriesListView.setVisibility(View.GONE);
+            swipeLayout.setVisibility(View.GONE);
           } else {
             findViewById(R.id.list_empty_text).setVisibility(View.GONE);
-            repositoriesListView.setVisibility(View.VISIBLE);
+            swipeLayout.setVisibility(View.VISIBLE);
           }
         }
       } finally {
         dataLoader = null;
-        if (mainMenu != null) {
-          MenuItem item = mainMenu.findItem(R.id.action_refresh);
-          if (item != null && item.getActionView() != null) {
-            item.getActionView().clearAnimation();
-            item.setActionView(null);
-          }
-        }
-        invalidateOptionsMenu();
+        swipeLayout.setRefreshing(false);
       }
     }
   }
@@ -258,7 +229,6 @@ public class WatchedRepositoriesActivity extends ActivityBase implements LoginDi
 
     @Override
     protected BaseViewData doInBackground(Long... params) {
-
       return watchedRepositoriesService.unwatchRepository(params[0]);
     }
 

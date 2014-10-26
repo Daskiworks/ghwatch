@@ -15,28 +15,22 @@
  */
 package com.daskiworks.ghwatch;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -58,7 +52,7 @@ import com.daskiworks.ghwatch.model.StringViewData;
  * @author Vlastimil Elias <vlastimil.elias@worldonline.cz>
  * 
  */
-public class MainActivity extends ActivityBase implements LoginDialogListener {
+public class MainActivity extends ActivityBase implements LoginDialogListener, OnRefreshListener {
 
   private static final String STATE_FILTER_REPOSITORY = "STATE_FILTER_REPOSITORY";
 
@@ -71,7 +65,6 @@ public class MainActivity extends ActivityBase implements LoginDialogListener {
   private DataLoaderTask dataLoader;
 
   // view components
-  private Menu mainMenu;
   private ListView notificationsListView;
   private NotificationListAdapter notificationsListAdapter;
 
@@ -98,7 +91,7 @@ public class MainActivity extends ActivityBase implements LoginDialogListener {
     imageLoader = ImageLoader.getInstance(getApplicationContext());
     unreadNotificationsService = new UnreadNotificationsService(getBaseContext());
 
-    navigationDrawerInit(NAV_DRAWER_ITEM_UNREAD_NOTIF);
+    initNavigationDrawer(NAV_DRAWER_ITEM_UNREAD_NOTIF);
 
     repositoriesListView = (ListView) findViewById(R.id.repositories_list);
     repositoriesListView.setOnItemClickListener(new RepositoriesListItemClickListener());
@@ -111,6 +104,9 @@ public class MainActivity extends ActivityBase implements LoginDialogListener {
     // Setting this scroll listener is required to ensure that during ListView scrolling,
     // we don't look for swipes.
     notificationsListView.setOnScrollListener(touchListener.makeScrollListener());
+
+    initSwipeLayout(this);
+
     ActivityTracker.sendView(this, TAG);
   }
 
@@ -144,11 +140,8 @@ public class MainActivity extends ActivityBase implements LoginDialogListener {
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    mainMenu = menu;
     MenuInflater inflater = getMenuInflater();
     inflater.inflate(R.menu.main_activity_actions, menu);
-    if (dataLoader != null)
-      animateRefreshButton();
     MenuItem mi = menu.findItem(R.id.action_notifCheck);
     if (mi != null) {
       mi.setVisible(GHConstants.DEBUG);
@@ -177,10 +170,6 @@ public class MainActivity extends ActivityBase implements LoginDialogListener {
     }
 
     switch (item.getItemId()) {
-    case R.id.action_refresh:
-      refreshList(ViewDataReloadStrategy.ALWAYS, false);
-      ActivityTracker.sendEvent(this, ActivityTracker.CAT_UI, "unread_notifications_refresh", "", 0L);
-      return true;
     case R.id.action_all_read:
       showMarkAllNotificationsAsReadDialog();
       return true;
@@ -194,26 +183,15 @@ public class MainActivity extends ActivityBase implements LoginDialogListener {
     }
   }
 
+  @Override
+  public void onRefresh() {
+    ActivityTracker.sendEvent(this, ActivityTracker.CAT_UI, "unread_notifications_refresh", "", 0L);
+    refreshList(ViewDataReloadStrategy.ALWAYS, false);
+  }
+
   public void refreshList(ViewDataReloadStrategy reloadStrateg, boolean supressErrorMessages) {
     if (dataLoader == null)
       (dataLoader = new DataLoaderTask(reloadStrateg, supressErrorMessages)).execute();
-  }
-
-  @SuppressLint("InflateParams")
-  protected void animateRefreshButton() {
-    if (mainMenu != null) {
-      MenuItem item = mainMenu.findItem(R.id.action_refresh);
-      if (item != null && item.getActionView() == null) {
-        LayoutInflater inflater = (LayoutInflater) getApplication().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        ImageView iv = (ImageView) inflater.inflate(R.layout.action_refresh_rotate, null);
-        iv.setScaleType(ScaleType.CENTER);
-        Animation rotation = AnimationUtils.loadAnimation(this, R.anim.refresh_rotate);
-        rotation.setRepeatCount(Animation.INFINITE);
-        iv.startAnimation(rotation);
-
-        item.setActionView(iv);
-      }
-    }
   }
 
   private final class NotificationsListSwipeDismissListener implements SwipeDismissListViewTouchListener.DismissCallbacks {
@@ -307,7 +285,7 @@ public class MainActivity extends ActivityBase implements LoginDialogListener {
     @Override
     protected void onPreExecute() {
       super.onPreExecute();
-      animateRefreshButton();
+      swipeLayout.setRefreshing(true);
     }
 
     @Override
@@ -353,22 +331,15 @@ public class MainActivity extends ActivityBase implements LoginDialogListener {
 
           if (viewData.notificationStream.size() == 0) {
             findViewById(R.id.list_empty_text).setVisibility(View.VISIBLE);
-            notificationsListView.setVisibility(View.GONE);
+            swipeLayout.setVisibility(View.GONE);
           } else {
             findViewById(R.id.list_empty_text).setVisibility(View.GONE);
-            notificationsListView.setVisibility(View.VISIBLE);
+            swipeLayout.setVisibility(View.VISIBLE);
           }
         }
       } finally {
         dataLoader = null;
-        if (mainMenu != null) {
-          MenuItem item = mainMenu.findItem(R.id.action_refresh);
-          if (item != null && item.getActionView() != null) {
-            item.getActionView().clearAnimation();
-            item.setActionView(null);
-          }
-        }
-        invalidateOptionsMenu();
+        swipeLayout.setRefreshing(false);
       }
     }
   }
@@ -456,7 +427,7 @@ public class MainActivity extends ActivityBase implements LoginDialogListener {
 
     @Override
     protected void onPreExecute() {
-      animateRefreshButton();
+      swipeLayout.setRefreshing(true);
     }
 
     @Override

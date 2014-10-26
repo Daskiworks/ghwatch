@@ -27,6 +27,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -72,13 +74,29 @@ public abstract class ActivityBase extends Activity {
   private int navDrawerMenuSelectedItem = -1;
 
   /**
+   * Swipe layout support. A {@link #initSwipeLayout(OnRefreshListener)} must be called in {@link #onCreate(Bundle)} of activity.
+   */
+  protected SwipeRefreshLayout swipeLayout;
+
+  /**
+   * Init SwipeRefreshLayout in the activity. A {@link #swipeLayout} is filled with object.
+   * 
+   * @param listener called on refresh swipe
+   */
+  protected void initSwipeLayout(OnRefreshListener listener) {
+    swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+    swipeLayout.setOnRefreshListener(listener);
+    swipeLayout.setColorSchemeResources(android.R.color.holo_red_light, R.color.apptheme_color, android.R.color.holo_orange_light, R.color.apptheme_color);
+  }
+
+  /**
    * Init navigation drawer for activity. Layout xml file must be appropriate!
    * 
    * @param selectedItem in drawer main menu which represents this activity, see <code>NAV_DRAWER_ITEM_xx</code> constants.
    * 
    * @see #navigationDrawerClose()
    */
-  protected void navigationDrawerInit(int selectedItem) {
+  protected void initNavigationDrawer(int selectedItem) {
     // initialization of navigation drawer
     mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
     if (mDrawerLayout != null) {

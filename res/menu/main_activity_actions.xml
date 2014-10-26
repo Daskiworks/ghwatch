@@ -16,11 +16,6 @@
  <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/action_refresh"
-        android:icon="@drawable/ic_action_refresh"
-        android:showAsAction="always"
-        android:title="@string/action_refresh"/>
-    <item
         android:id="@+id/action_all_read"
         android:icon="@drawable/ic_action_dismis_all"
         android:showAsAction="ifRoom"

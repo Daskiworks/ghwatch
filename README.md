@@ -24,8 +24,8 @@ Main features
 * OAuth used
 * No GithHub password stored on device
 * You can revoke access from GitHub website at any time
-* Support for GitHub two-factor authentication - **new in 1.8**
-* Info about logged in user in navigation drawer - **new in 1.8**
+* Support for GitHub two-factor authentication
+* Info about logged in user in navigation drawer
 
 ###New GitHub notification detection
 * Configurable pooling interval
@@ -52,19 +52,21 @@ Main features
 * Shows list of unread GitHub notifications
 * Shows notification type (Issue, Pull Request, ...) 
 * Shows reason why you received notification (subscribed, author, comment, ...)
+* Swipe down to refresh list - **new in 1.10**
 * Swipe right to mark notification as read
 * Click notification to view details - Detail informations are shown by 
   GitHub web (which is mobile friendly) or using GitHub android application, 
   so you see all necessary details and performs distinct actions (eg. reply in discussions etc.) directly.
 * Shows list of repositories some notifications are available for, together with notifications count
 * Notifications filtering by repository
-* Context menu to Mute notification thread
+* Context menu to Unsubscribe from selected notification thread
 * Mark all unread notifications as read by one action
 * Mark all unread notifications from selected repository as read by one action
 * Manually refresh unread notifications list from server
 
 ###Watched repositories list view
 * Shows list of repositories you watch on GitHub
+* Swipe down to refresh list - **new in 1.10**
 * Click repository to view details - Detail informations are shown 
   by GitHub web (which is mobile friendly) or using GitHub android 
   application, so you see all necessary details and performs distinct actions directly.
@@ -85,6 +87,9 @@ Main features
   * Donate small amount to the developer - In App payment
   * Report a Bug
   * Add Feature request
+
+###Preferences persistence
+* All important preferences (but no GitHub authentication details) are stored in Google cloud to be restored after device reset or on new device - **new in 1.10**
   
 Changelog
 ---------

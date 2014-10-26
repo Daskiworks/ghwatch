@@ -2,7 +2,9 @@ GH::watch changelog
 ===================
 
 ## v1.10 (ToDo)
+- #45 - "Pull to refresh" patter used for lists of unread notifications an watched repositories 
 - #42 - backup app settings in the cloud to be restored after device reset or on new device 
+- small texts polishing
 
 ## v1.9 (Sep 24th, 2014)
 - #25 - android notification now contains action to directly mark GitHub notifications as read
