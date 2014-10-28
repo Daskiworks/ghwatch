@@ -144,7 +144,7 @@ public class WatchedRepositoriesActivity extends ActivityBase implements LoginDi
         }
         return true;
       case R.id.action_unwatch:
-        showMarkAllNotificationsAsReadDialog(repository);
+        showUnwatchConfirmDialog(repository);
         return true;
       case R.id.action_pref_notifyFilter:
         showPrefNotifFilterDialog(repository);
@@ -260,7 +260,7 @@ public class WatchedRepositoriesActivity extends ActivityBase implements LoginDi
     builder.create().show();
   }
 
-  private void showMarkAllNotificationsAsReadDialog(final Repository repository) {
+  private void showUnwatchConfirmDialog(final Repository repository) {
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setTitle(R.string.message_confirm_unwatch_repository_title);
     builder.setMessage(R.string.message_confirm_unwatch_repository);
