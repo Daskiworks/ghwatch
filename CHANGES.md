@@ -1,6 +1,9 @@
 GH::watch changelog
 ===================
 
+## v1.11 (ToDo)
+- #50 - increased size of menu buttons in lists items for simpler use
+
 ## v1.10 (Oct 26th, 2014)
 - #45 - "Pull to refresh" patter used for lists of unread notifications an watched repositories 
 - #42 - backup app settings in the cloud to be restored after device reset or on new device 
