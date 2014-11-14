@@ -65,7 +65,6 @@ public class SettingsActivity extends ActivityBase implements OnSharedPreference
     ActionBar actionBar = getActionBar();
     actionBar.setDisplayHomeAsUpEnabled(true);
     authenticationManager = AuthenticationManager.getInstance();
-    ActivityTracker.sendView(this, TAG);
   }
 
   @Override
@@ -84,6 +83,7 @@ public class SettingsActivity extends ActivityBase implements OnSharedPreference
   protected void onResume() {
     super.onResume();
     sf.getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+    ActivityTracker.sendView(this, TAG);
   }
 
   @Override

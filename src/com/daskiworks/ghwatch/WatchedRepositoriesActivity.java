@@ -77,7 +77,6 @@ public class WatchedRepositoriesActivity extends ActivityBase implements LoginDi
 
     initSwipeLayout(this);
 
-    ActivityTracker.sendView(this, TAG);
   }
 
   @Override
@@ -85,7 +84,7 @@ public class WatchedRepositoriesActivity extends ActivityBase implements LoginDi
     super.onResume();
     if (!checkUserLoggedIn())
       return;
-
+    ActivityTracker.sendView(this, TAG);
     refreshList(ViewDataReloadStrategy.IF_TIMED_OUT, false);
   }
 

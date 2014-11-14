@@ -106,8 +106,6 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
     notificationsListView.setOnScrollListener(touchListener.makeScrollListener());
 
     initSwipeLayout(this);
-
-    ActivityTracker.sendView(this, TAG);
   }
 
   @Override
@@ -123,6 +121,7 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
       finish();
       return;
     }
+    ActivityTracker.sendView(this, TAG);
 
     Intent intent = getIntent();
     Log.d(TAG, "Intent who runs us : " + getIntent());

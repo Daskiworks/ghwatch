@@ -18,9 +18,9 @@ package com.daskiworks.ghwatch;
 import android.content.Context;
 
 import com.daskiworks.ghwatch.backend.GHConstants;
-import com.google.analytics.tracking.android.GAServiceManager;
-import com.google.analytics.tracking.android.GoogleAnalytics;
-import com.google.analytics.tracking.android.Tracker;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 /**
  * Activity tracker component.
@@ -30,13 +30,11 @@ import com.google.analytics.tracking.android.Tracker;
 public class ActivityTracker {
 
   private static Tracker mGaTracker;
-  private static GoogleAnalytics mGaInstance;
 
   private static Tracker getTracker(Context context) {
     if (mGaTracker == null) {
-      mGaInstance = GoogleAnalytics.getInstance(context);
-      mGaTracker = mGaInstance.getTracker("UA-37771622-3");
-      GAServiceManager.getInstance().setDispatchPeriod(30);
+      mGaTracker = GoogleAnalytics.getInstance(context).newTracker("UA-37771622-3");
+      // mGaTracker.enableAdvertisingIdCollection(true);
     }
     return mGaTracker;
   }
@@ -48,8 +46,11 @@ public class ActivityTracker {
    * @param appScreen
    */
   public static void sendView(Context context, String appScreen) {
-    if (!GHConstants.DEBUG)
-      getTracker(context).sendView(appScreen);
+    if (!GHConstants.DEBUG) {
+      Tracker t = getTracker(context);
+      t.setScreenName(appScreen);
+      t.send(new HitBuilders.AppViewBuilder().build());
+    }
   }
 
   /** Event category - notifications related events */
@@ -71,8 +72,9 @@ public class ActivityTracker {
    * @param value of event
    */
   public static void sendEvent(Context context, String category, String action, String label, Long value) {
-    if (!GHConstants.DEBUG)
-      getTracker(context).sendEvent(category, action, label, value);
+    if (!GHConstants.DEBUG) {
+      getTracker(context).send(new HitBuilders.EventBuilder().setCategory(category).setAction(action).setLabel(label).setValue(value).build());
+    }
   }
 
 }

@@ -73,7 +73,6 @@ public class StartActivity extends Activity implements LoginDialogListener {
           showLoginDialog();
         }
       });
-      ActivityTracker.sendView(this, TAG);
     }
 
   }
@@ -105,6 +104,7 @@ public class StartActivity extends Activity implements LoginDialogListener {
   @Override
   protected void onResume() {
     super.onResume();
+    ActivityTracker.sendView(this, TAG);
   }
 
   @Override
