@@ -1,8 +1,11 @@
 GH::watch changelog
 ===================
 
-## v1.11 (ToDo)
-- #50 - increased size of menu buttons in lists items for simpler use
+## v1.11 (Nov 15th, 2014)
+- #52 - GA library upgraded from v2 to v4 to patch crash on Android 5
+- #50, #51 - increased size of menu buttons in lists items for simpler clicking
+- #48 - patched "Mark everything as read" action item is not shown bug
+- #47 - improved message when no any unread notification is available
 
 ## v1.10 (Oct 26th, 2014)
 - #45 - "Pull to refresh" patter used for lists of unread notifications an watched repositories 
