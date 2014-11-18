@@ -1,7 +1,7 @@
 GH::watch changelog
 ===================
 
-## v1.12 (ToDo)
+## v1.12 (Nov 18th, 2014)
 - #53 - Patched disabling of Android Notification from preferences when widget is present
 
 ## v1.11 (Nov 15th, 2014)
