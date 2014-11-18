@@ -58,8 +58,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
    * @param context
    */
   public static void startServerPoolingIfEnabled(Context context) {
-    if (PreferencesUtils.getBoolean(context, PreferencesUtils.PREF_NOTIFY, true)
-        || PreferencesUtils.getBoolean(context, PreferencesUtils.PREF_WIDGET_UNREAD_EXISTS, false)) {
+    if (UnreadNotificationsService.isUnreadNotificationsServerCheckNecessary(context)) {
       String pv = PreferencesUtils.getString(context, PreferencesUtils.PREF_SERVER_CHECK_PERIOD, "" + R.string.pref_serverCheckPeriod_default);
       int ipv = R.string.pref_serverCheckPeriod_default;
       try {
@@ -78,8 +77,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
   }
 
   public static void stopServerPoolingIfDisabled(Context context) {
-    if (!PreferencesUtils.getBoolean(context, PreferencesUtils.PREF_NOTIFY, true)
-        && !PreferencesUtils.getBoolean(context, PreferencesUtils.PREF_WIDGET_UNREAD_EXISTS, false)) {
+    if (!UnreadNotificationsService.isUnreadNotificationsServerCheckNecessary(context)) {
       Log.i(TAG, "stopping alarm to check new notifications");
       Utils.getAlarmManager(context).cancel(prepareAlarmIntent(context));
     }

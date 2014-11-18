@@ -53,7 +53,6 @@
         android:title="@string/pref_serverSettings_title" >
         <ListPreference
             android:defaultValue="@string/pref_serverCheckPeriod_default"
-            android:dependency="pref_notify"
             android:dialogTitle="@string/pref_serverCheckPeriod"
             android:entries="@array/pref_serverCheckPeriod_entries"
             android:entryValues="@array/pref_serverCheckPeriod_values"

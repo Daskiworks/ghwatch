@@ -306,6 +306,17 @@ public class UnreadNotificationsService {
   }
 
   /**
+   * Return true if background check of unread notifications is necessary.
+   * 
+   * @param context to be used
+   * @return true if check is necessary
+   */
+  public static boolean isUnreadNotificationsServerCheckNecessary(Context context) {
+    return PreferencesUtils.getBoolean(context, PreferencesUtils.PREF_NOTIFY, true)
+        || PreferencesUtils.getBoolean(context, PreferencesUtils.PREF_WIDGET_UNREAD_EXISTS, false);
+  }
+
+  /**
    * Check new notifications on GitHub and fire androidNotification if necessary.
    * <p>
    * Check is done asynchronously, new thread is started inside of this method.
@@ -424,7 +435,7 @@ public class UnreadNotificationsService {
   }
 
   protected void fireAndroidNotification(NotificationStream newStream, NotificationStream oldStream) {
-    if (newStream == null)
+    if (newStream == null || !PreferencesUtils.getBoolean(context, PreferencesUtils.PREF_NOTIFY, true))
       return;
 
     Log.d(TAG, "fireAndroidNotification count before filter " + newStream.size());

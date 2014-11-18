@@ -1,6 +1,9 @@
 GH::watch changelog
 ===================
 
+## v1.12 (ToDo)
+- #53 - Patched disabling of Android Notification from preferences when widget is present
+
 ## v1.11 (Nov 15th, 2014)
 - #52 - GA library upgraded from v2 to v4 to patch crash on Android 5
 - #50, #51 - increased size of menu buttons in lists items for simpler clicking
