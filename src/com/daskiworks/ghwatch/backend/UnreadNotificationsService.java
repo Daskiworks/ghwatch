@@ -194,16 +194,9 @@ public class UnreadNotificationsService {
   public BaseViewData muteNotificationThread(long id) {
     BaseViewData nswd = new BaseViewData();
     try {
-      //
       RemoteSystemClient.putToURL(context, authenticationManager.getGhApiCredentials(context), URL_THREADS + id + "/subscription", null, "{\"ignored\":true}");
-      synchronized (TAG) {
-        NotificationStream oldNs = Utils.readFromStore(TAG, context, persistFile);
-        if (oldNs != null) {
-          oldNs.removeNotificationById(id);
-          Utils.writeToStore(TAG, context, persistFile, oldNs);
-          updateWidgets();
-        }
-      }
+      // #49 mark it as read also to be removed from list
+      markNotificationAsRead(id);
     } catch (NoRouteToHostException e) {
       nswd.loadingStatus = LoadingStatus.CONN_UNAVAILABLE;
     } catch (AuthenticationException e) {

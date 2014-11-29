@@ -243,7 +243,9 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
         return true;
       case R.id.action_mute_thread:
         new MuteNotificationThreadTask().execute(notification.getId());
+        notificationsListAdapter.removeNotificationById(notification.getId());
         ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_mute_thread", "", 0L);
+        notifyDataSetChanged();
         return true;
       default:
         return false;
