@@ -524,6 +524,9 @@ public class UnreadNotificationsService {
       // mId allows you to update the notification later on.
       Utils.getNotificationManager(context).notify(ANDROID_NOTIFICATION_ID, mBuilder.build());
       ActivityTracker.sendEvent(context, ActivityTracker.CAT_NOTIF, "new_notif", "notif count: " + newStream.size(), Long.valueOf(newStream.size()));
+    } else if (newStream.isEmpty()) {
+      // #54 dismiss previous android notification if no any Github notification is available (as it was read on another device)
+      Utils.getNotificationManager(context).cancel(ANDROID_NOTIFICATION_ID);
     }
   }
 
