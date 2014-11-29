@@ -38,6 +38,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -78,6 +79,7 @@ public abstract class ActivityBase extends Activity {
    */
   protected SwipeRefreshLayout swipeLayout;
   protected SwipeRefreshLayout swipeLayout2;
+  protected ProgressBar initialProgressBar;
 
   /**
    * Init SwipeRefreshLayout in the activity. A {@link #swipeLayout} is filled with object.
@@ -97,6 +99,12 @@ public abstract class ActivityBase extends Activity {
       swipeLayout2.setColorSchemeResources(android.R.color.holo_red_light, R.color.apptheme_color, android.R.color.holo_orange_light, R.color.apptheme_color);
     }
 
+    initialProgressBar = (ProgressBar) findViewById(R.id.initial_progress);
+  }
+
+  protected void hideInitialProgressBar() {
+    if (initialProgressBar != null)
+      initialProgressBar.setVisibility(View.GONE);
   }
 
   /**

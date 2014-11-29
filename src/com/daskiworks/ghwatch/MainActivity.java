@@ -288,7 +288,6 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
     @Override
     protected void onPreExecute() {
       super.onPreExecute();
-      swipeLayout.setRefreshing(true);
     }
 
     @Override
@@ -344,6 +343,7 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
         dataLoader = null;
         swipeLayout.setRefreshing(false);
         swipeLayout2.setRefreshing(false);
+        hideInitialProgressBar();
         invalidateOptionsMenu();
       }
     }

@@ -181,7 +181,6 @@ public class WatchedRepositoriesActivity extends ActivityBase implements LoginDi
     @Override
     protected void onPreExecute() {
       super.onPreExecute();
-      swipeLayout.setRefreshing(true);
     }
 
     @Override
@@ -221,6 +220,7 @@ public class WatchedRepositoriesActivity extends ActivityBase implements LoginDi
         dataLoader = null;
         swipeLayout.setRefreshing(false);
         swipeLayout2.setRefreshing(false);
+        hideInitialProgressBar();
       }
     }
   }
