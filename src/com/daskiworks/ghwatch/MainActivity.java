@@ -127,6 +127,7 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
     Log.d(TAG, "Intent who runs us : " + getIntent());
     if (intent != null && INTENT_ACTION_DISMISS_ALL.equals(intent.getAction())) {
       showMarkAllNotificationsAsReadDialog();
+      intent.setAction(null);
     } else {
       if (SupportAppDevelopmentDialogFragment.isAutoShowScheduled(this)) {
         showSupportAppDevelopmentDialog();
