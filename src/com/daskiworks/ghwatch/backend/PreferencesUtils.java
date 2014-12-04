@@ -28,9 +28,10 @@ import android.preference.PreferenceManager;
 public class PreferencesUtils {
 
   /*
-   * Names of user edited preferences
+   * Names of user edited preferences.
    */
   public static final String PREF_SERVER_CHECK_PERIOD = "pref_serverCheckPeriod";
+  public static final String PREF_SERVER_CHECK_FULL = "pref_serverCheckFull";
   public static final String PREF_SERVER_ACCOUNT = "pref_serverAccount";
   public static final String PREF_NOTIFY = "pref_notify";
   public static final String PREF_NOTIFY_VIBRATE = "pref_notifyVibrate";
@@ -183,13 +184,26 @@ public class PreferencesUtils {
    * Store String preference.
    * 
    * @param context
-   * @param key
-   * @param value
+   * @param key of preference
+   * @param value to store
    */
   public static void storeString(Context context, String key, String value) {
     SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(context);
     SharedPreferences.Editor editor = wmbPreference.edit();
     editor.putString(key, value);
+    editor.commit();
+  }
+
+  /**
+   * Remove preference.
+   * 
+   * @param context
+   * @param key of preference to remove
+   */
+  public static void remove(Context context, String key) {
+    SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(context);
+    SharedPreferences.Editor editor = wmbPreference.edit();
+    editor.remove(key);
     editor.commit();
   }
 

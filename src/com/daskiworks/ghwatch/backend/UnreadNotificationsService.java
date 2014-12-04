@@ -283,7 +283,10 @@ public class UnreadNotificationsService {
    * @param oldNs used to prepare header content
    * @return header content
    */
-  public static String prepareLastModifiedHeaderContent(NotificationStream oldNs, boolean isWiFi) {
+  public String prepareLastModifiedHeaderContent(NotificationStream oldNs, boolean isWiFi) {
+
+    if (PreferencesUtils.getBoolean(context, PreferencesUtils.PREF_SERVER_CHECK_FULL, false))
+      return null;
 
     long ts = 0;
     if (isWiFi) {

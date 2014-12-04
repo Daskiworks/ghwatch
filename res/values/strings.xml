@@ -135,6 +135,8 @@
     <string name="pref_serverAccount">GitHub user account</string>
     <string name="pref_serverCheckPeriod">New notifications check period</string>
     <string name="pref_serverCheckPeriod_default">5</string>
+    <string name="pref_serverCheckFull">Better read detection</string>
+    <string name="pref_serverCheckFull_summ">Better detection of notifications read on another device, a bit higher resources consumption.</string>
     <string name="pref_cat_serverInfo_title">GitHub server info</string>
     <string name="pref_serverInfo_title">GitHub API request info</string>
     <string name="pref_serverInfo_summary">Show informations about performed GitHub API requests</string>

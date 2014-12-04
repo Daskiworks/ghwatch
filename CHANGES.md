@@ -2,7 +2,8 @@ GH::watch changelog
 ===================
 
 ## v1.13 (ToDo)
-- 
+- #49 - unread notification vanishes from list (is marked as read) when user Unsubscribe from it.
+- small improvements and patches 
 
 ## v1.12 (Nov 18th, 2014)
 - #53 - patched disabling of Android Notification from preferences when widget is present
