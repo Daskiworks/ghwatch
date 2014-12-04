@@ -33,7 +33,7 @@ Main features
   and one hour on WiFi to prevent problems and allow widget decrease count/android notification remove when 
   notification is read on another device)
 * Preference to configure full update for all background checks to better detect notification reads 
-  on another device/web. Use may lead to a bit higher consumption of resources (network, battery, GitHub API limit). - **new in 1.13**
+  on another device/web. Use may lead to a bit higher consumption of resources (network, battery, GitHub API limit) - **new in 1.13**
 
 ###Android notification
 * Android notification is fired when new unread GithHub notification is detected
