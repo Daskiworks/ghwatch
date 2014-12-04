@@ -1,6 +1,9 @@
 GH::watch changelog
 ===================
 
+## v1.14 (ToDo)
+
+
 ## v1.13 (Dec 4th, 2014)
 - #49 - unread notification vanishes from list (is marked as read) when user Unsubscribes from it.
 - #54 - android notification is removed if there is not any unread notification on Github server (eg. it was read on another device or web).
