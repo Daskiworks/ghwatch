@@ -29,7 +29,11 @@ Main features
 
 ###New GitHub notification detection
 * Configurable pooling interval
-* GitHub API limit saving pooling method used (with full check once a six hours on mobile and one hour on WiFi to prevent problems and allow widget decrease count when notification is read on another device) - **improved in 1.9**
+* GitHub API limit saving pooling method used (with full check once a six hours on mobile 
+  and one hour on WiFi to prevent problems and allow widget decrease count/android notification remove when 
+  notification is read on another device)
+* Preference to configure full update for all background checks to better detect notification reads 
+  on another device/web. Use may lead to a bit higher consumption of resources (network, battery, GitHub API limit). - **new in 1.13**
 
 ###Android notification
 * Android notification is fired when new unread GithHub notification is detected
@@ -40,33 +44,33 @@ Main features
 * Configurable sound
 * Configurable vibration
 * Inbox style Big view when more GitHub notifications available
-* Action to directly mark GitHub notification as read - **new in 1.9**
+* Action to directly mark GitHub notification as read
   
 ###Homescreen and Lockscreen widget
 * Shows number of unread Github notifications
-* Number is highlighted if there are some new unread notifications from your last view of app. So you can use widget as less obtrusive 
-  way instead of Android notifications.
+* Number is highlighted if there are some new unread notifications from your last view of app. So you can use 
+  widget as less obtrusive way instead of Android notifications.
 * Resizeable  
   
 ###Unread notifications list view
 * Shows list of unread GitHub notifications
 * Shows notification type (Issue, Pull Request, ...) 
 * Shows reason why you received notification (subscribed, author, comment, ...)
-* Swipe down to refresh list - **new in 1.10**
+* Swipe down to refresh list
 * Swipe right to mark notification as read
 * Click notification to view details - Detail informations are shown by 
   GitHub web (which is mobile friendly) or using GitHub android application, 
   so you see all necessary details and performs distinct actions (eg. reply in discussions etc.) directly.
 * Shows list of repositories some notifications are available for, together with notifications count
 * Notifications filtering by repository
-* Context menu to Unsubscribe from selected notification thread
+* Context menu to Unsubscribe from selected notification thread, given notification is marked as read also - **improved in 1.13**
 * Mark all unread notifications as read by one action
 * Mark all unread notifications from selected repository as read by one action
 * Manually refresh unread notifications list from server
 
 ###Watched repositories list view
 * Shows list of repositories you watch on GitHub
-* Swipe down to refresh list - **new in 1.10**
+* Swipe down to refresh list
 * Click repository to view details - Detail informations are shown 
   by GitHub web (which is mobile friendly) or using GitHub android 
   application, so you see all necessary details and performs distinct actions directly.
@@ -89,7 +93,8 @@ Main features
   * Add Feature request
 
 ###Preferences persistence
-* All important preferences (but no GitHub authentication details) are stored in Google cloud to be restored after device reset or on new device - **new in 1.10**
+* All important preferences (but no GitHub authentication details) are stored in Google 
+  cloud to be restored after device reset or on new device
   
 Changelog
 ---------
