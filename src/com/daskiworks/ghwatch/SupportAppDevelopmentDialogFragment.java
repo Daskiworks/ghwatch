@@ -80,7 +80,9 @@ public class SupportAppDevelopmentDialogFragment extends DialogFragment {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    getActivity().bindService(new Intent(IabHelper.INTENT_ACTION_BIND), mServiceConn, Context.BIND_AUTO_CREATE);
+    Intent intent = new Intent(IabHelper.INTENT_ACTION_BIND);
+    intent.setPackage(IabHelper.INTENT_PACKAGE);
+    getActivity().bindService(intent, mServiceConn, Context.BIND_AUTO_CREATE);
   };
 
   @Override

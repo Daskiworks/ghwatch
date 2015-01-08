@@ -1,8 +1,9 @@
 GH::watch changelog
 ===================
 
-## v1.14 (ToDo)
-
+## v1.14 (Jan 8th, 2015)
+- Google Play Services updated to latest version
+- #60 - patched force close on some Android 5 devices due billing service binding
 
 ## v1.13 (Dec 4th, 2014)
 - #49 - unread notification vanishes from list (is marked as read) when user Unsubscribes from it.

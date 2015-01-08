@@ -23,6 +23,7 @@ package com.daskiworks.ghwatch;
 public class IabHelper {
 
   public static final String INTENT_ACTION_BIND = "com.android.vending.billing.InAppBillingService.BIND";
+  public static final String INTENT_PACKAGE = "com.android.vending";
 
   // Billing response codes
   public static final int BILLING_RESPONSE_RESULT_OK = 0;
