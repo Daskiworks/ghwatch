@@ -101,10 +101,15 @@ Changelog
 
 See [CHANGES.md](CHANGES.md) file content.
 
+Notes for the app developers
+----------------------------
+
+See [DEVEL_NOTES.md](DEVEL_NOTES.md) file content.
+
 License for source code
 -----------------------
 
-   Copyright 2014 contributors as indicated by the @authors tag.
+   Copyright 2014-2015 contributors as indicated by the @authors tag.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
