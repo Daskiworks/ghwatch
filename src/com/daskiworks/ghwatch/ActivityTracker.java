@@ -48,8 +48,10 @@ public class ActivityTracker {
   public static void sendView(Context context, String appScreen) {
     if (!GHConstants.DEBUG) {
       Tracker t = getTracker(context);
-      t.setScreenName(appScreen);
-      t.send(new HitBuilders.AppViewBuilder().build());
+      if (t != null) {
+        t.setScreenName(appScreen);
+        t.send(new HitBuilders.AppViewBuilder().build());
+      }
     }
   }
 
@@ -73,7 +75,10 @@ public class ActivityTracker {
    */
   public static void sendEvent(Context context, String category, String action, String label, Long value) {
     if (!GHConstants.DEBUG) {
-      getTracker(context).send(new HitBuilders.EventBuilder().setCategory(category).setAction(action).setLabel(label).setValue(value).build());
+      Tracker t = getTracker(context);
+      if (t != null) {
+        t.send(new HitBuilders.EventBuilder().setCategory(category).setAction(action).setLabel(label).setValue(value).build());
+      }
     }
   }
 

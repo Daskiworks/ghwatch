@@ -1,6 +1,9 @@
 GH::watch changelog
 ===================
 
+## v1.15 (ToDo)
+- #62 - minor NPE bugfix
+
 ## v1.14 (Jan 8th, 2015)
 - Google Play Services updated to latest version
 - #60 - patched force close on some Android 5 devices due billing service binding
