@@ -6,7 +6,7 @@ Release steps for GH::watch app
 1. `com.daskiworks.ghwatch.backend.GHConstants` - set `DEBUG` to `false`
 2. `AndroidManifest.xml` - check android:versionCode and android:versionName
 3. update `CHANGES.md` file 
-4. update `README.md` file
+4. update `README.md` file (mark features with `- **improved in x.y**` or `- **new in x.y**`)
 5. commit everything (both `ghwatch` and `ghwatch-test` projects) to code git repos
 6. run unit tests from `ghwatch-test` project (in Eclipse or using `ant clean debug install test`)
 7. build signed APK - `Right click on project > Android Tools > Export Signed application Package...` 
