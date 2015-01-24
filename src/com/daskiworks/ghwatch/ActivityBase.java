@@ -29,6 +29,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -55,6 +56,8 @@ import com.daskiworks.ghwatch.model.GHUserInfo;
  * 
  */
 public abstract class ActivityBase extends Activity {
+
+  private static final String TAG = ActivityBase.class.getSimpleName();
 
   private static final String FRAGMENT_DIALOG = "dialogFragment";
 
@@ -168,18 +171,20 @@ public abstract class ActivityBase extends Activity {
     }
   }
 
-  private void onDrawerMenuItemSelected(int position) {
+  protected void onDrawerMenuItemSelected(int position) {
     if (navDrawerMenuSelectedItem != position) {
       Intent intent = null;
       switch (position) {
       case NAV_DRAWER_ITEM_UNREAD_NOTIF:
         intent = new Intent(this, MainActivity.class);
+        intent.setAction(MainActivity.INTENT_ACTION_RESET_FILTER);
         break;
       case NAV_DRAWER_ITEM_WATCHED_REPOS:
         intent = new Intent(this, WatchedRepositoriesActivity.class);
         break;
       }
       if (intent != null) {
+        Log.d(TAG, "Intent frow drawer navigation : " + intent + " with action " + intent.getAction());
         navigationDrawerClose();
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         this.startActivity(intent);

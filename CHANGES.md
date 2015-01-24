@@ -3,7 +3,8 @@ GH::watch changelog
 
 ## v1.15 (ToDo)
 - #62 - bugfix of NPE during OS start with widget used
-- #66 -  "View" function removed from notification's dropdown menu as it was duplicate to row click 
+- #63 - tapping "unread notifications" in navigation drawer resets notifications filter  
+- #66 - "View" function removed from notification's dropdown menu as it is duplicate to row click 
 
 ## v1.14 (Jan 8th, 2015)
 - Google Play Services updated to latest version

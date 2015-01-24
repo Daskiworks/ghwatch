@@ -56,8 +56,9 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
 
   private static final String STATE_FILTER_REPOSITORY = "STATE_FILTER_REPOSITORY";
 
-  public static String INTENT_ACTION_DISMISS_ALL = "ACTION_MARK_ALL_READ";
-  public static String INTENT_ACTION_SHOW = "ACTION_SHOW";
+  public static String INTENT_ACTION_RESET_FILTER = "com.daskiworks.ghwatch.ACTION_RESET_FILTER";
+  public static String INTENT_ACTION_DISMISS_ALL = "com.daskiworks.ghwatch.ACTION_MARK_ALL_READ";
+  public static String INTENT_ACTION_SHOW = "com.daskiworks.ghwatch.ACTION_SHOW";
 
   private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -81,6 +82,8 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    Log.d(TAG, "onCreate() intent: " + getIntent());
 
     if (savedInstanceState != null) {
       filterByRepository = savedInstanceState.getString(STATE_FILTER_REPOSITORY);
@@ -115,6 +118,15 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
   }
 
   @Override
+  protected void onNewIntent(Intent intent) {
+    Log.d(TAG, "onNewIntent() intent: " + getIntent());
+    if (intent != null && INTENT_ACTION_RESET_FILTER.equals(intent.getAction())) {
+      resetNotificationsFilter();
+    }
+    super.onNewIntent(intent);
+  }
+
+  @Override
   protected void onResume() {
     super.onResume();
     if (!checkUserLoggedIn()) {
@@ -124,15 +136,18 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
     ActivityTracker.sendView(this, TAG);
 
     Intent intent = getIntent();
-    Log.d(TAG, "Intent who runs us : " + getIntent());
+    Log.d(TAG, "onResume() intent: " + getIntent());
     if (intent != null && INTENT_ACTION_DISMISS_ALL.equals(intent.getAction())) {
       showMarkAllNotificationsAsReadDialog();
-      intent.setAction(null);
     } else {
+      if (intent != null && INTENT_ACTION_RESET_FILTER.equals(intent.getAction())) {
+        resetNotificationsFilter();
+      }
       if (SupportAppDevelopmentDialogFragment.isAutoShowScheduled(this)) {
         showSupportAppDevelopmentDialog();
       }
     }
+    intent.setAction(null);
     refreshList(ViewDataReloadStrategy.IF_TIMED_OUT, false);
     unreadNotificationsService.markAndroidWidgetsAsRead();
     unreadNotificationsService.markAndroidNotificationsRead();
@@ -195,6 +210,23 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
   public void refreshList(ViewDataReloadStrategy reloadStrateg, boolean supressErrorMessages) {
     if (dataLoader == null)
       (dataLoader = new DataLoaderTask(reloadStrateg, supressErrorMessages)).execute();
+  }
+
+  protected void onDrawerMenuItemSelected(int position) {
+    if (position == NAV_DRAWER_ITEM_UNREAD_NOTIF) {
+      resetNotificationsFilter();
+    }
+    super.onDrawerMenuItemSelected(position);
+  }
+
+  protected void resetNotificationsFilter() {
+    filterByRepository = null;
+    if (repositoriesListAdapter != null) {
+      repositoriesListAdapter.setSelectionForFilter(repositoriesListView, filterByRepository);
+    }
+    if (notificationsListAdapter != null) {
+      notificationsListAdapter.setFilterByRepository(filterByRepository);
+    }
   }
 
   private final class NotificationsListSwipeDismissListener implements SwipeDismissListViewTouchListener.DismissCallbacks {
