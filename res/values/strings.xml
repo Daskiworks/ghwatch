@@ -81,28 +81,28 @@
 
     <!-- Notifications list page -->
     <string name="notifications_list_title">Unread Notifications</string>
-    <string name="message_no_unread_notifications">No any unread notifications available. Pull down to refresh.</string>
-    <string name="message_staled_data">Displayed data may be staled!</string>
+    <string name="message_no_unread_notifications">No unread notifications available. Pull down to refresh.</string>
+    <string name="message_staled_data">Displayed data may be outdated!</string>
     <string name="message_confirm_notifications_all_mark_read_title">Mark all notifications as read?</string>
     <string name="message_confirm_notifications_all_mark_read">Do you really want to mark all GitHub notifications as read? This can\'t be undone!\n\nYou can mark particular notification as read by swiping it out to the right.</string>
-    <string name="message_confirm_notifications_all_mark_read_repo">Do you really want to mark all GitHub notifications from selected Repository as read? This can\'t be undone!\n\nYou can mark particular notification as read by swiping it out to the right.</string>
-    <string name="message_notification_marked_read">Notification marked as read on GitHub server successfuly.</string>
-    <string name="message_notification_thread_muted">Notification thread unsubscribed on GitHub server successfuly.</string>
-    <string name="message_notifications_all_marked_read">All notifications marked as read on GitHub server successfuly.</string>
-    <string name="progress_get_view_url_title">Loading view URL from server</string>
+    <string name="message_confirm_notifications_all_mark_read_repo">Do you really want to mark all GitHub notifications from the selected repository as read? This can\'t be undone!\n\nYou can mark particular notification as read by swiping it out to the right.</string>
+    <string name="message_notification_marked_read">Notification marked as read</string>
+    <string name="message_notification_thread_muted">Notification unsubscribed</string>
+    <string name="message_notifications_all_marked_read">All notifications marked as read</string>
+    <string name="progress_get_view_url_title">Loading issue</string>
 
     <!-- Watched repositories list page -->
     <string name="watched_repos_list_title">Watched Repositories</string>
-    <string name="message_no_watched_repos">No any watched repositories available. Pull down to refresh.</string>
+    <string name="message_no_watched_repos">No watched repositories available. Pull down to refresh.</string>
     <string name="message_confirm_unwatch_repository_title">Unwatch repository?</string>
-    <string name="message_confirm_unwatch_repository">Do you really want to unwatch selected Repository on GitHub server? This can\'t be undone from this application!</string>
+    <string name="message_confirm_unwatch_repository">Do you really want to unwatch the selected repository? This can\'t be undone from this application!</string>
     
     
     <!-- Preferences related strings -->
     <string name="activity_settings_title">Preferences</string>
     <string name="pref_notificationSettings_title">Android notifications</string>
     <string name="pref_notify">Notifications enabled</string>
-    <string name="pref_notify_summ">Fire Android notification when new GitHub notification is available</string>
+    <string name="pref_notify_summ">Fire Android notification when a new GitHub notification is available</string>
     <string name="pref_notifyFilter">Notifications filter</string>
     <string name="pref_notifyFilter_default">1</string>
     <string-array name="pref_notifyFilter_entries">
@@ -136,7 +136,7 @@
     <string name="pref_serverCheckPeriod">New notifications check period</string>
     <string name="pref_serverCheckPeriod_default">5</string>
     <string name="pref_serverCheckFull">Better read detection</string>
-    <string name="pref_serverCheckFull_summ">Better detection of notifications read on another device, a bit higher resources consumption.</string>
+    <string name="pref_serverCheckFull_summ">Better detection of notifications read on another device, a bit higher resource consumption.</string>
     <string name="pref_cat_serverInfo_title">GitHub server info</string>
     <string name="pref_serverInfo_title">GitHub API request info</string>
     <string name="pref_serverInfo_summary">Show informations about performed GitHub API requests</string>
@@ -172,8 +172,8 @@
     <!-- Support App Development dialog -->
     <string name="dialog_sad_title">Support Development</string>
     <string name="dialog_sad_button_close">Not now, Thanks</string>
-    <string name="dialog_sad_intro_text">Do you like this app? Support its development please. Thanks in advance.</string>
-    <string name="dialog_sad_title_social">Spread the world</string>
+    <string name="dialog_sad_intro_text">Do you like this app? Support its development please. Thanks in advance!</string>
+    <string name="dialog_sad_title_social">Spread the word</string>
     <string name="dialog_sad_button_rate">Rate in Google Play</string>
     <string name="dialog_sad_button_share">Share App Info</string>
     <string name="dialog_sad_button_share_title">Share App Info to..</string>
