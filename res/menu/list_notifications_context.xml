@@ -15,9 +15,6 @@
  -->
  <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <item
-        android:id="@+id/action_view"
-        android:title="@string/action_view"/>
-    <item
         android:id="@+id/action_mark_read"
         android:icon="@drawable/ic_action_dismis_all"
         android:title="@string/action_mark_read"/>

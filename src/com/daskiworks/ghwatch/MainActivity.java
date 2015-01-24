@@ -232,9 +232,6 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
     @Override
     public boolean onMenuItemClick(Notification notification, MenuItem item) {
       switch (item.getItemId()) {
-      case R.id.action_view:
-        new ShowNotificationTask().execute(notification);
-        ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_show_menu", "", 0L);
       case R.id.action_mark_read:
         new MarkNotificationAsReadTask().execute(notification.getId());
         notificationsListAdapter.removeNotificationById(notification.getId());
@@ -374,16 +371,19 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
     @Override
     protected void onPostExecute(StringViewData result) {
       if (isCancelled() || result == null) {
-        progress.dismiss();
+        if (progress != null)
+          progress.dismiss();
         return;
       }
       if (result.loadingStatus != LoadingStatus.OK) {
-        progress.dismiss();
+        if (progress != null)
+          progress.dismiss();
         showServerCommunicationErrorAllertDialog(result.loadingStatus, false);
       } else if (result.data != null) {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(result.data));
         startActivity(browserIntent);
-        progress.dismiss();
+        if (progress != null)
+          progress.dismiss();
       }
     }
   }
