@@ -1,7 +1,11 @@
 GH::watch changelog
 ===================
 
-## v1.16 (ToDo)
+## v1.17 (ToDo)
+
+
+## v1.16 (Jan 28th, 2015)
+- #67 - bugfix of NPE during widget add and remove
 
 ## v1.15 (Jan 24th, 2015)
 - #62 - bugfix of NPE during OS start with widget used

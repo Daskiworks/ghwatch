@@ -20,6 +20,7 @@ import android.content.Context;
 import com.daskiworks.ghwatch.backend.GHConstants;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.HitBuilders.EventBuilder;
 import com.google.android.gms.analytics.Tracker;
 
 /**
@@ -77,7 +78,12 @@ public class ActivityTracker {
     if (!GHConstants.DEBUG) {
       Tracker t = getTracker(context);
       if (t != null) {
-        t.send(new HitBuilders.EventBuilder().setCategory(category).setAction(action).setLabel(label).setValue(value).build());
+        EventBuilder eb = new HitBuilders.EventBuilder();
+        eb.setCategory(category).setAction(action).setLabel(label);
+        if (value != null) {
+          eb.setValue(value);
+        }
+        t.send(eb.build());
       }
     }
   }
