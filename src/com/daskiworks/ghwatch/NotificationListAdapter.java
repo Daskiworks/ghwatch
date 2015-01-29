@@ -94,7 +94,11 @@ public class NotificationListAdapter extends BaseAdapter {
 
   @Override
   public Object getItem(int position) {
-    return getFilteredNotifications().get(position);
+    List<Notification> nl = getFilteredNotifications();
+    if (nl != null && position >= 0 && position < nl.size())
+      return nl.get(position);
+    else
+      return null;
   }
 
   @Override
