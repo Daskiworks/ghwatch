@@ -2,7 +2,7 @@ GH::watch changelog
 ===================
 
 ## v1.17 (ToDo)
-
+- #74 - bugfix of authentication fail on new device when old token exists on github.com  
 
 ## v1.16 (Jan 28th, 2015)
 - #67 - bugfix of NPE during widget add and remove

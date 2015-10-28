@@ -92,7 +92,7 @@ public class AuthenticationManager {
   private static final String cuFileName = "cu.td";
 
   private static final String GH_AUTH_REQ_CONTENT = "{\"client_secret\":\"" + client_s
-      + "\",\"scopes\":[\"notifications\",\"repo\"],\"note\":\"GH:watch android app\" }";
+      + "\",\"scopes\":[\"notifications\",\"repo\"],\"note\":\"GH:watch android app\", \"fingerprint\":\"*fp*\"}";
 
   private File culiFile;
   private File cuFile;
@@ -207,7 +207,8 @@ public class AuthenticationManager {
       headers = new HashMap<String, String>();
       headers.put("X-GitHub-OTP", otp);
     }
-    Response<String> resp = RemoteSystemClient.putToURL(context, cred, GH_AUTH_REQ_URL, headers, GH_AUTH_REQ_CONTENT);
+    String content = GH_AUTH_REQ_CONTENT.replace("*fp*", System.currentTimeMillis() + "");
+    Response<String> resp = RemoteSystemClient.putToURL(context, cred, GH_AUTH_REQ_URL, headers, content);
     JSONObject jo = new JSONObject(resp.data);
     return jo.getString("token");
   }
