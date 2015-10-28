@@ -64,6 +64,7 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
 
   // common fields
   private DataLoaderTask dataLoader;
+  private ShowNotificationTask showNotificationTask;
 
   // view components
   private ListView notificationsListView;
@@ -172,10 +173,16 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
 
   @Override
   protected void onDestroy() {
-    super.onDestroy();
+    Log.d(TAG, "onDestroy()");
     if (dataLoader != null)
       dataLoader.cancel(true);
+    if (showNotificationTask != null) {
+      Utils.dismissDialogSafe(showNotificationTask.progress);
+      showNotificationTask.progress = null;
+      showNotificationTask.cancel(true);
+    }
     notifyDataSetChanged();
+    super.onDestroy();
   }
 
   @Override
@@ -250,11 +257,13 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
   }
 
   private final class NotificationsListItemClickListener implements OnItemClickListener {
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
       Notification notification = (Notification) notificationsListAdapter.getItem(position);
       if (notification != null) {
-        new ShowNotificationTask().execute(notification);
+        showNotificationTask = new ShowNotificationTask();
+        showNotificationTask.execute(notification);
         ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_show", "", 0L);
       }
     }
@@ -402,20 +411,22 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
 
     @Override
     protected void onPostExecute(StringViewData result) {
-      if (isCancelled() || result == null) {
-        if (progress != null)
-          progress.dismiss();
-        return;
-      }
-      if (result.loadingStatus != LoadingStatus.OK) {
-        if (progress != null)
-          progress.dismiss();
-        showServerCommunicationErrorAllertDialog(result.loadingStatus, false);
-      } else if (result.data != null) {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(result.data));
-        startActivity(browserIntent);
-        if (progress != null)
-          progress.dismiss();
+      try {
+        if (isCancelled() || result == null) {
+          Utils.dismissDialogSafe(progress);
+          return;
+        }
+        if (result.loadingStatus != LoadingStatus.OK) {
+          Utils.dismissDialogSafe(progress);
+          showServerCommunicationErrorAllertDialog(result.loadingStatus, false);
+        } else if (result.data != null) {
+          Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(result.data));
+          startActivity(browserIntent);
+          Utils.dismissDialogSafe(progress);
+        }
+      } finally {
+        progress = null;
+        MainActivity.this.showNotificationTask = null;
       }
     }
   }

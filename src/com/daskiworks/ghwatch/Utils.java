@@ -29,6 +29,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import android.app.AlarmManager;
+import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -285,6 +286,21 @@ public class Utils {
     }
 
     return sb;
+  }
+
+  /**
+   * Method to safe dismiss Dialog without exception - workaround for bug #68
+   * 
+   * @param dialog
+   */
+  public static void dismissDialogSafe(Dialog dialog) {
+    if (dialog == null)
+      return;
+    try {
+      dialog.dismiss();
+    } catch (final IllegalArgumentException e) {
+      // Ignore this exception
+    }
   }
 
 }
