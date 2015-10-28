@@ -1,7 +1,9 @@
 GH::watch changelog
 ===================
 
-## v1.17 (ToDo)
+## v1.18 (ToDo)
+
+## v1.17 (Oct 28th, 2015)
 - #74 - bugfix of authentication fail on new device when old token exists on github.com  
 - #68 - bugfix for rare exception when notification list screen is rotated during loading info to show notification  
 
