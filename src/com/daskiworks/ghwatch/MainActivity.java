@@ -406,7 +406,7 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
 
     @Override
     protected StringViewData doInBackground(Notification... params) {
-      return unreadNotificationsService.getGithubDataHtmlUrl(params[0].getViewBaseUrl());
+      return unreadNotificationsService.getGithubDataHtmlUrl(params[0]);
     }
 
     @Override

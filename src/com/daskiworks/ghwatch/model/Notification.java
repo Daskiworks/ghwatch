@@ -42,6 +42,16 @@ public class Notification implements Serializable {
   private Date updatedAt;
 
   /**
+   * Flag indicating that that details had been loaded from server already.
+   */
+  private boolean detailLoaded = false;
+  private String subjectDetailHtmlUrl;
+  /**
+   * Status related to the notification: open, closed, merged
+   */
+  private String subjectStatus;
+
+  /**
    * Constructor for unit tests.
    * 
    * @param id to be used
@@ -140,6 +150,30 @@ public class Notification implements Serializable {
 
   public String getReason() {
     return reason;
+  }
+
+  public boolean isDetailLoaded() {
+    return detailLoaded;
+  }
+
+  public void setDetailLoaded(boolean detailLoaded) {
+    this.detailLoaded = detailLoaded;
+  }
+
+  public String getSubjectDetailHtmlUrl() {
+    return subjectDetailHtmlUrl;
+  }
+
+  public void setSubjectDetailHtmlUrl(String subjectDetailHtmlUrl) {
+    this.subjectDetailHtmlUrl = subjectDetailHtmlUrl;
+  }
+
+  public String getSubjectStatus() {
+    return subjectStatus;
+  }
+
+  public void setSubjectStatus(String subjectStatus) {
+    this.subjectStatus = subjectStatus;
   }
 
   @Override
