@@ -22,6 +22,15 @@ package com.daskiworks.ghwatch.model;
  */
 public class NotificationViewData extends BaseViewData {
 
+  public NotificationViewData() {
+    super();
+  }
+
+  public NotificationViewData(Notification notification) {
+    super();
+    this.notification = notification;
+  }
+
   public Notification notification;
 
 }

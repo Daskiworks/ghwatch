@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -31,9 +33,13 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.daskiworks.ghwatch.backend.PreferencesUtils;
+import com.daskiworks.ghwatch.backend.UnreadNotificationsService;
 import com.daskiworks.ghwatch.image.ImageLoader;
+import com.daskiworks.ghwatch.model.LoadingStatus;
 import com.daskiworks.ghwatch.model.Notification;
 import com.daskiworks.ghwatch.model.NotificationStream;
+import com.daskiworks.ghwatch.model.NotificationViewData;
 
 /**
  * {@link ListView} adapter used to show list of notifications from {@link NotificationStream}.
@@ -43,6 +49,7 @@ import com.daskiworks.ghwatch.model.NotificationStream;
 public class NotificationListAdapter extends BaseAdapter {
 
   public ImageLoader imageLoader;
+  private UnreadNotificationsService unreadNotificationsService;
   private LayoutInflater layoutInflater;
   private NotificationStream notificationStream;
   private Context context;
@@ -51,11 +58,13 @@ public class NotificationListAdapter extends BaseAdapter {
 
   private List<Notification> filteredNotifications = null;
 
-  public NotificationListAdapter(Context activity, final NotificationStream notificationStream, ImageLoader imageLoader) {
+  public NotificationListAdapter(Context activity, final NotificationStream notificationStream, ImageLoader imageLoader,
+      UnreadNotificationsService unreadNotificationsService) {
     this.context = activity;
     layoutInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     this.notificationStream = notificationStream;
     this.imageLoader = imageLoader;
+    this.unreadNotificationsService = unreadNotificationsService;
   }
 
   public void setNotificationStream(NotificationStream notificationStream) {
@@ -106,6 +115,14 @@ public class NotificationListAdapter extends BaseAdapter {
     return getFilteredNotifications().get(position).getId();
   }
 
+  public static void updateNotificationDetails(View listItem, Notification notification) {
+    View tvStatus = listItem.findViewById(R.id.status);
+    Integer statusColor = notification.getSubjectStatusColor();
+    if (statusColor != null) {
+      tvStatus.setBackgroundColor(statusColor);
+    }
+  }
+
   @Override
   public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -113,7 +130,8 @@ public class NotificationListAdapter extends BaseAdapter {
     if (convertView == null) {
       listItem = layoutInflater.inflate(R.layout.list_notifications, parent, false);
     } else {
-      listItem = layoutInflater.inflate(R.layout.list_notifications, parent, false);
+      listItem = convertView;
+      // listItem = layoutInflater.inflate(R.layout.list_notifications, parent, false);
     }
 
     // Initialize the views in the layout
@@ -129,6 +147,15 @@ public class NotificationListAdapter extends BaseAdapter {
     tvTitle.setText(notification.getSubjectTitle());
     tvType.setText(Utils.formatNotificationTypeForView(notification.getSubjectType()) + ", " + notification.getReason());
     tvRepoName.setText(notification.getRepositoryFullName());
+
+    if (notification.isDetailLoaded()) {
+      updateNotificationDetails(listItem, notification);
+    } else if (PreferencesUtils.getBoolean(context, PreferencesUtils.PREF_SERVER_DETAIL_LOADING)) {
+      View tvStatus = listItem.findViewById(R.id.status);
+      tvStatus.setBackgroundColor(Color.TRANSPARENT);
+      // TODO #57 handle correct reuse of views
+      new DetailedDataLoaderTask(listItem).execute(notification);
+    }
 
     if (notification.getUpdatedAt() != null) {
       ((TextView) listItem.findViewById(R.id.time)).setText(Utils.formatDateIntervalFromNow(context, notification.getUpdatedAt()));
@@ -156,6 +183,29 @@ public class NotificationListAdapter extends BaseAdapter {
     });
 
     return listItem;
+  }
+
+  private final class DetailedDataLoaderTask extends AsyncTask<Notification, String, NotificationViewData> {
+
+    View listItem;
+
+    public DetailedDataLoaderTask(View listItem) {
+      super();
+      this.listItem = listItem;
+    }
+
+    @Override
+    protected NotificationViewData doInBackground(Notification... params) {
+      return unreadNotificationsService.getNotificationDetailForView(params[0]);
+    }
+
+    @Override
+    protected void onPostExecute(NotificationViewData result) {
+      if (result.loadingStatus == LoadingStatus.OK && result.notification != null)
+        updateNotificationDetails(listItem, result.notification);
+      super.onPostExecute(result);
+    }
+
   }
 
   private OnItemMenuClickedListener onItemMenuClickedListener;

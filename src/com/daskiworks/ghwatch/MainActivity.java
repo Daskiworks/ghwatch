@@ -350,7 +350,7 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
             notificationsListAdapter.setNotificationStream(viewData.notificationStream);
             notificationsListAdapter.notifyDataSetChanged();
           } else {
-            notificationsListAdapter = new NotificationListAdapter(MainActivity.this, viewData.notificationStream, imageLoader);
+            notificationsListAdapter = new NotificationListAdapter(MainActivity.this, viewData.notificationStream, imageLoader, unreadNotificationsService);
             notificationsListView.setAdapter(notificationsListAdapter);
             notificationsListAdapter.setOnItemMenuClickedListener(new NotificationsListItemMenuClickListener());
             notificationsListView.setOnItemClickListener(new NotificationsListItemClickListener());
@@ -406,7 +406,7 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
 
     @Override
     protected StringViewData doInBackground(Notification... params) {
-      return unreadNotificationsService.getGithubDataHtmlUrl(params[0]);
+      return unreadNotificationsService.getNotificationViewUrl(params[0]);
     }
 
     @Override

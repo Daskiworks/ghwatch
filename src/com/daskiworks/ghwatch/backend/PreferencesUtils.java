@@ -32,6 +32,7 @@ public class PreferencesUtils {
    */
   public static final String PREF_SERVER_CHECK_PERIOD = "pref_serverCheckPeriod";
   public static final String PREF_SERVER_CHECK_FULL = "pref_serverCheckFull";
+  public static final String PREF_SERVER_DETAIL_LOADING = "pref_serverDetailLoading";
   public static final String PREF_SERVER_ACCOUNT = "pref_serverAccount";
   public static final String PREF_NOTIFY = "pref_notify";
   public static final String PREF_NOTIFY_VIBRATE = "pref_notifyVibrate";
@@ -138,6 +139,13 @@ public class PreferencesUtils {
    */
   public static boolean getBoolean(Context context, String key, boolean defaultValue) {
     return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(key, defaultValue);
+  }
+
+  /**
+   * Get boolean preference. Same as {@link #getBoolean(Context, String, boolean)} with <code>false</code> as default.
+   */
+  public static boolean getBoolean(Context context, String key) {
+    return getBoolean(context, key, false);
   }
 
   /**

@@ -26,7 +26,6 @@ import java.util.Map;
 import org.apache.http.auth.AuthenticationException;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -88,11 +87,14 @@ public class UnreadNotificationsService {
    */
   public static final int ANDROID_NOTIFICATION_ID = 0;
 
+  // few fields initialized in constructor
   private Context context;
-
   private File persistFile;
-
   private AuthenticationManager authenticationManager;
+
+  // few data loaders - initialized lazily when necessary only
+  private NotificationDetailLoader notificationDetailLoader;
+  private NotificationViewUrlLoader notificationViewUrlLoader;
 
   /**
    * Create service.
@@ -235,77 +237,52 @@ public class UnreadNotificationsService {
   }
 
   /**
-   * Get notification object containing all data for view. May be loaded from server in this method, so do not call this from GUI thread!
+   * Get notification object containing all detailed data for view. May be loaded from server in this method, so do not call this from GUI thread!
    * 
    * @param notification to get detail data for
    * @return view response with {@link Notification} containing all data
    */
-  public NotificationViewData getNotificationForView(Notification notification) {
-    String apiUrl = notification.getViewBaseUrl();
-    NotificationViewData nswd = new NotificationViewData();
+  public NotificationViewData getNotificationDetailForView(Notification notification) {
+    String apiUrl = notification.getSubjectUrl();
     if (notification.isDetailLoaded()) {
-      nswd.notification = notification;
+      return new NotificationViewData(notification);
     } else {
-      try {
-        if (apiUrl != null) {
-          Response<JSONObject> resp = RemoteSystemClient.getJSONObjectFromUrl(context, authenticationManager.getGhApiCredentials(context), apiUrl, null);
-          synchronized (TAG) {
-            NotificationStream ns = Utils.readFromStore(TAG, context, persistFile);
-            notification = ns.getNotificationById(notification.getId());
-            if (notification != null) {
-              notification.setSubjectDetailHtmlUrl(Utils.trimToNull(resp.data.getString("html_url")));
-              if (notification.getSubjectDetailHtmlUrl() == null) {
-                Log.w(TAG, "Notification detail loading problem due data format problem: no 'html_url' field in response");
-              }
-
-              if (resp.data.has("merged") && resp.data.getBoolean("merged")) {
-                notification.setSubjectStatus("merged");
-              } else {
-                notification.setSubjectStatus(Utils.trimToNull(resp.data.getString("state")));
-              }
-              notification.setDetailLoaded(true);
-              Utils.writeToStore(TAG, context, persistFile, ns);
-              nswd.notification = notification;
-            }
-          }
-        }
-      } catch (InvalidObjectException e) {
-        nswd.loadingStatus = LoadingStatus.DATA_ERROR;
-        Log.w(TAG, "Notification detail loading failed due data format problem: " + e.getMessage(), e);
-      } catch (NoRouteToHostException e) {
-        nswd.loadingStatus = LoadingStatus.CONN_UNAVAILABLE;
-      } catch (AuthenticationException e) {
-        nswd.loadingStatus = LoadingStatus.AUTH_ERROR;
-      } catch (IOException e) {
-        Log.w(TAG, "Notification detail loading failed due connection problem: " + e.getMessage());
-        nswd.loadingStatus = LoadingStatus.CONN_ERROR;
-      } catch (JSONException e) {
-        nswd.loadingStatus = LoadingStatus.DATA_ERROR;
-        Log.w(TAG, "Notification detail loading failed due data format problem: " + e.getMessage());
-      } catch (Exception e) {
-        Log.e(TAG, "Notification detail loading failed due: " + e.getMessage(), e);
-        nswd.loadingStatus = LoadingStatus.UNKNOWN_ERROR;
-      }
+      if (notificationDetailLoader == null)
+        notificationDetailLoader = new NotificationDetailLoader(TAG, context, authenticationManager, persistFile);
+      return notificationDetailLoader.loadData(apiUrl, notification);
     }
-    return nswd;
   }
 
   /**
-   * Get github.com web view URL for the notification. May be loaded from server in this method, so do not call this from GUI thread!
+   * Get web view URL for the notification. May be loaded from server in this method, so do not call this from GUI thread!
    * 
    * @param notification to get view url for
    * @return response with URL from data
    */
-  public StringViewData getGithubDataHtmlUrl(Notification notification) {
+  public StringViewData getNotificationViewUrl(Notification notification) {
     StringViewData nswd = new StringViewData();
-    NotificationViewData nvd = getNotificationForView(notification);
-    nswd.loadingStatus = nvd.loadingStatus;
-    if (nvd.notification != null) {
-      nswd.data = nvd.notification.getSubjectDetailHtmlUrl();
+
+    String apiUrl = notification.getViewBaseUrl();
+    if (apiUrl != null) {
+      if (notification.isDetailLoaded() && apiUrl.equals(notification.getSubjectUrl())) {
+        nswd.data = notification.getSubjectDetailHtmlUrl();
+      } else if (apiUrl.equals(notification.getSubjectUrl()) && PreferencesUtils.getBoolean(context, PreferencesUtils.PREF_SERVER_DETAIL_LOADING)) {
+        NotificationViewData nvd = getNotificationDetailForView(notification);
+        nswd.loadingStatus = nvd.loadingStatus;
+        if (nvd.notification != null) {
+          nswd.data = nvd.notification.getSubjectDetailHtmlUrl();
+        }
+      } else {
+        if (notificationViewUrlLoader == null)
+          notificationViewUrlLoader = new NotificationViewUrlLoader(apiUrl, context, authenticationManager);
+        nswd = notificationViewUrlLoader.loadData(apiUrl, null);
+      }
       if (nswd.data == null) {
         nswd.loadingStatus = LoadingStatus.DATA_ERROR;
-        Log.w(TAG, "GithubDataHtmlUrl loading failed due data format problem: no 'html_url' field in response");
+        Log.w(TAG, "Notification html view URL loading failed due data format problem: no 'html_url' field in response");
       }
+    } else {
+      nswd.loadingStatus = LoadingStatus.DATA_ERROR;
     }
     return nswd;
   };

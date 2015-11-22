@@ -18,6 +18,8 @@ package com.daskiworks.ghwatch.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import android.graphics.Color;
+
 import com.daskiworks.ghwatch.Utils;
 
 /**
@@ -170,6 +172,23 @@ public class Notification implements Serializable {
 
   public String getSubjectStatus() {
     return subjectStatus;
+  }
+
+  /**
+   * Get color for subject status.
+   * 
+   * @return integer with color or null if status is not available
+   */
+  public Integer getSubjectStatusColor() {
+    if ("open".equalsIgnoreCase(subjectStatus)) {
+      return Color.parseColor("#6CC644");
+    } else if ("closed".equalsIgnoreCase(subjectStatus)) {
+      return Color.parseColor("#BD2C00");
+    } else if ("merged".equalsIgnoreCase(subjectStatus)) {
+      return Color.parseColor("#6E5494");
+    } else {
+      return null;
+    }
   }
 
   public void setSubjectStatus(String subjectStatus) {
