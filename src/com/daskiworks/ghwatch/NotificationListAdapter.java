@@ -16,7 +16,9 @@
 package com.daskiworks.ghwatch;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -57,6 +59,9 @@ public class NotificationListAdapter extends BaseAdapter {
   private String filterByRepository;
 
   private List<Notification> filteredNotifications = null;
+
+  private Map<View, DetailedDataLoaderTask> detailLoadersByView = new HashMap<View, DetailedDataLoaderTask>();
+  private Map<Notification, DetailedDataLoaderTask> detailLoadersByNotification = new HashMap<Notification, DetailedDataLoaderTask>();
 
   public NotificationListAdapter(Context activity, final NotificationStream notificationStream, ImageLoader imageLoader,
       UnreadNotificationsService unreadNotificationsService) {
@@ -115,11 +120,13 @@ public class NotificationListAdapter extends BaseAdapter {
     return getFilteredNotifications().get(position).getId();
   }
 
-  public static void updateNotificationDetails(View listItem, Notification notification) {
+  protected static void updateNotificationDetails(View listItem, Notification notification) {
     View tvStatus = listItem.findViewById(R.id.status);
     Integer statusColor = notification.getSubjectStatusColor();
     if (statusColor != null) {
       tvStatus.setBackgroundColor(statusColor);
+    } else {
+      tvStatus.setBackgroundColor(Color.TRANSPARENT);
     }
   }
 
@@ -135,7 +142,6 @@ public class NotificationListAdapter extends BaseAdapter {
     }
 
     // Initialize the views in the layout
-    ImageView iv = (ImageView) listItem.findViewById(R.id.thumb);
     TextView tvType = (TextView) listItem.findViewById(R.id.type);
     TextView tvTitle = (TextView) listItem.findViewById(R.id.title);
     TextView tvRepoName = (TextView) listItem.findViewById(R.id.repo_name);
@@ -143,22 +149,31 @@ public class NotificationListAdapter extends BaseAdapter {
 
     // Set the views in the layout
     final Notification notification = getFilteredNotifications().get(position);
-    imageLoader.displayImage(notification.getRepositoryAvatarUrl(), iv);
+    imageLoader.displayImage(notification.getRepositoryAvatarUrl(), (ImageView) listItem.findViewById(R.id.thumb));
     tvTitle.setText(notification.getSubjectTitle());
     tvType.setText(Utils.formatNotificationTypeForView(notification.getSubjectType()) + ", " + notification.getReason());
     tvRepoName.setText(notification.getRepositoryFullName());
 
+    View tvStatus = listItem.findViewById(R.id.status);
+    tvStatus.setBackgroundColor(Color.TRANSPARENT);
     if (notification.isDetailLoaded()) {
       updateNotificationDetails(listItem, notification);
+      detailLoadersByView.remove(listItem);
     } else if (PreferencesUtils.getBoolean(context, PreferencesUtils.PREF_SERVER_DETAIL_LOADING)) {
-      View tvStatus = listItem.findViewById(R.id.status);
-      tvStatus.setBackgroundColor(Color.TRANSPARENT);
-      // TODO #57 handle correct reuse of views
-      new DetailedDataLoaderTask(listItem).execute(notification);
+      // TODO #57 load only for Donators
+      DetailedDataLoaderTask loader = detailLoadersByNotification.get(notification);
+      if (loader == null) {
+        new DetailedDataLoaderTask(listItem, notification).execute();
+      } else {
+        loader.setView(listItem);
+      }
     }
 
+    TextView timeView = ((TextView) listItem.findViewById(R.id.time));
     if (notification.getUpdatedAt() != null) {
-      ((TextView) listItem.findViewById(R.id.time)).setText(Utils.formatDateIntervalFromNow(context, notification.getUpdatedAt()));
+      timeView.setText(Utils.formatDateIntervalFromNow(context, notification.getUpdatedAt()));
+    } else {
+      timeView.setText("");
     }
 
     ImageButton imgButton = (ImageButton) listItem.findViewById(R.id.button_menu);
@@ -185,25 +200,41 @@ public class NotificationListAdapter extends BaseAdapter {
     return listItem;
   }
 
-  private final class DetailedDataLoaderTask extends AsyncTask<Notification, String, NotificationViewData> {
+  private final class DetailedDataLoaderTask extends AsyncTask<Object, Integer, NotificationViewData> {
 
-    View listItem;
+    private View listItem;
+    private Notification notification;
 
-    public DetailedDataLoaderTask(View listItem) {
-      super();
+    public DetailedDataLoaderTask(View listItem, Notification notification) {
       this.listItem = listItem;
+      this.notification = notification;
+    }
+
+    public void setView(View view) {
+      listItem = view;
+      detailLoadersByView.put(listItem, this);
     }
 
     @Override
-    protected NotificationViewData doInBackground(Notification... params) {
-      return unreadNotificationsService.getNotificationDetailForView(params[0]);
+    protected void onPreExecute() {
+      detailLoadersByView.put(listItem, this);
+      detailLoadersByNotification.put(notification, this);
+    }
+
+    @Override
+    protected NotificationViewData doInBackground(Object... params) {
+      return unreadNotificationsService.getNotificationDetailForView(notification);
     }
 
     @Override
     protected void onPostExecute(NotificationViewData result) {
-      if (result.loadingStatus == LoadingStatus.OK && result.notification != null)
-        updateNotificationDetails(listItem, result.notification);
-      super.onPostExecute(result);
+      detailLoadersByNotification.remove(notification);
+      if (listItem != null && detailLoadersByView.get(listItem) == this) {
+        detailLoadersByView.remove(listItem);
+        if (result.loadingStatus == LoadingStatus.OK && result.notification != null) {
+          updateNotificationDetails(listItem, result.notification);
+        }
+      }
     }
 
   }
@@ -235,7 +266,17 @@ public class NotificationListAdapter extends BaseAdapter {
   @Override
   public void notifyDataSetChanged() {
     filteredNotifications = null;
+    detailLoadersByView.clear();
     super.notifyDataSetChanged();
+  }
+
+  /**
+   * Cancel all data loading threads.
+   */
+  public void cancel() {
+    for (DetailedDataLoaderTask loader : detailLoadersByNotification.values()) {
+      loader.cancel(true);
+    }
   }
 
 }

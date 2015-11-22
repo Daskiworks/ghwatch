@@ -176,6 +176,8 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
     Log.d(TAG, "onDestroy()");
     if (dataLoader != null)
       dataLoader.cancel(true);
+    if (notificationsListAdapter != null)
+      notificationsListAdapter.cancel();
     if (showNotificationTask != null) {
       Utils.dismissDialogSafe(showNotificationTask.progress);
       showNotificationTask.progress = null;
