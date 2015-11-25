@@ -64,7 +64,7 @@
             android:key="pref_serverCheckFull"
             android:summary="@string/pref_serverCheckFull_summ"
             android:title="@string/pref_serverCheckFull" />
-        <CheckBoxPreference
+        <com.daskiworks.ghwatch.view.preference.CheckBoxDonatedPreference
             android:defaultValue="false"
             android:key="pref_serverDetailLoading"
             android:summary="@string/pref_serverDetailLoading_summ"

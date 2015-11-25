@@ -15,10 +15,14 @@
  */
 package com.daskiworks.ghwatch.backend;
 
+import java.io.File;
+
 import android.app.backup.BackupManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+
+import com.daskiworks.ghwatch.Utils;
 
 /**
  * Utilities to work with default preferences.
@@ -26,6 +30,8 @@ import android.preference.PreferenceManager;
  * @author Vlastimil Elias <vlastimil.elias@worldonline.cz>
  */
 public class PreferencesUtils {
+
+  private static final String TAG = PreferencesUtils.class.getSimpleName();
 
   /*
    * Names of user edited preferences.
@@ -213,6 +219,30 @@ public class PreferencesUtils {
     SharedPreferences.Editor editor = wmbPreference.edit();
     editor.remove(key);
     editor.commit();
+  }
+
+  private static final String DTFN = "dtfn";
+
+  /**
+   * Store donation timestamp.
+   * 
+   * @param context
+   * @param timestamp to store
+   */
+  public static void storeDonationTimestamp(Context context, Long timestamp) {
+    File file = context.getFileStreamPath(DTFN);
+    Utils.writeToStore(TAG, context, file, timestamp);
+  }
+
+  /**
+   * Read donation timestamp.
+   * 
+   * @param context
+   * @return donation timestamp or null if not donated yet.
+   */
+  public static Long readDonationTimestamp(Context context) {
+    File file = context.getFileStreamPath(DTFN);
+    return Utils.readFromStore(TAG, context, file);
   }
 
 }

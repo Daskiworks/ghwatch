@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2014 contributors as indicated by the @authors tag.
+<!--
+   Copyright 2014 contributors as indicated by the @authors tag.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -12,13 +13,14 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
- -->
- <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+   
+   -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:padding="16dp" >
 
-   <LinearLayout
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
@@ -28,6 +30,40 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/dialog_sad_intro_text" />
+        
+        <TextView
+            android:id="@+id/text_donated"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:text="@string/dialog_sad_text_donated" 
+            android:layout_marginTop="12dp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/button_donate_2"
+            style="?android:attr/button"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:text="@string/dialog_sad_button_donate_2" 
+            android:layout_marginTop="12dp"/>
+
+        <Button
+            android:id="@+id/button_donate_1"
+            style="?android:attr/button"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:text="@string/dialog_sad_button_donate_1" />
+        
+        <Button
+            android:id="@+id/button_donate_restore"
+            style="?android:attr/button"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:text="@string/dialog_sad_button_donate_restore" />
 
         <TextView
             android:id="@+id/title_social"
@@ -37,59 +73,21 @@
             android:layout_marginTop="8dp"
             android:text="@string/dialog_sad_title_social" />
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal" >
-
-            <Button
-                android:id="@+id/button_social_rate"
-                style="?android:attr/button"
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:text="@string/dialog_sad_button_rate" />
-
-            <Button
-                android:id="@+id/button_social_share"
-                style="?android:attr/button"
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:text="@string/dialog_sad_button_share" />
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/title_donate"
-            style="?android:listSeparatorTextViewStyle"
+        <Button
+            android:id="@+id/button_social_rate"
+            style="?android:attr/button"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/dialog_sad_title_donate" />
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:text="@string/dialog_sad_button_rate" />
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal" >
-
-            <Button
-                android:id="@+id/button_donate_1"
-                style="?android:attr/button"
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:text="@string/dialog_sad_button_donate_1" />
-
-            <Button
-                android:id="@+id/button_donate_2"
-                style="?android:attr/button"
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:text="@string/dialog_sad_button_donate_2" />
-        </LinearLayout>
+        <Button
+            android:id="@+id/button_social_share"
+            style="?android:attr/button"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:text="@string/dialog_sad_button_share" />
 
         <TextView
             android:id="@+id/title_participate"
@@ -99,30 +97,21 @@
             android:layout_marginTop="8dp"
             android:text="@string/dialog_sad_title_participate" />
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal" >
+        <Button
+            android:id="@+id/button_bug"
+            style="?android:attr/button"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:text="@string/dialog_sad_button_bug" />
 
-            <Button
-                android:id="@+id/button_bug"
-                style="?android:attr/button"
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:text="@string/dialog_sad_button_bug" />
-            
-            <Button
-                android:id="@+id/button_src"
-                style="?android:attr/button"
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:text="@string/dialog_sad_button_src" />
-            
-        </LinearLayout>
-
+        <Button
+            android:id="@+id/button_src"
+            style="?android:attr/button"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:text="@string/dialog_sad_button_src" />
     </LinearLayout>
 
 </ScrollView>

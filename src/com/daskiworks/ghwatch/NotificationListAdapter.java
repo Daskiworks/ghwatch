@@ -138,6 +138,7 @@ public class NotificationListAdapter extends BaseAdapter {
       listItem = layoutInflater.inflate(R.layout.list_notifications, parent, false);
     } else {
       listItem = convertView;
+      listItem.requestLayout();
       // listItem = layoutInflater.inflate(R.layout.list_notifications, parent, false);
     }
 
@@ -159,8 +160,7 @@ public class NotificationListAdapter extends BaseAdapter {
     if (notification.isDetailLoaded()) {
       updateNotificationDetails(listItem, notification);
       detailLoadersByView.remove(listItem);
-    } else if (PreferencesUtils.getBoolean(context, PreferencesUtils.PREF_SERVER_DETAIL_LOADING)) {
-      // TODO #57 load only for Donators
+    } else if (PreferencesUtils.getBoolean(context, PreferencesUtils.PREF_SERVER_DETAIL_LOADING) && PreferencesUtils.readDonationTimestamp(context) != null) {
       DetailedDataLoaderTask loader = detailLoadersByNotification.get(notification);
       if (loader == null) {
         new DetailedDataLoaderTask(listItem, notification).execute();

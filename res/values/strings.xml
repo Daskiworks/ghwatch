@@ -173,21 +173,25 @@
     
     <!-- Support App Development dialog -->
     <string name="dialog_sad_title">Support Development</string>
-    <string name="dialog_sad_button_close">Not now, Thanks</string>
-    <string name="dialog_sad_intro_text">Do you like this app? Support its development please. Thanks in advance!</string>
+    <string name="dialog_sad_button_close">Close</string>
+    <string name="dialog_sad_intro_text">Do you like this app? Support its development please. You get a small gift for your donation in form of few extra features. It is showing of status related to the notified Issue or Pull Request for now, but other will be added in future.</string>
     <string name="dialog_sad_title_social">Spread the word</string>
     <string name="dialog_sad_button_rate">Rate in Google Play</string>
     <string name="dialog_sad_button_share">Share App Info</string>
     <string name="dialog_sad_button_share_title">Share App Info to..</string>
-    <string name="dialog_sad_title_donate">Donate</string>
+    <string name="dialog_sad_text_donated">You donated already, thank you very much.</string>
     <string name="dialog_sad_button_donate_1">Basic donation\n(~1 USD/EUR)</string>
     <string name="dialog_sad_button_donate_2">I\'m feeling rich ;-)\n(~4 USD/EUR)</string>
+    <string name="dialog_sad_button_donate_restore">Restore previous donation</string>
     <string name="message_err_billing_unavailable">Sorry, but billing service is not available.</string>
-    <string name="message_err_billing_error">Sorry, but billing service doesn\'t work properly.</string>
+    <string name="message_err_billing_error">Sorry, but donation failed.</string>
+    <string name="message_err_billing_check_error">Sorry, but donation restore failed.</string>
+    <string name="message_err_billing_check_not_found">Sorry, but previous donation not found.</string>
+    <string name="message_ok_billing">Thank you for your Donation. Enjoy extra features as your gift.</string>
     <string name="dialog_sad_title_participate">Participate in Development</string>
     <string name="dialog_sad_button_bug">Bug Report or Feature Request</string>
     <string name="dialog_sad_button_src">Contribute to the source code</string>
-    
+    <string name="message_donation_only">This feature is a gift for Donators. Visit "Support Development" item of main menu please.</string>
     
     <!-- About dialog -->
     <string name="dialog_about_waranty_info">DISCLAIMER OF WARRANTY: The Software is provided \"AS IS\" and \"WITH ALL FAULTS,\" without warranty of any kind, including without limitation the warranties of merchantability, fitness for a particular purpose and non-infringement. The Licensor makes no warranty that the Software is free of defects or is suitable for any particular purpose. In no event shall the Licensor be responsible for loss or damages arising from the installation or use of the Software, including but not limited to any indirect, punitive, special, incidental or consequential damages of any character including, without limitation, damages for loss of goodwill, work stoppage, computer failure or malfunction, or any and all other commercial damages or losses. The entire risk as to the quality and performance of the Software is borne by you. Should the Software prove defective, you and not the Licensor assume the entire cost of any service and repair.</string>

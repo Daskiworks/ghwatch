@@ -266,8 +266,8 @@ public class UnreadNotificationsService {
     if (apiUrl != null) {
       if (notification.isDetailLoaded() && apiUrl.equals(notification.getSubjectUrl())) {
         nswd.data = notification.getSubjectDetailHtmlUrl();
-      } else if (apiUrl.equals(notification.getSubjectUrl()) && PreferencesUtils.getBoolean(context, PreferencesUtils.PREF_SERVER_DETAIL_LOADING)) {
-        // TODO #57 use this only for Donators
+      } else if (apiUrl.equals(notification.getSubjectUrl()) && PreferencesUtils.getBoolean(context, PreferencesUtils.PREF_SERVER_DETAIL_LOADING)
+          && PreferencesUtils.readDonationTimestamp(context) != null) {
         NotificationViewData nvd = getNotificationDetailForView(notification);
         nswd.loadingStatus = nvd.loadingStatus;
         if (nvd.notification != null) {
