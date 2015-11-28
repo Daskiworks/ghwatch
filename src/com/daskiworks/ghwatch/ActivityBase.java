@@ -18,6 +18,8 @@ package com.daskiworks.ghwatch;
 import java.lang.reflect.Field;
 
 import android.app.Activity;
+import android.app.DialogFragment;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -60,7 +62,7 @@ public abstract class ActivityBase extends Activity {
 
   private static final String TAG = ActivityBase.class.getSimpleName();
 
-  private static final String FRAGMENT_DIALOG = "dialogFragment";
+  protected static final String FRAGMENT_DIALOG = "dialogFragment";
 
   protected static final int COLOR_BACKGROUND_DRAWER = 0xFFEEEEEE;
 
@@ -276,16 +278,26 @@ public abstract class ActivityBase extends Activity {
   }
 
   /**
+   * Show dialog. Dialog is shown only if no other dialog is shown currently.
+   * 
+   * @param dialog to show
+   * @return true if shown, false if not.
+   */
+  protected boolean showDialog(DialogFragment dialog) {
+    Fragment f = this.getFragmentManager().findFragmentByTag(FRAGMENT_DIALOG);
+    if (f == null) {
+      dialog.show(this.getFragmentManager(), FRAGMENT_DIALOG);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
    * Show dialog with application support info
    */
   protected void showSupportAppDevelopmentDialog() {
-    SupportAppDevelopmentDialogFragment f = (SupportAppDevelopmentDialogFragment) this.getFragmentManager().findFragmentByTag(FRAGMENT_DIALOG);
-    if (f == null) {
-      SupportAppDevelopmentDialogFragment sdf = new SupportAppDevelopmentDialogFragment();
-      sdf.show(this.getFragmentManager(), FRAGMENT_DIALOG);
-    } else {
-      f.showDonatedInfo();
-    }
+    showDialog(new SupportAppDevelopmentDialogFragment());
   }
 
   @Override

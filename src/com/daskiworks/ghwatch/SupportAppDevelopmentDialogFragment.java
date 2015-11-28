@@ -50,7 +50,17 @@ public class SupportAppDevelopmentDialogFragment extends DialogFragment {
 
   protected View view;
 
+  /**
+   * Check if this dialog should be shown now.
+   * 
+   * @param activity
+   * @return true if dialog should be shown now.
+   */
   public static boolean isAutoShowScheduled(MainActivity activity) {
+
+    if (PreferencesUtils.readDonationTimestamp(activity) != null)
+      return false;
+
     long lastShowTimestamp = PreferencesUtils.getLong(activity, SupportAppDevelopmentDialogFragment.PREF_LAST_SUPPORT_SHOW_TIMESTAMP, 0);
     if (lastShowTimestamp == 0) {
       storeTimestampOfLastShow(activity, System.currentTimeMillis() - (AUTO_SHOW_PERIOD - AUTO_SHOW_FIRST));

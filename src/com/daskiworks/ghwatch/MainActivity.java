@@ -145,7 +145,9 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
       if (intent != null && INTENT_ACTION_RESET_FILTER.equals(intent.getAction())) {
         resetNotificationsFilter();
       }
-      if (SupportAppDevelopmentDialogFragment.isAutoShowScheduled(this)) {
+      if (NewVersionInfoDialogFragment.isShowScheduled(this)) {
+        showDialog(new NewVersionInfoDialogFragment());
+      } else if (SupportAppDevelopmentDialogFragment.isAutoShowScheduled(this)) {
         showSupportAppDevelopmentDialog();
       }
     }
