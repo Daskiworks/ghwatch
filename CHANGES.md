@@ -1,7 +1,8 @@
 GH::watch changelog
 ===================
 
-## v1.18 (ToDo)
+## v1.18 (Nov 28th, 2015)
+- #57 - Shows current status of Issue or Pull Request the notification is for by color bar on left side (open - green, closed - red, merged - purple)
 
 ## v1.17 (Oct 28th, 2015)
 - #74 - bugfix of authentication fail on new device when old token exists on github.com  

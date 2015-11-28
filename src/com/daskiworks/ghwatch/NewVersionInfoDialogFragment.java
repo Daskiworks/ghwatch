@@ -19,6 +19,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.backup.BackupManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -91,8 +92,10 @@ public class NewVersionInfoDialogFragment extends DialogFragment {
   }
 
   protected void storeShowOccurence() {
-    if (getActivity() != null)
+    if (getActivity() != null) {
       PreferencesUtils.storeString(getActivity(), PREF_LAST_VERSION_INFO_SHOW_TAG, VERSION_VALUE);
+      (new BackupManager(getActivity())).dataChanged();
+    }
   }
 
 }

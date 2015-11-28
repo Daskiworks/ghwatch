@@ -22,7 +22,7 @@ package com.daskiworks.ghwatch.backend;
  */
 public final class GHConstants {
 
-  public static final boolean DEBUG = true;
+  public static final boolean DEBUG = false;
 
   public static final String URL_BASE = "https://api.github.com";
 

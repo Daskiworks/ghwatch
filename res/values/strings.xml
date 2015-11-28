@@ -176,7 +176,7 @@
     <!-- Support App Development dialog -->
     <string name="dialog_sad_title">Support Development</string>
     <string name="dialog_sad_button_close">Close</string>
-    <string name="dialog_sad_intro_text">Do you like this app? Support its development please. You get a small gift for your donation in form of few extra features. It is showing of status related to the notified Issue or Pull Request for now, but other will be added in future.</string>
+    <string name="dialog_sad_intro_text">Do you like this app? Support its development please. You get a small gift for your donation in form of few extra features. It is showing of status related to the notified Issue or Pull Request.</string>
     <string name="dialog_sad_title_social">Spread the word</string>
     <string name="dialog_sad_button_rate">Rate in Google Play</string>
     <string name="dialog_sad_button_share">Share App Info</string>
@@ -199,11 +199,11 @@
     
     <!-- New Version dialog -->
     <string name="dialog_nv_title">New version</string>
-    <string name="dialog_nv_intro_text">Thanks everybody who supports this app development by donation. I prepared small gift for you. Current Issue or Pull Request status is indicated for each notification by color bar shown on left side. Visit "Support Development" item of main menu please to donate or restore previous donation status and claim your gift.</string>
+    <string name="dialog_nv_intro_text">Thanks everybody who supports this app development by donation. Version 1.18. brings small gift for you. Issue or Pull Request status is indicated for each notification by color bar shown on left side. Visit "Support Development" item of main menu please to donate or restore previous donation status and claim your gift.</string>
     
     
     <!-- About dialog -->
     <string name="dialog_about_waranty_info">DISCLAIMER OF WARRANTY: The Software is provided \"AS IS\" and \"WITH ALL FAULTS,\" without warranty of any kind, including without limitation the warranties of merchantability, fitness for a particular purpose and non-infringement. The Licensor makes no warranty that the Software is free of defects or is suitable for any particular purpose. In no event shall the Licensor be responsible for loss or damages arising from the installation or use of the Software, including but not limited to any indirect, punitive, special, incidental or consequential damages of any character including, without limitation, damages for loss of goodwill, work stoppage, computer failure or malfunction, or any and all other commercial damages or losses. The entire risk as to the quality and performance of the Software is borne by you. Should the Software prove defective, you and not the Licensor assume the entire cost of any service and repair.</string>
-	<string name="copyright">Copyright &#169; 2013&#8211;2014 Daskiworks</string>
+	<string name="copyright">Copyright &#169; 2013&#8211;2015 Daskiworks</string>
 	<string name="infoTxtIssues">If you find any Bug or have any Enhancement request for this app, feel free to use issue tracker available at https://github.com/Daskiworks/ghwatch/issues</string>
 </resources>

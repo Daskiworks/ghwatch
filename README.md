@@ -33,7 +33,7 @@ Main features
   and one hour on WiFi to prevent problems and allow widget decrease count/android notification remove when 
   notification is read on another device)
 * Preference to configure full update for all background checks to better detect notification reads 
-  on another device/web. Use may lead to a bit higher consumption of resources (network, battery, GitHub API limit) - **new in 1.13**
+  on another device/web. Use may lead to a bit higher consumption of resources (network, battery, GitHub API limit)
 
 ###Android notification
 * Android notification is fired when new unread GithHub notification is detected
@@ -56,6 +56,7 @@ Main features
 * Shows list of unread GitHub notifications
 * Shows notification type (Issue, Pull Request, ...) 
 * Shows reason why you received notification (subscribed, author, comment, ...)
+* Shows current status of Issue or Pull Request the notification is for by color bar on left side (open - green, closed - red, merged - purple) - this is a gift for users who support app development by small donation - **new in 1.18**
 * Swipe down to refresh list
 * Swipe right to mark notification as read
 * Click notification to view details - Detail informations are shown by 
@@ -63,7 +64,7 @@ Main features
   so you see all necessary details and performs distinct actions (eg. reply in discussions etc.) directly.
 * Shows list of repositories some notifications are available for, together with notifications count
 * Notifications filtering by repository
-* Context menu to Unsubscribe from selected notification thread, given notification is marked as read also - **improved in 1.13**
+* Context menu to Unsubscribe from selected notification thread, given notification is marked as read also
 * Mark all unread notifications as read by one action
 * Mark all unread notifications from selected repository as read by one action
 * Manually refresh unread notifications list from server
@@ -86,9 +87,9 @@ Main features
 
 ###Support GH::watch Development dialog
 * Dialog where you can take some actions to support GH::watch development
+  * Donate small amount to the app development by In App payment, you get small gift for this 
   * Rate app in Google Play
   * Share App info over social media
-  * Donate small amount to the developer - In App payment
   * Report a Bug
   * Add Feature request
 
