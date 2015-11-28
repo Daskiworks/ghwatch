@@ -23,6 +23,7 @@
     <string name="action_supportAppDevelopment">Support Development</string>
     <string name="action_about">About</string>
     <string name="action_notifCheck">Notification check (debug)</string>
+    <string name="action_donationTogle">Donation togle (debug)</string>
     <string name="action_all_read">Mark Everything as Read</string>
     <string name="action_mark_read">Mark as Read</string>
     <string name="action_view">View</string>

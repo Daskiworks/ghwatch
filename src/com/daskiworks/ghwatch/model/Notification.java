@@ -183,7 +183,8 @@ public class Notification implements Serializable {
     if ("open".equalsIgnoreCase(subjectStatus)) {
       return Color.parseColor("#6CC644");
     } else if ("closed".equalsIgnoreCase(subjectStatus)) {
-      return Color.parseColor("#BD2C00");
+      return Color.parseColor("#B34545");
+      // return Color.parseColor("#BD2C00");
     } else if ("merged".equalsIgnoreCase(subjectStatus)) {
       return Color.parseColor("#6E5494");
     } else {

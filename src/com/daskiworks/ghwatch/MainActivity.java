@@ -36,6 +36,7 @@ import android.widget.Toast;
 
 import com.daskiworks.ghwatch.LoginDialogFragment.LoginDialogListener;
 import com.daskiworks.ghwatch.backend.GHConstants;
+import com.daskiworks.ghwatch.backend.PreferencesUtils;
 import com.daskiworks.ghwatch.backend.UnreadNotificationsService;
 import com.daskiworks.ghwatch.backend.ViewDataReloadStrategy;
 import com.daskiworks.ghwatch.image.ImageLoader;
@@ -158,11 +159,16 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
   public boolean onCreateOptionsMenu(Menu menu) {
     MenuInflater inflater = getMenuInflater();
     inflater.inflate(R.menu.main_activity_actions, menu);
-    MenuItem mi = menu.findItem(R.id.action_notifCheck);
+    setDebugMenuItemVisibility(menu, R.id.action_notifCheck);
+    setDebugMenuItemVisibility(menu, R.id.action_donationTogle);
+    return super.onCreateOptionsMenu(menu);
+  }
+
+  protected void setDebugMenuItemVisibility(Menu menu, int id) {
+    MenuItem mi = menu.findItem(id);
     if (mi != null) {
       mi.setVisible(GHConstants.DEBUG);
     }
-    return super.onCreateOptionsMenu(menu);
   }
 
   @Override
@@ -202,6 +208,15 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
       unreadNotificationsService.flushPersistentStore();
       unreadNotificationsService.newNotificationCheck();
       return true;
+    case R.id.action_donationTogle:
+      Long l = PreferencesUtils.readDonationTimestamp(this);
+      if (l == null) {
+        l = System.currentTimeMillis();
+      } else {
+        l = null;
+      }
+      PreferencesUtils.storeDonationTimestamp(this, l);
+      Toast.makeText(MainActivity.this, "Donation status toggled to " + (l != null ? "on" : "off"), Toast.LENGTH_SHORT).show();
     default:
       return false;
     }
@@ -560,5 +575,7 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
     if (repositoriesListAdapter != null) {
       repositoriesListAdapter.notifyDataSetChanged();
     }
+    if (notificationsListView != null)
+      notificationsListView.requestLayout();
   }
 }
