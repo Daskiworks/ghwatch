@@ -20,11 +20,14 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import com.daskiworks.ghwatch.backend.GHConstants;
 
 /**
  * {@link DialogFragment} for About dialog.
@@ -43,7 +46,12 @@ public class AboutDialogFragment extends DialogFragment {
     View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_about, null);
     TextView appVersion = (TextView) view.findViewById(R.id.app_version);
     try {
-      appVersion.setText(getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0).versionName);
+      PackageInfo pi = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
+      String version = pi.versionName;
+      if (GHConstants.DEBUG) {
+        version = version + " (" + pi.versionCode + ")";
+      }
+      appVersion.setText(version);
     } catch (NameNotFoundException e) {
       Log.e(TAG, e.getMessage(), e);
     }

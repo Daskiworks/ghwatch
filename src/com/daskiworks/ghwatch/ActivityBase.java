@@ -44,6 +44,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.daskiworks.ghwatch.backend.AuthenticationManager;
+import com.daskiworks.ghwatch.backend.DonationService;
 import com.daskiworks.ghwatch.image.ImageLoader;
 import com.daskiworks.ghwatch.model.GHUserInfo;
 
@@ -278,9 +279,19 @@ public abstract class ActivityBase extends Activity {
    * Show dialog with application support info
    */
   protected void showSupportAppDevelopmentDialog() {
-    if (this.getFragmentManager().findFragmentByTag(FRAGMENT_DIALOG) == null) {
+    SupportAppDevelopmentDialogFragment f = (SupportAppDevelopmentDialogFragment) this.getFragmentManager().findFragmentByTag(FRAGMENT_DIALOG);
+    if (f == null) {
       SupportAppDevelopmentDialogFragment sdf = new SupportAppDevelopmentDialogFragment();
       sdf.show(this.getFragmentManager(), FRAGMENT_DIALOG);
+    } else {
+      f.showDonatedInfo();
+    }
+  }
+
+  @Override
+  public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    if (!DonationService.processBillingResult(this, this.getFragmentManager().findFragmentByTag(FRAGMENT_DIALOG), requestCode, resultCode, data)) {
+      super.onActivityResult(requestCode, resultCode, data);
     }
   }
 

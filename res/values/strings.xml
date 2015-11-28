@@ -184,11 +184,12 @@
     <string name="dialog_sad_button_donate_1">Basic donation\n(~1 USD/EUR)</string>
     <string name="dialog_sad_button_donate_2">I\'m feeling rich ;-)\n(~4 USD/EUR)</string>
     <string name="dialog_sad_button_donate_restore">Restore previous donation</string>
-    <string name="message_err_billing_unavailable">Sorry, but billing service is not available.</string>
-    <string name="message_err_billing_error">Sorry, but donation failed.</string>
-    <string name="message_err_billing_check_error">Sorry, but donation restore failed.</string>
+    <string name="message_err_billing_unavailable">Sorry, billing service is not available.</string>
+    <string name="message_err_billing_error">Sorry, donation failed.</string>
+    <string name="message_err_billing_check_error">Sorry, donation restore failed.</string>
     <string name="message_err_billing_check_not_found">Sorry, but previous donation not found.</string>
     <string name="message_ok_billing">Thank you for your Donation. Enjoy extra features as your gift.</string>
+    <string name="message_ok_billing_previous">Previous donation detected. Thank you. Enjoy extra features as your gift.</string>
     <string name="dialog_sad_title_participate">Participate in Development</string>
     <string name="dialog_sad_button_bug">Bug Report or Feature Request</string>
     <string name="dialog_sad_button_src">Contribute to the source code</string>
