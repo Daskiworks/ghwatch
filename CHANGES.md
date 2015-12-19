@@ -1,6 +1,11 @@
 GH::watch changelog
 ===================
 
+## v1.19 (ToDo)
+- #76 don't clear status bar color when updating notifications list, wait to get new status to change color
+- #73 project updated to Android Studion and gradle build 
+- update of Google Play service and support libraries
+
 ## v1.18 (Nov 28th, 2015)
 - #57 - Shows current status of Issue or Pull Request the notification is for by color bar on left side (open - green, closed - red, merged - purple)
 

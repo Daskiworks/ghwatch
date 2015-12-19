@@ -8,7 +8,7 @@ so they are not stored in the public git repository.
 
 If you want to compile app yourself then you have to Register GitHub application at https://github.com/settings/applications/new
 
-Then you have to create text file `/src/com/daskiworks/ghwatch/backend/clients.properties` with content containing two OAuth 
+Then you have to create text file `/app/src/main/resources/com/daskiworks/ghwatch/backend/clients.properties` with content containing two OAuth 
 secrets from the registered application:
 
 ````
