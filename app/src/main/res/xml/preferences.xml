@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2014 contributors as indicated by the @authors tag.
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+ <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:key="pref_cat_notificationSettings"
+        android:title="@string/pref_notificationSettings_title" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="pref_notify"
+            android:summary="@string/pref_notify_summ"
+            android:title="@string/pref_notify" />
+		<ListPreference
+            android:defaultValue="@string/pref_notifyFilter_default"
+            android:dependency="pref_notify"
+            android:dialogTitle="@string/pref_notifyFilter"
+            android:entries="@array/pref_notifyFilter_entries"
+            android:entryValues="@array/pref_notifyFilter_values"
+            android:key="pref_notifyFilter"
+            android:title="@string/pref_notifyFilter" />
+        <RingtonePreference
+            android:defaultValue="content://settings/system/notification_sound"
+            android:dependency="pref_notify"
+            android:key="pref_notifySound"
+            android:ringtoneType="notification"
+            android:showDefault="true"
+            android:showSilent="true"
+            android:title="@string/pref_notifySound" >
+        </RingtonePreference>
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:dependency="pref_notify"
+            android:key="pref_notifyVibrate"
+            android:summary="@string/pref_notifyVibrate_summ"
+            android:title="@string/pref_notifyVibrate" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="pref_cat_serverSettings"
+        android:title="@string/pref_serverSettings_title" >
+        <ListPreference
+            android:defaultValue="@string/pref_serverCheckPeriod_default"
+            android:dialogTitle="@string/pref_serverCheckPeriod"
+            android:entries="@array/pref_serverCheckPeriod_entries"
+            android:entryValues="@array/pref_serverCheckPeriod_values"
+            android:key="pref_serverCheckPeriod"
+            android:title="@string/pref_serverCheckPeriod" />
+        
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_serverCheckFull"
+            android:summary="@string/pref_serverCheckFull_summ"
+            android:title="@string/pref_serverCheckFull" />
+        <com.daskiworks.ghwatch.view.preference.CheckBoxDonatedPreference
+            android:defaultValue="false"
+            android:key="pref_serverDetailLoading"
+            android:summary="@string/pref_serverDetailLoading_summ"
+            android:title="@string/pref_serverDetailLoading" />
+
+        <Preference
+            android:key="pref_serverAccount"
+            android:title="@string/pref_serverAccount" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="pref_cat_serverInfo"
+        android:title="@string/pref_cat_serverInfo_title" >
+        <PreferenceScreen
+            android:key="pref_cat_serverInfoScreen"
+            android:persistent="false"
+            android:summary="@string/pref_serverInfo_summary"
+            android:title="@string/pref_serverInfo_title" >
+            <com.daskiworks.ghwatch.view.preference.ShowTextPreference
+                android:key="pref_serverInfo_APILimit"
+                android:title="@string/pref_serverInfo_APILimit" />
+            <com.daskiworks.ghwatch.view.preference.ShowTextPreference
+                android:key="pref_serverInfo_APILimitRemaining"
+                android:title="@string/pref_serverInfo_APILimitRemaining" />
+
+            <com.daskiworks.ghwatch.view.preference.ShowTimestampPreference
+                android:key="pref_serverInfo_APILimitResetTimestamp"
+                android:title="@string/pref_serverInfo_APILimitResetTimestamp" />
+
+            <com.daskiworks.ghwatch.view.preference.ShowTextPreference
+                android:key="pref_serverInfo_lastRequestDuration"
+                android:title="@string/pref_serverInfo_lastRequestDuration" />
+            <com.daskiworks.ghwatch.view.preference.ShowTimestampPreference
+                android:key="pref_serverInfo_lastUnredNotifBackRequestTimestamp"
+                android:title="@string/pref_serverInfo_lastUnredNotifBackRequestTimestamp" />
+        </PreferenceScreen>
+    </PreferenceCategory>
+
+</PreferenceScreen>
