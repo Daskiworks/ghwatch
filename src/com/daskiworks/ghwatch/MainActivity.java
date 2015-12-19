@@ -577,7 +577,9 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
     if (repositoriesListAdapter != null) {
       repositoriesListAdapter.notifyDataSetChanged();
     }
-    if (notificationsListView != null)
+    if (notificationsListView != null) {
+      notificationsListView.measure(0, 0);
       notificationsListView.requestLayout();
+    }
   }
 }

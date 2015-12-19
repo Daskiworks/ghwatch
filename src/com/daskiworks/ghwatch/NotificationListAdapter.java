@@ -138,7 +138,6 @@ public class NotificationListAdapter extends BaseAdapter {
       listItem = layoutInflater.inflate(R.layout.list_notifications, parent, false);
     } else {
       listItem = convertView;
-      listItem.requestLayout();
       // listItem = layoutInflater.inflate(R.layout.list_notifications, parent, false);
     }
 
@@ -157,15 +156,17 @@ public class NotificationListAdapter extends BaseAdapter {
 
     View tvStatus = listItem.findViewById(R.id.status);
     tvStatus.setBackgroundColor(Color.TRANSPARENT);
-    if (notification.isDetailLoaded()) {
+    if (PreferencesUtils.getBoolean(context, PreferencesUtils.PREF_SERVER_DETAIL_LOADING) && PreferencesUtils.readDonationTimestamp(context) != null) {
       updateNotificationDetails(listItem, notification);
-      detailLoadersByView.remove(listItem);
-    } else if (PreferencesUtils.getBoolean(context, PreferencesUtils.PREF_SERVER_DETAIL_LOADING) && PreferencesUtils.readDonationTimestamp(context) != null) {
-      DetailedDataLoaderTask loader = detailLoadersByNotification.get(notification);
-      if (loader == null) {
-        new DetailedDataLoaderTask(listItem, notification).execute();
+      if (notification.isDetailLoaded()) {
+        detailLoadersByView.remove(listItem);
       } else {
-        loader.setView(listItem);
+        DetailedDataLoaderTask loader = detailLoadersByNotification.get(notification);
+        if (loader == null) {
+          new DetailedDataLoaderTask(listItem, notification).execute();
+        } else {
+          loader.setView(listItem);
+        }
       }
     }
 
@@ -196,6 +197,9 @@ public class NotificationListAdapter extends BaseAdapter {
 
       }
     });
+
+    listItem.measure(0, 0);
+    listItem.requestLayout();
 
     return listItem;
   }

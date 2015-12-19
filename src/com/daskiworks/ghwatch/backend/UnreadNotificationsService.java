@@ -21,6 +21,7 @@ import java.io.InvalidObjectException;
 import java.net.NoRouteToHostException;
 import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.http.auth.AuthenticationException;
@@ -134,6 +135,7 @@ public class UnreadNotificationsService {
         if (ns == null && reloadStrategy != ViewDataReloadStrategy.NEVER) {
           // we DO NOT use lastModified here because it returns only notifications newly added after given date, not all unread
           ns = readNotificationStreamFromServer(URL_NOTIFICATIONS, null);
+          keepNotificationDetailDataAfterReload(ns, oldNs);
           if (ns != null) {
             Utils.writeToStore(TAG, context, persistFile, ns);
             updateWidgets();
@@ -165,6 +167,20 @@ public class UnreadNotificationsService {
 
       nswd.notificationStream = ns;
       return nswd;
+    }
+  }
+
+  private void keepNotificationDetailDataAfterReload(NotificationStream ns, NotificationStream oldNs) {
+    if (oldNs != null && ns != null) {
+      Iterator<Notification> i = ns.iterator();
+      while (i.hasNext()) {
+        Notification n = i.next();
+        Notification oldN = oldNs.getNotificationById(n.getId());
+        if (oldN != null) {
+          n.setSubjectStatus(oldN.getSubjectStatus());
+          n.setSubjectDetailHtmlUrl(oldN.getSubjectDetailHtmlUrl());
+        }
+      }
     }
   }
 
@@ -370,6 +386,7 @@ public class UnreadNotificationsService {
               ns.addNotification(n);
             ns.setLastFullUpdateTimestamp(oldNs.getLastFullUpdateTimestamp());
           }
+          keepNotificationDetailDataAfterReload(ns, oldNs);
           Utils.writeToStore(TAG, context, persistFile, ns);
 
           fireAndroidNotification(ns, oldNs);
