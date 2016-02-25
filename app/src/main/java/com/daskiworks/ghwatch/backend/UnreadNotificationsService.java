@@ -55,6 +55,8 @@ import com.daskiworks.ghwatch.model.NotificationStreamViewData;
 import com.daskiworks.ghwatch.model.NotificationViewData;
 import com.daskiworks.ghwatch.model.StringViewData;
 
+import me.leolin.shortcutbadger.ShortcutBadger;
+
 /**
  * Service used to work with unread notifications.
  * 
@@ -480,8 +482,11 @@ public class UnreadNotificationsService {
           .setContentTitle(context.getString(R.string.an_title_more)).setPriority(NotificationCompat.PRIORITY_DEFAULT);
       mBuilder.setAutoCancel(true);
 
+      ShortcutBadger.applyCount(context, newStream.size());
+
       if (newStream.size() > 1)
         mBuilder.setNumber(newStream.size());
+
 
       boolean allFromOne = newStream.allNotificationsFromSameRepository();
 

@@ -47,6 +47,8 @@ import com.daskiworks.ghwatch.model.Notification;
 import com.daskiworks.ghwatch.model.NotificationStreamViewData;
 import com.daskiworks.ghwatch.model.StringViewData;
 
+import me.leolin.shortcutbadger.ShortcutBadger;
+
 /**
  * Activity used to show list of Notifications.
  * 
@@ -155,6 +157,7 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
     refreshList(ViewDataReloadStrategy.IF_TIMED_OUT, false);
     unreadNotificationsService.markAndroidWidgetsAsRead();
     unreadNotificationsService.markAndroidNotificationsRead();
+    ShortcutBadger.removeCount(getApplicationContext());
   }
 
   @Override

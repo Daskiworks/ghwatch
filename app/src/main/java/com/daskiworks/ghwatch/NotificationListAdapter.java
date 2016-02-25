@@ -137,8 +137,9 @@ public class NotificationListAdapter extends BaseAdapter {
     if (convertView == null) {
       listItem = layoutInflater.inflate(R.layout.list_notifications, parent, false);
     } else {
-      listItem = convertView;
-      // listItem = layoutInflater.inflate(R.layout.list_notifications, parent, false);
+       // we can't reuse view due problems with item height (not resized correctly)
+       //listItem = convertView;
+       listItem = layoutInflater.inflate(R.layout.list_notifications, parent, false);
     }
 
     // Initialize the views in the layout
