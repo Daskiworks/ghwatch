@@ -3,7 +3,8 @@ GH::watch changelog
 
 ## v1.19 (ToDo)
 - #76 don't clear status bar color when updating notifications list, wait to get new status to change color
-- #73 project updated to Android Studion and gradle build 
+- #77 added launcher icon badge with number of new notifications for launchers which support badges (using https://github.com/leolin310148/ShortcutBadger)  
+- #73 project updated to Android Studio and gradle build 
 - update of Google Play service and support libraries
 
 ## v1.18 (Nov 28th, 2015)

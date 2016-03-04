@@ -15,19 +15,6 @@
  */
 package com.daskiworks.ghwatch.backend;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InvalidObjectException;
-import java.net.NoRouteToHostException;
-import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
-import org.apache.http.auth.AuthenticationException;
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
@@ -55,16 +42,29 @@ import com.daskiworks.ghwatch.model.NotificationStreamViewData;
 import com.daskiworks.ghwatch.model.NotificationViewData;
 import com.daskiworks.ghwatch.model.StringViewData;
 
+import org.apache.http.auth.AuthenticationException;
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InvalidObjectException;
+import java.net.NoRouteToHostException;
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 import me.leolin.shortcutbadger.ShortcutBadger;
 
 /**
  * Service used to work with unread notifications.
- * 
+ *
  * @author Vlastimil Elias <vlastimil.elias@worldonline.cz>
  */
 public class UnreadNotificationsService {
 
-  private static final String TAG = "UnreadNotificationsService";
+  private static final String TAG = "UnreadNotificationsSvc";
 
   /**
    * URL to load notifications from.
@@ -101,7 +101,7 @@ public class UnreadNotificationsService {
 
   /**
    * Create service.
-   * 
+   *
    * @param context this service runs in
    */
   public UnreadNotificationsService(Context context) {
@@ -112,7 +112,7 @@ public class UnreadNotificationsService {
 
   /**
    * Get unread notifications for view.
-   * 
+   *
    * @param reloadStrategy if data should be reloaded from server
    * @return info about notifications
    */
@@ -174,9 +174,7 @@ public class UnreadNotificationsService {
 
   private void keepNotificationDetailDataAfterReload(NotificationStream ns, NotificationStream oldNs) {
     if (oldNs != null && ns != null) {
-      Iterator<Notification> i = ns.iterator();
-      while (i.hasNext()) {
-        Notification n = i.next();
+      for (Notification n : ns) {
         Notification oldN = oldNs.getNotificationById(n.getId());
         if (oldN != null) {
           n.setSubjectStatus(oldN.getSubjectStatus());
@@ -256,7 +254,7 @@ public class UnreadNotificationsService {
 
   /**
    * Get notification object containing all detailed data for view. May be loaded from server in this method, so do not call this from GUI thread!
-   * 
+   *
    * @param notification to get detail data for
    * @return view response with {@link Notification} containing all data
    */
@@ -273,7 +271,7 @@ public class UnreadNotificationsService {
 
   /**
    * Get web view URL for the notification. May be loaded from server in this method, so do not call this from GUI thread!
-   * 
+   *
    * @param notification to get view url for
    * @return response with URL from data
    */
@@ -304,20 +302,22 @@ public class UnreadNotificationsService {
       nswd.loadingStatus = LoadingStatus.DATA_ERROR;
     }
     return nswd;
-  };
+  }
+
+  ;
 
   /**
    * Switch if we will use optimized pooling or not.
    */
-  private static boolean USE_OPTIMIZED_POOLING = true;
+  private static final boolean USE_OPTIMIZED_POOLING = true;
 
-  private static long BACKGROUND_FORCE_FULL_RELOAD_AFTER = Utils.MILLIS_HOUR * 6L;
-  private static long BACKGROUND_FORCE_FULL_RELOAD_AFTER_WIFI = Utils.MILLIS_HOUR * 1L;
+  private static final long BACKGROUND_FORCE_FULL_RELOAD_AFTER = Utils.MILLIS_HOUR * 6L;
+  private static final long BACKGROUND_FORCE_FULL_RELOAD_AFTER_WIFI = Utils.MILLIS_HOUR * 1L;
 
   /**
    * Prepare "Last-Modified" content which is used to do optimized calls to GitHub rest API by incremental updates. It decides based on
    * {@link #USE_OPTIMIZED_POOLING} switch and on time of last full update. We do full updates once a time to prevent problems with incremental updates.
-   * 
+   *
    * @param oldNs used to prepare header content
    * @return header content
    */
@@ -341,7 +341,7 @@ public class UnreadNotificationsService {
 
   /**
    * Return true if background check of unread notifications is necessary.
-   * 
+   *
    * @param context to be used
    * @return true if check is necessary
    */
@@ -352,9 +352,9 @@ public class UnreadNotificationsService {
 
   /**
    * Check new notifications on GitHub and fire androidNotification if necessary.
-   * <p>
+   * <p/>
    * Check is done asynchronously, new thread is started inside of this method.
-   * 
+   *
    * @see #newNotificationCheckImpl()
    */
   public void newNotificationCheck() {
@@ -368,7 +368,7 @@ public class UnreadNotificationsService {
 
   /**
    * Real business logic for check new notifications on GitHub and fire androidNotification if necessary.
-   * 
+   *
    * @see #newNotificationCheck()
    */
   protected void newNotificationCheckImpl() {
@@ -384,9 +384,12 @@ public class UnreadNotificationsService {
         if (ns != null) {
           if (lastModified != null) {
             // incremental update has been performed and some new notif is available (ns is not null), so we have to add old ones to keep them
-            for (Notification n : oldNs)
-              ns.addNotification(n);
-            ns.setLastFullUpdateTimestamp(oldNs.getLastFullUpdateTimestamp());
+            if (oldNs != null) {
+              for (Notification n : oldNs) {
+                ns.addNotification(n);
+              }
+              ns.setLastFullUpdateTimestamp(oldNs.getLastFullUpdateTimestamp());
+            }
           }
           keepNotificationDetailDataAfterReload(ns, oldNs);
           Utils.writeToStore(TAG, context, persistFile, ns);
@@ -406,8 +409,8 @@ public class UnreadNotificationsService {
   }
 
   /**
-   * @param url
-   * @param lastModified
+   * @param url          to read stream from
+   * @param lastModified timestamp used in "If-Modified-Since" http header, can be null
    * @return null if lastModified used and nothing new
    * @throws InvalidObjectException
    * @throws NoRouteToHostException
@@ -554,7 +557,7 @@ public class UnreadNotificationsService {
         mBuilder.setSound(Uri.parse(nsound));
       }
       if (PreferencesUtils.getBoolean(context, PreferencesUtils.PREF_NOTIFY_VIBRATE, true)) {
-        mBuilder.setVibrate(new long[] { 0, 300, 100, 150, 100, 150 });
+        mBuilder.setVibrate(new long[]{0, 300, 100, 150, 100, 150});
       }
 
       mBuilder.setLights(0xffffffff, 100, 4000);
@@ -565,6 +568,7 @@ public class UnreadNotificationsService {
     } else if (newStream.isEmpty()) {
       // #54 dismiss previous android notification if no any Github notification is available (as it was read on another device)
       Utils.getNotificationManager(context).cancel(ANDROID_NOTIFICATION_ID);
+      ShortcutBadger.removeCount(context);
     }
   }
 
