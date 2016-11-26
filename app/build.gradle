@@ -25,6 +25,6 @@ android {
 dependencies {
     compile 'com.android.support:support-v4:25.0.1'
     compile 'com.google.android.gms:play-services:10.0.0'
-    compile 'me.leolin:ShortcutBadger:1.1.4@aar'
+    compile 'me.leolin:ShortcutBadger:1.1.11@aar'
     androidTestCompile 'com.android.support:support-v4:25.0.1'
 }
