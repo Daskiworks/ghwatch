@@ -36,7 +36,7 @@
         android:paddingBottom="6dp"
         android:paddingEnd="6dp"
         android:paddingLeft="3dp"
-        android:paddingRight="6dp"
+        android:paddingRight="0dp"
         android:paddingStart="3dp"
         android:paddingTop="6dp" >
 
@@ -44,7 +44,8 @@
             android:id="@+id/line1"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:paddingRight="3dp">
 
             <TextView
                 android:id="@+id/title"
@@ -90,8 +91,8 @@
 
             <ImageButton
                 android:id="@+id/button_menu"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="38dp"
+                android:layout_height="35dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
@@ -101,6 +102,7 @@
                 android:focusable="false"
                 android:focusableInTouchMode="true"
                 android:padding="3dp"
+                android:paddingRight="0dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_action_overflow_dark" />
 
