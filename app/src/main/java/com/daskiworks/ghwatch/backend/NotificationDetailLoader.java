@@ -15,18 +15,20 @@
  */
 package com.daskiworks.ghwatch.backend;
 
-import java.io.File;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.util.Log;
 
 import com.daskiworks.ghwatch.Utils;
+import com.daskiworks.ghwatch.model.Label;
 import com.daskiworks.ghwatch.model.Notification;
 import com.daskiworks.ghwatch.model.NotificationStream;
 import com.daskiworks.ghwatch.model.NotificationViewData;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
 
 /**
  * Loader used to load notification detail. It is stored back to the notification stream persistent store not to be loaded again!
@@ -66,6 +68,17 @@ public class NotificationDetailLoader extends RemoteJSONObjectGetTemplate<Notifi
       } else {
         inputObject.setSubjectStatus(Utils.trimToNull(remoteResponse.getString("state")));
       }
+
+      inputObject.setSubjectLabels(null);
+      if(remoteResponse.has("labels")){
+        processLabelsJson(remoteResponse, inputObject);
+      } else if(remoteResponse.has("issue_url") && remoteResponse.getString("issue_url") != null) {
+        //#75 if pullrequest we have to load Labels from related issue (get URL of it from "issue_url" field) :-(
+        String issueUrl = remoteResponse.getString("issue_url");
+        NotificationDetailLabelLoader ndll = new NotificationDetailLabelLoader(TAG, context, authenticationManager);
+        //load labels, ignore possible errors (do not process returned object)
+        ndll.loadData(issueUrl, inputObject);
+      }
       inputObject.setDetailLoaded(true);
 
       synchronized (TAG) {
@@ -75,12 +88,21 @@ public class NotificationDetailLoader extends RemoteJSONObjectGetTemplate<Notifi
           if (n != null) {
             n.setSubjectDetailHtmlUrl(inputObject.getSubjectDetailHtmlUrl());
             n.setSubjectStatus(inputObject.getSubjectStatus());
+            n.setSubjectLabels(inputObject.getSubjectLabels());
             n.setDetailLoaded(true);
             Utils.writeToStore(TAG, context, persistFile, ns);
           }
         }
       }
       returnValue.notification = inputObject;
+    }
+  }
+
+  public static void processLabelsJson(JSONObject remoteResponse, Notification inputObject) throws JSONException {
+    JSONArray labels = remoteResponse.getJSONArray("labels");
+    for(int i =0; i< labels.length(); i++) {
+      JSONObject label = labels.getJSONObject(i);
+      inputObject.addSubjectLabel(new Label(label.getString("name"), label.getString("color")));
     }
   }
 

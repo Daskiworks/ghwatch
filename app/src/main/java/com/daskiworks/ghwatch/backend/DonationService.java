@@ -199,6 +199,7 @@ public class DonationService {
   public static void storeDonationExists(Context context) {
     PreferencesUtils.storeDonationTimestamp(context, System.currentTimeMillis());
     PreferencesUtils.storeBoolean(context, PreferencesUtils.PREF_SERVER_DETAIL_LOADING, true);
+    PreferencesUtils.storeBoolean(context, PreferencesUtils.PREF_SERVER_LABELS_LOADING, true);
   }
 
 }

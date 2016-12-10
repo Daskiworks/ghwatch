@@ -179,6 +179,7 @@ public class UnreadNotificationsService {
         if (oldN != null) {
           n.setSubjectStatus(oldN.getSubjectStatus());
           n.setSubjectDetailHtmlUrl(oldN.getSubjectDetailHtmlUrl());
+          n.setSubjectLabels(oldN.getSubjectLabels());
         }
       }
     }

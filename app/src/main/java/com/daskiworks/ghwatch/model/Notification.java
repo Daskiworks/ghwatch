@@ -15,12 +15,14 @@
  */
 package com.daskiworks.ghwatch.model;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import android.graphics.Color;
 
 import com.daskiworks.ghwatch.Utils;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * JavaBean to hold info about one Github notification.
@@ -44,14 +46,20 @@ public class Notification implements Serializable {
   private Date updatedAt;
 
   /**
-   * Flag indicating that that details had been loaded from server already.
+   * Flag indicating that that details (fields marked DETAIL) had been loaded from server already.
    */
   private boolean detailLoaded = false;
   private String subjectDetailHtmlUrl;
+
   /**
-   * Status related to the notification: open, closed, merged
+   * Status related to the notification: open, closed, merged (DETAIL)
    */
   private String subjectStatus;
+
+  /**
+   * List of labels for the notification subject (DETAIL)
+   */
+  private List<Label> subjectLabels;
 
   /**
    * Constructor for unit tests.
@@ -194,6 +202,21 @@ public class Notification implements Serializable {
 
   public void setSubjectStatus(String subjectStatus) {
     this.subjectStatus = subjectStatus;
+  }
+
+  public List<Label> getSubjectLabels() {
+    return subjectLabels;
+  }
+
+  public void setSubjectLabels(List<Label> subjectLabels) {
+    this.subjectLabels = subjectLabels;
+  }
+
+  public void addSubjectLabel(Label label){
+    if(subjectLabels == null){
+      subjectLabels = new ArrayList<>();
+    }
+    subjectLabels.add(label);
   }
 
   @Override

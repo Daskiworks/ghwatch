@@ -85,6 +85,7 @@ public abstract class RemoteJSONObjectGetTemplate<T extends BaseViewData, U> {
     T ret = createResponseObject();
     if (apiUrl != null) {
       try {
+        Log.d(TAG, logName + " loading data from: " + apiUrl);
         Response<JSONObject> resp = RemoteSystemClient.getJSONObjectFromUrl(context, authenticationManager.getGhApiCredentials(context), apiUrl, null);
         processData(resp.data, ret, inputObject);
       } catch (InvalidObjectException e) {

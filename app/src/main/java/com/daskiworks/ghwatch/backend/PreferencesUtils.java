@@ -39,6 +39,7 @@ public class PreferencesUtils {
   public static final String PREF_SERVER_CHECK_PERIOD = "pref_serverCheckPeriod";
   public static final String PREF_SERVER_CHECK_FULL = "pref_serverCheckFull";
   public static final String PREF_SERVER_DETAIL_LOADING = "pref_serverDetailLoading";
+  public static final String PREF_SERVER_LABELS_LOADING = "pref_serverLabelsLoading";
   public static final String PREF_SERVER_ACCOUNT = "pref_serverAccount";
   public static final String PREF_NOTIFY = "pref_notify";
   public static final String PREF_NOTIFY_VIBRATE = "pref_notifyVibrate";

@@ -2,11 +2,12 @@ GH::watch changelog
 ===================
 
 ## v1.19 (ToDo)
+- \#75 show Labels related to the notification subject (Issue, Pull Request)
 - \#76 don't clear status bar color when updating notifications list, wait to get new status to change color
 - \#77 added launcher icon badge with number of new notifications for launchers which support badges (using https://github.com/leolin310148/ShortcutBadger)  
-- \#73 project updated to Android Studio and gradle build 
+- \#78 bigger menu button in notification list item for easier usability
+- \#73 project updated to Android Studio and gradle build
 - \#81 updated targetSdkVersion to 25, updated build tools, Google Play service and support libraries to latest versions
-- #78 bigger menu button in notification list item  
 
 ## v1.18 (Nov 28th, 2015)
 - \#57 - Shows current status of Issue or Pull Request the notification is for by color bar on left side (open - green, closed - red, merged - purple)

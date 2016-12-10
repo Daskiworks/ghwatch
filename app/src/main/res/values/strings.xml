@@ -13,197 +13,200 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  -->
- <resources>
+<resources>
 
-    <!-- Common strings -->
-    <string name="app_name">GH::watch</string>
-    <string name="context_menu">Context menu</string>
-    <string name="action_settings">Preferences</string>
-    <string name="action_refresh">Refresh</string>
-    <string name="action_supportAppDevelopment">Support Development</string>
-    <string name="action_about">About</string>
-    <string name="action_notifCheck">Notification check (debug)</string>
-    <string name="action_donationTogle">Donation togle (debug)</string>
-    <string name="action_all_read">Mark Everything as Read</string>
-    <string name="action_mark_read">Mark as Read</string>
-    <string name="action_view">View</string>
-    <string name="action_mute_thread">Unsubscribe</string>
-    <string name="action_unwatch">Unwatch</string>
-    <string name="button_cancel">Cancel</string>
-    <string name="button_close">Close</string>
-    <string name="button_ok">OK</string>
-    <string name="dialog_error">Error</string>
-    <string name="drawer_open">Open navigation drawer</string>
-    <string name="drawer_close">Close navigation drawer</string>
-    <string name="widget_title_unread">Github notifications unread count</string>
-    <string name="empty"></string> 
-    
-    <string-array name="action_list">
-        <item>Unread notifications</item>
-        <item>Watched repositories</item>
-    </string-array>
-    
-    <string name="drawer_repo_filter_title">Filter by repository</string>
-    
-    
-    <string name="time_interval_abbreviation_minute">m</string>
-    <string name="time_interval_abbreviation_hour">h</string>
-    <string name="time_interval_abbreviation_day">d</string>
-    
-    <!-- android notifications -->
-    <string name="an_title_one">New GitHub notification available</string>
-    <string name="an_title_more">New GitHub notifications available</string>
+  <!-- Common strings -->
+  <string name="app_name">GH::watch</string>
+  <string name="context_menu">Context menu</string>
+  <string name="action_settings">Preferences</string>
+  <string name="action_refresh">Refresh</string>
+  <string name="action_supportAppDevelopment">Support Development</string>
+  <string name="action_about">About</string>
+  <string name="action_notifCheck">Notification check (debug)</string>
+  <string name="action_donationTogle">Donation togle (debug)</string>
+  <string name="action_all_read">Mark Everything as Read</string>
+  <string name="action_mark_read">Mark as Read</string>
+  <string name="action_view">View</string>
+  <string name="action_mute_thread">Unsubscribe</string>
+  <string name="action_unwatch">Unwatch</string>
+  <string name="button_cancel">Cancel</string>
+  <string name="button_close">Close</string>
+  <string name="button_ok">OK</string>
+  <string name="dialog_error">Error</string>
+  <string name="drawer_open">Open navigation drawer</string>
+  <string name="drawer_close">Close navigation drawer</string>
+  <string name="widget_title_unread">Github notifications unread count</string>
+  <string name="empty"></string>
 
-    <!-- Start activity -->
-    <string name="start_activity_text">Stay in touch with what is happening around GitHub project of your interest.</string>
-    <string name="start_activity_text2">Follow GitHub notifications directly from your smart phone or tablet.</string>
-    <string name="start_activity_text3">You can lighten your email box thanks to this application. Simply go to the GitHub.com > \'Account settings\' > \'Notification center\' and disable emails for notifications there because you are notified directly by this app.</string>
-    <string name="button_login_github">Login GitHub</string>
-    
-    <!-- Login dialog -->
-    <string name="dialog_login">Login GitHub</string>
-    <string name="dialog_login_info">Note: Password is not stored on your device (OAuth is used). Two factor authentication is supported!</string>
-    <string name="username">Username</string>
-    <string name="password">Password</string>
-    <string name="otp">Authentication code</string>
-    <string name="otp_info">Two factor authentication is in use. Enter Authentication code please.</string>
-    <string name="password_show">Show password</string>
-    <string name="button_login">Log In</string>
-    <string name="error_username_mandatory">\"Username\" must be filled</string>
-    <string name="error_password_mandatory">\"Password\" must be filled</string>
-    <string name="progress_login_title">GitHub login in progress</string>
-    <string name="message_err_error_auth">GitHub login failed. Provided \"Username\" or \"Password\" is invalid or number of failed login attempts exceeded.</string>
+  <string-array name="action_list">
+    <item>Unread notifications</item>
+    <item>Watched repositories</item>
+  </string-array>
 
-    <!-- Notification loading error messages -->
-    <string name="message_err_comm_error_conn_unavailable">Communication with GitHub server failed. Network is not available. Enable/check internet connection please.</string>
-    <string name="message_err_comm_error_auth">Communication with GitHub server failed due authentication problem. Check your account settings please.</string>
-    <string name="message_err_comm_error_conn_error">Communication with GitHub server failed due network error. Try later please.</string>
-    <string name="message_err_comm_error_data_error">Communication with GitHub server failed due invalid data format. Try later please.</string>
-    <string name="message_err_comm_error_unknown">Communication with GitHub server failed due unknown error. Try later please.</string>
+  <string name="drawer_repo_filter_title">Filter by repository</string>
 
-    <!-- Notifications list page -->
-    <string name="notifications_list_title">Unread Notifications</string>
-    <string name="message_no_unread_notifications">No unread notifications available. Pull down to refresh.</string>
-    <string name="message_staled_data">Displayed data may be outdated!</string>
-    <string name="message_confirm_notifications_all_mark_read_title">Mark all notifications as read?</string>
-    <string name="message_confirm_notifications_all_mark_read">Do you really want to mark all notifications as read? This can\'t be undone!\n\nYou can mark particular notification as read by swiping it out to the right.</string>
-    <string name="message_confirm_notifications_all_mark_read_repo">Do you really want to mark all notifications from the selected repository as read? This can\'t be undone!\n\nYou can mark particular notification as read by swiping it out to the right.</string>
-    <string name="message_notification_marked_read">Notification marked as read.</string>
-    <string name="message_notification_thread_muted">Notification thread unsubscribed.</string>
-    <string name="message_notifications_all_marked_read">All notifications marked as read.</string>
-    <string name="progress_get_view_url_title">Loading notification</string>
 
-    <!-- Watched repositories list page -->
-    <string name="watched_repos_list_title">Watched Repositories</string>
-    <string name="message_no_watched_repos">No watched repositories available. Pull down to refresh.</string>
-    <string name="message_confirm_unwatch_repository_title">Unwatch repository?</string>
-    <string name="message_confirm_unwatch_repository">Do you really want to unwatch the selected repository? This can\'t be undone from this application!</string>
-    
-    
-    <!-- Preferences related strings -->
-    <string name="activity_settings_title">Preferences</string>
-    <string name="pref_notificationSettings_title">Android notifications</string>
-    <string name="pref_notify">Notifications enabled</string>
-    <string name="pref_notify_summ">Fire Android notification when a new GitHub notification is available</string>
-    <string name="pref_notifyFilter">Notifications filter</string>
-    <string name="pref_notifyFilter_default">1</string>
-    <string-array name="pref_notifyFilter_entries">
-        <item>Everything</item>
-        <item>Participating only</item>
-        <item>Nothing</item>
-    </string-array>
-    <string-array name="pref_notifyFilter_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-    <string-array name="pref_notifyFilterFull_entries">
-        <item>Inherited</item>
-        <item>Everything</item>
-        <item>Participating only</item>
-        <item>Nothing</item>
-    </string-array>
-    <string-array name="pref_notifyFilterFull_values">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-    <string name="pref_notifySound">Notification sound</string>
-    <string name="notificationSoundDisabled">None</string>
-    <string name="pref_notifyVibrate">Vibrate</string>
-    <string name="pref_notifyVibrate_summ">Vibrate when new GitHub notification is available</string>
-    <string name="pref_serverSettings_title">GitHub server settings</string>
-    <string name="pref_serverAccount">GitHub user account</string>
-    <string name="pref_serverCheckPeriod">New notifications check period</string>
-    <string name="pref_serverCheckPeriod_default">5</string>
-    <string name="pref_serverCheckFull">Better read detection</string>
-    <string name="pref_serverCheckFull_summ">Better detection of notifications read on another device, a bit higher resource consumption.</string>
-    <string name="pref_serverDetailLoading">Load notification details</string>
-    <string name="pref_serverDetailLoading_summ">Load details about notification subject like Status etc. A bit higher resource consumption.</string>
-    <string name="pref_cat_serverInfo_title">GitHub server info</string>
-    <string name="pref_serverInfo_title">GitHub API request info</string>
-    <string name="pref_serverInfo_summary">Show informations about performed GitHub API requests</string>
-    <string name="pref_serverInfo_APILimit">API requests hour limit (X-RateLimit-Limit)</string>
-    <string name="pref_serverInfo_APILimitRemaining">Remaining API requests limit (X-RateLimit-Remaining)</string>
-    <string name="pref_serverInfo_APILimitResetTimestamp">API request limit reset (X-RateLimit-Reset)</string>
-    <string name="pref_serverInfo_lastRequestDuration">Last response time [ms]</string>
-    <string name="pref_serverInfo_lastUnredNotifBackRequestTimestamp">Last Unread Notifications check</string>
+  <string name="time_interval_abbreviation_minute">m</string>
+  <string name="time_interval_abbreviation_hour">h</string>
+  <string name="time_interval_abbreviation_day">d</string>
 
-    <string-array name="pref_serverCheckPeriod_entries">
-        <item>1 minute</item>
-        <item>2 minutes</item>
-        <item>5 minutes</item>
-        <item>10 minutes</item>
-        <item>20 minutes</item>
-        <item>30 minutes</item>
-        <item>60 minutes</item>
-        <item>90 minutes</item>
-        <item>120 minutes</item>
-    </string-array>
-    <string-array name="pref_serverCheckPeriod_values">
-        <item>1</item>
-        <item>2</item>
-        <item>5</item>
-        <item>10</item>
-        <item>20</item>
-        <item>30</item>
-        <item>60</item>
-        <item>90</item>
-        <item>120</item>
-    </string-array>
-    
-    <!-- Support App Development dialog -->
-    <string name="dialog_sad_title">Support Development</string>
-    <string name="dialog_sad_button_close">Close</string>
-    <string name="dialog_sad_intro_text">Do you like this app? Support its development please. You get a small gift for your donation in form of few extra features. It is showing of status related to the notified Issue or Pull Request.</string>
-    <string name="dialog_sad_title_social">Spread the word</string>
-    <string name="dialog_sad_button_rate">Rate in Google Play</string>
-    <string name="dialog_sad_button_share">Share App Info</string>
-    <string name="dialog_sad_button_share_title">Share App Info to..</string>
-    <string name="dialog_sad_text_donated">You donated already, thank you very much.</string>
-    <string name="dialog_sad_button_donate_1">Basic donation\n(~1 USD/EUR)</string>
-    <string name="dialog_sad_button_donate_2">I\'m feeling rich ;-)\n(~4 USD/EUR)</string>
-    <string name="dialog_sad_button_donate_restore">Restore previous donation</string>
-    <string name="message_err_billing_unavailable">Sorry, billing service is not available.</string>
-    <string name="message_err_billing_error">Sorry, donation failed.</string>
-    <string name="message_err_billing_check_error">Sorry, donation restore failed.</string>
-    <string name="message_err_billing_check_not_found">Sorry, but previous donation not found.</string>
-    <string name="message_ok_billing">Thank you for your Donation. Enjoy extra features as your gift.</string>
-    <string name="message_ok_billing_previous">Previous donation detected. Thank you. Enjoy extra features as your gift.</string>
-    <string name="dialog_sad_title_participate">Participate in Development</string>
-    <string name="dialog_sad_button_bug">Bug Report or Feature Request</string>
-    <string name="dialog_sad_button_src">Contribute to the source code</string>
-    <string name="message_donation_only">This feature is a gift for Donators. Visit "Support Development" item of main menu please.</string>
-    
-    
-    <!-- New Version dialog -->
-    <string name="dialog_nv_title">New version</string>
-    <string name="dialog_nv_intro_text">Thanks everybody who supports this app development by donation. Version 1.18. brings small gift for you. Issue or Pull Request status is indicated for each notification by color bar shown on left side. Visit "Support Development" item of main menu please to donate or restore previous donation status and claim your gift.</string>
-    
-    
-    <!-- About dialog -->
-    <string name="dialog_about_waranty_info">DISCLAIMER OF WARRANTY: The Software is provided \"AS IS\" and \"WITH ALL FAULTS,\" without warranty of any kind, including without limitation the warranties of merchantability, fitness for a particular purpose and non-infringement. The Licensor makes no warranty that the Software is free of defects or is suitable for any particular purpose. In no event shall the Licensor be responsible for loss or damages arising from the installation or use of the Software, including but not limited to any indirect, punitive, special, incidental or consequential damages of any character including, without limitation, damages for loss of goodwill, work stoppage, computer failure or malfunction, or any and all other commercial damages or losses. The entire risk as to the quality and performance of the Software is borne by you. Should the Software prove defective, you and not the Licensor assume the entire cost of any service and repair.</string>
-	<string name="copyright">Copyright &#169; 2013&#8211;2015 Daskiworks</string>
-	<string name="infoTxtIssues">If you find any Bug or have any Enhancement request for this app, feel free to use issue tracker available at https://github.com/Daskiworks/ghwatch/issues</string>
+  <!-- android notifications -->
+  <string name="an_title_one">New GitHub notification available</string>
+  <string name="an_title_more">New GitHub notifications available</string>
+
+  <!-- Start activity -->
+  <string name="start_activity_text">Stay in touch with what is happening around GitHub project of your interest.</string>
+  <string name="start_activity_text2">Follow GitHub notifications directly from your smart phone or tablet.</string>
+  <string name="start_activity_text3">You can lighten your email box thanks to this application. Simply go to the GitHub.com > \'Account settings\' > \'Notification center\' and disable emails for notifications there because you are notified directly by this app.</string>
+  <string name="button_login_github">Login GitHub</string>
+
+  <!-- Login dialog -->
+  <string name="dialog_login">Login GitHub</string>
+  <string name="dialog_login_info">Note: Password is not stored on your device (OAuth is used). Two factor authentication is supported!</string>
+  <string name="username">Username</string>
+  <string name="password">Password</string>
+  <string name="otp">Authentication code</string>
+  <string name="otp_info">Two factor authentication is in use. Enter Authentication code please.</string>
+  <string name="password_show">Show password</string>
+  <string name="button_login">Log In</string>
+  <string name="error_username_mandatory">\"Username\" must be filled</string>
+  <string name="error_password_mandatory">\"Password\" must be filled</string>
+  <string name="progress_login_title">GitHub login in progress</string>
+  <string name="message_err_error_auth">GitHub login failed. Provided \"Username\" or \"Password\" is invalid or number of failed login attempts exceeded.</string>
+
+  <!-- Notification loading error messages -->
+  <string name="message_err_comm_error_conn_unavailable">Communication with GitHub server failed. Network is not available. Enable/check internet connection please.</string>
+  <string name="message_err_comm_error_auth">Communication with GitHub server failed due authentication problem. Check your account settings please.</string>
+  <string name="message_err_comm_error_conn_error">Communication with GitHub server failed due network error. Try later please.</string>
+  <string name="message_err_comm_error_data_error">Communication with GitHub server failed due invalid data format. Try later please.</string>
+  <string name="message_err_comm_error_unknown">Communication with GitHub server failed due unknown error. Try later please.</string>
+
+  <!-- Notifications list page -->
+  <string name="notifications_list_title">Unread Notifications</string>
+  <string name="message_no_unread_notifications">No unread notifications available. Pull down to refresh.</string>
+  <string name="message_staled_data">Displayed data may be outdated!</string>
+  <string name="message_confirm_notifications_all_mark_read_title">Mark all notifications as read?</string>
+  <string name="message_confirm_notifications_all_mark_read">Do you really want to mark all notifications as read? This can\'t be undone!\n\nYou can mark particular notification as read by swiping it out to the right.</string>
+  <string name="message_confirm_notifications_all_mark_read_repo">Do you really want to mark all notifications from the selected repository as read? This can\'t be undone!\n\nYou can mark particular notification as read by swiping it out to the right.</string>
+  <string name="message_notification_marked_read">Notification marked as read.</string>
+  <string name="message_notification_thread_muted">Notification thread unsubscribed.</string>
+  <string name="message_notifications_all_marked_read">All notifications marked as read.</string>
+  <string name="progress_get_view_url_title">Loading notification</string>
+
+  <!-- Watched repositories list page -->
+  <string name="watched_repos_list_title">Watched Repositories</string>
+  <string name="message_no_watched_repos">No watched repositories available. Pull down to refresh.</string>
+  <string name="message_confirm_unwatch_repository_title">Unwatch repository?</string>
+  <string name="message_confirm_unwatch_repository">Do you really want to unwatch the selected repository? This can\'t be undone from this application!</string>
+
+
+  <!-- Preferences related strings -->
+  <string name="activity_settings_title">Preferences</string>
+  <string name="pref_notificationSettings_title">Android notifications</string>
+  <string name="pref_notify">Notifications enabled</string>
+  <string name="pref_notify_summ">Fire Android notification when a new GitHub notification is available</string>
+  <string name="pref_notifyFilter">Notifications filter</string>
+  <string name="pref_notifyFilter_default">1</string>
+  <string-array name="pref_notifyFilter_entries">
+    <item>Everything</item>
+    <item>Participating only</item>
+    <item>Nothing</item>
+  </string-array>
+  <string-array name="pref_notifyFilter_values">
+    <item>1</item>
+    <item>2</item>
+    <item>3</item>
+  </string-array>
+  <string-array name="pref_notifyFilterFull_entries">
+    <item>Default</item>
+    <item>Everything</item>
+    <item>Participating only</item>
+    <item>Nothing</item>
+  </string-array>
+  <string-array name="pref_notifyFilterFull_values">
+    <item>0</item>
+    <item>1</item>
+    <item>2</item>
+    <item>3</item>
+  </string-array>
+  <string name="pref_notifySound">Notification sound</string>
+  <string name="notificationSoundDisabled">None</string>
+  <string name="pref_notifyVibrate">Vibrate</string>
+  <string name="pref_notifyVibrate_summ">Vibrate when new GitHub notification is available</string>
+  <string name="pref_serverSettings_title">GitHub server settings</string>
+  <string name="pref_serverAccount">GitHub user account</string>
+  <string name="pref_serverCheckPeriod">New notifications check period</string>
+  <string name="pref_serverCheckPeriod_default">5</string>
+  <string name="pref_serverCheckFull">Better read detection</string>
+  <string name="pref_serverCheckFull_summ">Better detection of notifications read on another device, a bit higher resource consumption.</string>
+  <string name="pref_serverDetailLoading">Load notification details</string>
+  <string name="pref_serverDetailLoading_summ">Load and show details about notification subject like Status, Labels etc. A bit higher resource consumption.</string>
+  <string name="pref_serverLabelsLoading">Show Labels</string>
+  <string name="pref_serverLabelsLoading_summ">Load and show Labels for notification subject (Issue, Pull Request).</string>
+
+  <string name="pref_cat_serverInfo_title">GitHub server info</string>
+  <string name="pref_serverInfo_title">GitHub API request info</string>
+  <string name="pref_serverInfo_summary">Show informations about performed GitHub API requests</string>
+  <string name="pref_serverInfo_APILimit">API requests hour limit (X-RateLimit-Limit)</string>
+  <string name="pref_serverInfo_APILimitRemaining">Remaining API requests limit (X-RateLimit-Remaining)</string>
+  <string name="pref_serverInfo_APILimitResetTimestamp">API request limit reset (X-RateLimit-Reset)</string>
+  <string name="pref_serverInfo_lastRequestDuration">Last response time [ms]</string>
+  <string name="pref_serverInfo_lastUnredNotifBackRequestTimestamp">Last Unread Notifications check</string>
+
+  <string-array name="pref_serverCheckPeriod_entries">
+    <item>1 minute</item>
+    <item>2 minutes</item>
+    <item>5 minutes</item>
+    <item>10 minutes</item>
+    <item>20 minutes</item>
+    <item>30 minutes</item>
+    <item>60 minutes</item>
+    <item>90 minutes</item>
+    <item>120 minutes</item>
+  </string-array>
+  <string-array name="pref_serverCheckPeriod_values">
+    <item>1</item>
+    <item>2</item>
+    <item>5</item>
+    <item>10</item>
+    <item>20</item>
+    <item>30</item>
+    <item>60</item>
+    <item>90</item>
+    <item>120</item>
+  </string-array>
+
+  <!-- Support App Development dialog -->
+  <string name="dialog_sad_title">Support Development</string>
+  <string name="dialog_sad_button_close">Close</string>
+  <string name="dialog_sad_intro_text">Do you like this app? Support its development please. You get a small gift for your donation in form of few extra features. For now it is showing of Status and Labels related to the notified Issue or Pull Request, but we can add others in the future.</string>
+  <string name="dialog_sad_title_social">Spread the word</string>
+  <string name="dialog_sad_button_rate">Rate in Google Play</string>
+  <string name="dialog_sad_button_share">Share App with friends</string>
+  <string name="dialog_sad_button_share_title">Share GH::watch app info to..</string>
+  <string name="dialog_sad_text_donated">You donated already, thank you very much.</string>
+  <string name="dialog_sad_button_donate_1">Basic donation\n(~1 USD/EUR)</string>
+  <string name="dialog_sad_button_donate_2">I\'m feeling rich ;-)\n(~4 USD/EUR)</string>
+  <string name="dialog_sad_button_donate_restore">Restore previous donation</string>
+  <string name="message_err_billing_unavailable">Sorry, billing service is not available.</string>
+  <string name="message_err_billing_error">Sorry, donation failed.</string>
+  <string name="message_err_billing_check_error">Sorry, donation restore failed.</string>
+  <string name="message_err_billing_check_not_found">Sorry, but previous donation not found.</string>
+  <string name="message_ok_billing">Thank you for your Donation. Enjoy extra features as your gift.</string>
+  <string name="message_ok_billing_previous">Previous donation detected. Thank you. Enjoy extra features as your gift.</string>
+  <string name="dialog_sad_title_participate">Participate in Development</string>
+  <string name="dialog_sad_button_bug">Bug Report or Feature Request</string>
+  <string name="dialog_sad_button_src">Contribute to the source code</string>
+  <string name="message_donation_only">This feature is a gift for Donators. Visit "Support Development" item of main menu please.</string>
+
+
+  <!-- New Version dialog -->
+  <string name="dialog_nv_title">New version</string>
+  <string name="dialog_nv_intro_text">Thanks everybody who supports this app development by donation. Version 1.19. brings a new small gift for you. Issue or Pull Request Labels may be shown for the notification if enabled in app Preferences. Visit "Support Development" item of main menu please to donate or restore previous donation status and claim your gift.</string>
+
+
+  <!-- About dialog -->
+  <string name="dialog_about_waranty_info">DISCLAIMER OF WARRANTY: The Software is provided \"AS IS\" and \"WITH ALL FAULTS,\" without warranty of any kind, including without limitation the warranties of merchantability, fitness for a particular purpose and non-infringement. The Licensor makes no warranty that the Software is free of defects or is suitable for any particular purpose. In no event shall the Licensor be responsible for loss or damages arising from the installation or use of the Software, including but not limited to any indirect, punitive, special, incidental or consequential damages of any character including, without limitation, damages for loss of goodwill, work stoppage, computer failure or malfunction, or any and all other commercial damages or losses. The entire risk as to the quality and performance of the Software is borne by you. Should the Software prove defective, you and not the Licensor assume the entire cost of any service and repair.</string>
+  <string name="copyright">Copyright &#169; 2013&#8211;2015 Daskiworks</string>
+  <string name="infoTxtIssues">If you find any Bug or have any Enhancement request for this app, feel free to use issue tracker available at https://github.com/Daskiworks/ghwatch/issues</string>
 </resources>

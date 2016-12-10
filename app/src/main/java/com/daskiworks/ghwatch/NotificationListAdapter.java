@@ -15,11 +15,6 @@
  */
 package com.daskiworks.ghwatch;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -38,10 +33,18 @@ import android.widget.TextView;
 import com.daskiworks.ghwatch.backend.PreferencesUtils;
 import com.daskiworks.ghwatch.backend.UnreadNotificationsService;
 import com.daskiworks.ghwatch.image.ImageLoader;
+import com.daskiworks.ghwatch.model.Label;
 import com.daskiworks.ghwatch.model.LoadingStatus;
 import com.daskiworks.ghwatch.model.Notification;
 import com.daskiworks.ghwatch.model.NotificationStream;
 import com.daskiworks.ghwatch.model.NotificationViewData;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import eu.fiskur.chipcloud.ChipCloud;
 
 /**
  * {@link ListView} adapter used to show list of notifications from {@link NotificationStream}.
@@ -127,6 +130,18 @@ public class NotificationListAdapter extends BaseAdapter {
       tvStatus.setBackgroundColor(statusColor);
     } else {
       tvStatus.setBackgroundColor(Color.TRANSPARENT);
+    }
+
+    ChipCloud tagGroup = (ChipCloud) listItem.findViewById(R.id.chip_cloud);
+    List<Label> ll = notification.getSubjectLabels();
+    if(PreferencesUtils.getBoolean(listItem.getContext(), PreferencesUtils.PREF_SERVER_LABELS_LOADING) && ll!=null && !ll.isEmpty()){
+      tagGroup.setVisibility(View.VISIBLE);
+      tagGroup.removeAllViews();
+      for (Label l : ll) {
+        tagGroup.addChip(l.getName());
+      }
+    } else {
+      tagGroup.setVisibility(View.GONE);
     }
   }
 

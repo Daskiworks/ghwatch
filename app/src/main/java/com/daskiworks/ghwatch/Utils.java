@@ -174,7 +174,7 @@ public class Utils {
   @SuppressWarnings("unchecked")
   public static <T> T readFromStore(String TAG, Context context, File file) {
 
-    if (!file.exists())
+    if (file == null || !file.exists())
       return null;
 
     FileInputStream fis = null;
