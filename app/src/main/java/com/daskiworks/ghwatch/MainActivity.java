@@ -615,22 +615,26 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
                 public void onClick(DialogInterface dialog, int id) {
                   Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + MainActivity.this.getPackageName()));
                   startActivity(browserIntent);
+                  ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "app_rateus_btn_rate", null, 0L);
                   MainActivity.this.storeTimestampOfLastRateusShow(System.currentTimeMillis());
                   MainActivity.this.finish();
                 }
               })
               .setNeutralButton(R.string.dialog_rateus_btn_never, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
+                  ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "app_rateus_btn_never", null, 0L);
                   MainActivity.this.storeTimestampOfLastRateusShow(System.currentTimeMillis() + (365*Utils.MILLIS_DAY));
                   MainActivity.this.finish();
                 }
               }).setNegativeButton(R.string.dialog_rateus_btn_later, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
+                  ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "app_rateus_btn_later", null, 0L);
                   MainActivity.this.storeTimestampOfLastRateusShow(System.currentTimeMillis());
                   MainActivity.this.finish();
                 }
               });
       AlertDialog alert = builder.create();
+      ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "app_rateus_show", null, 0L);
       alert.show();
     } else {
       super.onBackPressed();
