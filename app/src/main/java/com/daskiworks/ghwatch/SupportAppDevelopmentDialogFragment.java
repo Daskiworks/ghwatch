@@ -45,7 +45,7 @@ public class SupportAppDevelopmentDialogFragment extends DialogFragment {
   public static final String PREF_LAST_SUPPORT_SHOW_TIMESTAMP = "LAST_SUPPORT_SHOW_TIMESTAMP";
 
   private static final String TAG = SupportAppDevelopmentDialogFragment.class.getSimpleName();
-  private static final long AUTO_SHOW_PERIOD = 180L * Utils.MILLIS_DAY;
+  private static final long AUTO_SHOW_PERIOD = 60L * Utils.MILLIS_DAY;
   private static final long AUTO_SHOW_FIRST = 10L * Utils.MILLIS_DAY;
 
   protected View view;

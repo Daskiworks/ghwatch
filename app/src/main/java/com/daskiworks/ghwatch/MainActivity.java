@@ -51,9 +51,8 @@ import me.leolin.shortcutbadger.ShortcutBadger;
 
 /**
  * Activity used to show list of Notifications.
- * 
+ *
  * @author Vlastimil Elias <vlastimil.elias@worldonline.cz>
- * 
  */
 public class MainActivity extends ActivityBase implements LoginDialogListener, OnRefreshListener {
 
@@ -205,25 +204,25 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
     }
 
     switch (item.getItemId()) {
-    case R.id.action_all_read:
-      showMarkAllNotificationsAsReadDialog();
-      return true;
-    case R.id.action_notifCheck:
-      Toast.makeText(MainActivity.this, "New notification check started with empty store", Toast.LENGTH_SHORT).show();
-      unreadNotificationsService.flushPersistentStore();
-      unreadNotificationsService.newNotificationCheck();
-      return true;
-    case R.id.action_donationTogle:
-      Long l = PreferencesUtils.readDonationTimestamp(this);
-      if (l == null) {
-        l = System.currentTimeMillis();
-      } else {
-        l = null;
-      }
-      PreferencesUtils.storeDonationTimestamp(this, l);
-      Toast.makeText(MainActivity.this, "Donation status toggled to " + (l != null ? "on" : "off"), Toast.LENGTH_SHORT).show();
-    default:
-      return false;
+      case R.id.action_all_read:
+        showMarkAllNotificationsAsReadDialog();
+        return true;
+      case R.id.action_notifCheck:
+        Toast.makeText(MainActivity.this, "New notification check started with empty store", Toast.LENGTH_SHORT).show();
+        unreadNotificationsService.flushPersistentStore();
+        unreadNotificationsService.newNotificationCheck();
+        return true;
+      case R.id.action_donationTogle:
+        Long l = PreferencesUtils.readDonationTimestamp(this);
+        if (l == null) {
+          l = System.currentTimeMillis();
+        } else {
+          l = null;
+        }
+        PreferencesUtils.storeDonationTimestamp(this, l);
+        Toast.makeText(MainActivity.this, "Donation status toggled to " + (l != null ? "on" : "off"), Toast.LENGTH_SHORT).show();
+      default:
+        return false;
     }
   }
 
@@ -295,20 +294,20 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
     @Override
     public boolean onMenuItemClick(Notification notification, MenuItem item) {
       switch (item.getItemId()) {
-      case R.id.action_mark_read:
-        new MarkNotificationAsReadTask().execute(notification.getId());
-        notificationsListAdapter.removeNotificationById(notification.getId());
-        ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_mark_read_menu", "", 0L);
-        notifyDataSetChanged();
-        return true;
-      case R.id.action_mute_thread:
-        new MuteNotificationThreadTask().execute(notification.getId());
-        notificationsListAdapter.removeNotificationById(notification.getId());
-        ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_mute_thread", "", 0L);
-        notifyDataSetChanged();
-        return true;
-      default:
-        return false;
+        case R.id.action_mark_read:
+          new MarkNotificationAsReadTask().execute(notification.getId());
+          notificationsListAdapter.removeNotificationById(notification.getId());
+          ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_mark_read_menu", "", 0L);
+          notifyDataSetChanged();
+          return true;
+        case R.id.action_mute_thread:
+          new MuteNotificationThreadTask().execute(notification.getId());
+          notificationsListAdapter.removeNotificationById(notification.getId());
+          ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_mute_thread", "", 0L);
+          notifyDataSetChanged();
+          return true;
+        default:
+          return false;
       }
     }
   }
@@ -329,7 +328,7 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
             notificationsListAdapter.setFilterByRepository(filterByRepository);
           }
           ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_filter_by_repository", filterByRepository != null ? "SET"
-              : "RESET", 0L);
+                  : "RESET", 0L);
         }
       }
       navigationDrawerClose();
@@ -583,6 +582,58 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
     if (notificationsListView != null) {
       notificationsListView.measure(0, 0);
       notificationsListView.requestLayout();
+    }
+  }
+
+  protected static final String PREF_LAST_RATEUS_SHOW_TIMESTAMP = "LAST_RATEUS_SHOW_TIMESTAMP";
+
+  protected long RATEUS_SHOW_PERIOD = 5 * Utils.MILLIS_DAY ;
+
+  protected void storeTimestampOfLastRateusShow(long timestamp) {
+    PreferencesUtils.storeLong(this, PREF_LAST_RATEUS_SHOW_TIMESTAMP, timestamp);
+  }
+
+  protected boolean isRateUsShowScheduled() {
+
+    long lastShowTimestamp = PreferencesUtils.getLong(this, PREF_LAST_RATEUS_SHOW_TIMESTAMP, 0);
+    if (lastShowTimestamp == 0) {
+      storeTimestampOfLastRateusShow(System.currentTimeMillis());
+    } else {
+      return lastShowTimestamp <= (System.currentTimeMillis() - RATEUS_SHOW_PERIOD);
+    }
+    return false;
+  }
+
+  @Override
+  public void onBackPressed() {
+
+    if (isRateUsShowScheduled()) {
+      AlertDialog.Builder builder = new AlertDialog.Builder(this);
+      builder.setMessage(R.string.dialog_rateus_text)
+              .setCancelable(false)
+              .setPositiveButton(R.string.dialog_rateus_btn_rate, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                  Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + MainActivity.this.getPackageName()));
+                  startActivity(browserIntent);
+                  MainActivity.this.storeTimestampOfLastRateusShow(System.currentTimeMillis());
+                  MainActivity.this.finish();
+                }
+              })
+              .setNeutralButton(R.string.dialog_rateus_btn_never, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                  MainActivity.this.storeTimestampOfLastRateusShow(System.currentTimeMillis() + (365*Utils.MILLIS_DAY));
+                  MainActivity.this.finish();
+                }
+              }).setNegativeButton(R.string.dialog_rateus_btn_later, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                  MainActivity.this.storeTimestampOfLastRateusShow(System.currentTimeMillis());
+                  MainActivity.this.finish();
+                }
+              });
+      AlertDialog alert = builder.create();
+      alert.show();
+    } else {
+      super.onBackPressed();
     }
   }
 }

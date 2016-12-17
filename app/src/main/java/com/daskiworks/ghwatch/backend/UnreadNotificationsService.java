@@ -136,7 +136,7 @@ public class UnreadNotificationsService {
       try {
         if (ns == null && reloadStrategy != ViewDataReloadStrategy.NEVER) {
           // we DO NOT use lastModified here because it returns only notifications newly added after given date, not all unread
-          ns = readNotificationStreamFromServer(URL_NOTIFICATIONS, null);
+          ns = readNotificationStreamFromServer(null);
           keepNotificationDetailDataAfterReload(ns, oldNs);
           if (ns != null) {
             Utils.writeToStore(TAG, context, persistFile, ns);
@@ -380,7 +380,7 @@ public class UnreadNotificationsService {
 
         String lastModified = prepareLastModifiedHeaderContent(oldNs, Utils.isInternetConnectionAvailableWifi(Utils.getConnectivityManager(context)));
 
-        NotificationStream ns = readNotificationStreamFromServer(URL_NOTIFICATIONS, lastModified);
+        NotificationStream ns = readNotificationStreamFromServer(lastModified);
 
         if (ns != null) {
           if (lastModified != null) {
@@ -410,7 +410,6 @@ public class UnreadNotificationsService {
   }
 
   /**
-   * @param url          to read stream from
    * @param lastModified timestamp used in "If-Modified-Since" http header, can be null
    * @return null if lastModified used and nothing new
    * @throws InvalidObjectException
@@ -420,8 +419,11 @@ public class UnreadNotificationsService {
    * @throws JSONException
    * @throws URISyntaxException
    */
-  protected NotificationStream readNotificationStreamFromServer(String url, String lastModified) throws InvalidObjectException, NoRouteToHostException,
+  protected NotificationStream readNotificationStreamFromServer(String lastModified) throws InvalidObjectException, NoRouteToHostException,
       AuthenticationException, IOException, JSONException, URISyntaxException {
+
+    //TODO #80 detect which URL should be used
+    String url = URL_NOTIFICATIONS;
 
     Map<String, String> headers = null;
     if (lastModified != null) {
