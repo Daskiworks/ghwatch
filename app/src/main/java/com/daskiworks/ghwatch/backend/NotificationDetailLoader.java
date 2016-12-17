@@ -72,7 +72,7 @@ public class NotificationDetailLoader extends RemoteJSONObjectGetTemplate<Notifi
       inputObject.setSubjectLabels(null);
       if(remoteResponse.has("labels")){
         processLabelsJson(remoteResponse, inputObject);
-      } else if(remoteResponse.has("issue_url") && remoteResponse.getString("issue_url") != null) {
+      } else if(PreferencesUtils.getBoolean(context, PreferencesUtils.PREF_SERVER_LABELS_LOADING) && remoteResponse.has("issue_url") && remoteResponse.getString("issue_url") != null ) {
         //#75 if pullrequest we have to load Labels from related issue (get URL of it from "issue_url" field) :-(
         String issueUrl = remoteResponse.getString("issue_url");
         NotificationDetailLabelLoader ndll = new NotificationDetailLabelLoader(TAG, context, authenticationManager);

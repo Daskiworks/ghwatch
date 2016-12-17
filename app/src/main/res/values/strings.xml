@@ -140,9 +140,9 @@
   <string name="pref_serverCheckFull">Better read detection</string>
   <string name="pref_serverCheckFull_summ">Better detection of notifications read on another device, a bit higher resource consumption.</string>
   <string name="pref_serverDetailLoading">Load notification details</string>
-  <string name="pref_serverDetailLoading_summ">Load and show details about notification subject like Status, Labels etc. A bit higher resource consumption.</string>
+  <string name="pref_serverDetailLoading_summ">Load and show details about notification subject like Status, Labels etc. A bit higher resource consumption due to additional server call.</string>
   <string name="pref_serverLabelsLoading">Show Labels</string>
-  <string name="pref_serverLabelsLoading_summ">Load and show Labels for notification subject (Issue, Pull Request).</string>
+  <string name="pref_serverLabelsLoading_summ">Load and show Labels for notification subject (Issue, Pull Request). A bit higher resource consumption due to additional server call for Pull Request.</string>
 
   <string name="pref_cat_serverInfo_title">GitHub server info</string>
   <string name="pref_serverInfo_title">GitHub API request info</string>

@@ -41,7 +41,7 @@ import com.daskiworks.ghwatch.model.GHUserLoginInfo;
 
 /**
  * Application settings activity.
- * 
+ *
  * @author Vlastimil Elias <vlastimil.elias@worldonline.cz>
  */
 public class SettingsActivity extends ActivityBase implements OnSharedPreferenceChangeListener, LoginDialogListener {
@@ -70,10 +70,10 @@ public class SettingsActivity extends ActivityBase implements OnSharedPreference
   @Override
   public boolean onOptionsItemSelected(MenuItem menuItem) {
     switch (menuItem.getItemId()) {
-    case android.R.id.home:
-      Intent homeIntent = new Intent(this, MainActivity.class);
-      homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-      startActivity(homeIntent);
+      case android.R.id.home:
+        Intent homeIntent = new Intent(this, MainActivity.class);
+        homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(homeIntent);
     }
     return (super.onOptionsItemSelected(menuItem));
 
@@ -96,7 +96,7 @@ public class SettingsActivity extends ActivityBase implements OnSharedPreference
 
     if (key.equals(PreferencesUtils.PREF_NOTIFY)) {
       ActivityTracker.sendEvent(this, ActivityTracker.CAT_PREF, PreferencesUtils.PREF_NOTIFY,
-          "" + sharedPreferences.getBoolean(PreferencesUtils.PREF_NOTIFY, true), 0L);
+              "" + sharedPreferences.getBoolean(PreferencesUtils.PREF_NOTIFY, true), 0L);
       if (sharedPreferences.getBoolean(PreferencesUtils.PREF_NOTIFY, true)) {
         AlarmBroadcastReceiver.startServerPoolingIfEnabled(this);
       } else {
@@ -104,7 +104,7 @@ public class SettingsActivity extends ActivityBase implements OnSharedPreference
       }
     } else if (key.equals(PreferencesUtils.PREF_NOTIFY_VIBRATE)) {
       ActivityTracker.sendEvent(this, ActivityTracker.CAT_PREF, PreferencesUtils.PREF_NOTIFY_VIBRATE,
-          "" + sharedPreferences.getBoolean(PreferencesUtils.PREF_NOTIFY_VIBRATE, true), 0L);
+              "" + sharedPreferences.getBoolean(PreferencesUtils.PREF_NOTIFY_VIBRATE, true), 0L);
     } else if (key.equals(PreferencesUtils.PREF_SERVER_CHECK_PERIOD)) {
       ListPreference periodPref = (ListPreference) sf.findPreference(PreferencesUtils.PREF_SERVER_CHECK_PERIOD);
       periodPref.setSummary(periodPref.getEntry());
@@ -114,6 +114,8 @@ public class SettingsActivity extends ActivityBase implements OnSharedPreference
       ListPreference notifFilterPref = (ListPreference) sf.findPreference(PreferencesUtils.PREF_NOTIFY_FILTER);
       notifFilterPref.setSummary(notifFilterPref.getEntry());
       ActivityTracker.sendEvent(this, ActivityTracker.CAT_PREF, "notif_filter", notifFilterPref.getEntry().toString(), 0L);
+    } else if (key.equals(PreferencesUtils.PREF_SERVER_DETAIL_LOADING) || key.equals(PreferencesUtils.PREF_SERVER_LABELS_LOADING)) {
+      ActivityTracker.sendEvent(this, ActivityTracker.CAT_PREF, key, "" + sharedPreferences.getBoolean(key, false), 0L);
     }
     mBackupManager.dataChanged();
   }
