@@ -2,12 +2,12 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.1"
+    buildToolsVersion "25.0.2"
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
         applicationId "com.daskiworks.ghwatch"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 25
 
         testApplicationId "com.daskiworks.ghwatch.test"
@@ -29,9 +29,9 @@ repositories {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:25.0.1'
-    compile 'com.google.android.gms:play-services:10.0.0'
+    compile 'com.android.support:support-v4:25.1.0'
+    compile 'com.google.android.gms:play-services:10.0.1'
     compile 'me.leolin:ShortcutBadger:1.1.11@aar'
     compile 'com.github.fiskurgit:ChipCloud:2.1.1'
-    androidTestCompile 'com.android.support:support-v4:25.0.1'
+    androidTestCompile 'com.android.support:support-v4:25.1.0'
 }
