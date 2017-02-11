@@ -66,17 +66,34 @@
         android:layout_toRightOf="@id/thumb"
         android:layout_toEndOf="@id/thumb"
         android:textStyle="bold"
-        android:singleLine="true" 
+        android:singleLine="true"
         android:maxLines="1"
         android:scrollHorizontally="true"
         android:ellipsize="marquee"
         android:marqueeRepeatLimit ="marquee_forever"  />
 
+   <TextView
+     android:id="@+id/repo_visibility"
+     android:layout_width="0dp"
+     android:layout_height="fill_parent"
+     android:layout_below="@id/repo_name"
+     android:layout_marginLeft="6dp"
+     android:layout_marginStart="6dp"
+     android:layout_toLeftOf="@id/button_menu"
+     android:layout_toStartOf="@id/button_menu"
+     android:layout_toRightOf="@id/thumb"
+     android:layout_toEndOf="@id/thumb"
+     android:textColor="@color/greyed_text_color"
+     android:textSize="12sp"
+     android:scrollHorizontally="true"
+     android:ellipsize="marquee"
+     android:marqueeRepeatLimit ="marquee_forever"  />
+
     <TextView
         android:id="@+id/notif_filter"
         android:layout_width="0dp"
         android:layout_height="fill_parent"
-        android:layout_below="@id/repo_name"
+        android:layout_below="@id/repo_visibility"
         android:layout_marginLeft="6dp"
         android:layout_marginStart="6dp"
         android:layout_toLeftOf="@id/button_menu"

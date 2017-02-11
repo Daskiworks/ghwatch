@@ -38,7 +38,7 @@ import com.daskiworks.ghwatch.model.WatchedRepositories;
 
 /**
  * {@link ListView} adapter used to show list of watched repositories from {@link WatchedRepositories}.
- * 
+ *
  * @author Vlastimil Elias <vlastimil.elias@worldonline.cz>
  */
 public class WatchedRepositoryListAdapter extends BaseAdapter {
@@ -115,6 +115,7 @@ public class WatchedRepositoryListAdapter extends BaseAdapter {
     ImageView iv = (ImageView) listItem.findViewById(R.id.thumb);
     TextView tvRepoName = (TextView) listItem.findViewById(R.id.repo_name);
     TextView tvNotifFilter = (TextView) listItem.findViewById(R.id.notif_filter);
+    TextView tvRepoVisibility = (TextView) listItem.findViewById(R.id.repo_visibility);
 
     // Set the views in the layout
     final Repository repository = getFilteredRepositories().get(position);
@@ -122,17 +123,48 @@ public class WatchedRepositoryListAdapter extends BaseAdapter {
     tvRepoName.setText(repository.getRepositoryFullName());
     tvRepoName.setSelected(true);
 
-    StringBuilder sb = new StringBuilder(context.getString(R.string.pref_notifyFilter));
-    sb.append(": ");
-    String[] sa = context.getResources().getStringArray(R.array.pref_notifyFilterFull_entries);
-    int p = Integer.parseInt(PreferencesUtils.getNotificationFilterForRepository(context, repository.getRepositoryFullName(), false));
-    sb.append(sa[p]);
-    if (p == 0) {
-      sb.append(" (");
-      sb.append(sa[Integer.parseInt(PreferencesUtils.getNotificationFilter(context))]);
-      sb.append(")");
+    //repo visibility text
+    boolean notifFilterVisible = true;
+    {
+      StringBuilder sb = new StringBuilder(context.getString(R.string.pref_repoVisibility_context));
+      sb.append(": ");
+      String[] sa = context.getResources().getStringArray(R.array.pref_repoVisibilityFull_entries);
+      int p = Integer.parseInt(PreferencesUtils.getRepoVisibilityForRepository(context, repository.getRepositoryFullName(), false));
+      sb.append(sa[p]);
+      if (p == 0) {
+        sb.append(" (");
+        sb.append(sa[Integer.parseInt(PreferencesUtils.getRepoVisibility(context))]);
+        sb.append(")");
+      }
+      tvRepoVisibility.setText(sb);
+      if (PreferencesUtils.PREF_REPO_VISIBILITY_INVISIBLE.equals(PreferencesUtils.getRepoVisibilityForRepository(context, repository.getRepositoryFullName(), true))) {
+        notifFilterVisible = false;
+      }
     }
-    tvNotifFilter.setText(sb);
+
+    //notif filter text
+    {
+      StringBuilder sb = new StringBuilder(context.getString(R.string.pref_notifyFilter));
+      sb.append(": ");
+      String[] sa = context.getResources().getStringArray(R.array.pref_notifyFilterFull_entries);
+      if(notifFilterVisible) {
+        int p = Integer.parseInt(PreferencesUtils.getNotificationFilterForRepository(context, repository.getRepositoryFullName(), false));
+        sb.append(sa[p]);
+        if (p == 0) {
+          sb.append(" (");
+          sb.append(sa[Integer.parseInt(PreferencesUtils.getNotificationFilter(context))]);
+          sb.append(")");
+        }
+      } else {
+        sb.append(sa[Integer.parseInt(PreferencesUtils.PREF_NOTIFY_FILTER_NOTHING)]);
+        sb.append(" (");
+        sb.append(context.getString(R.string.text_because));
+        sb.append(" ");
+        sb.append(context.getResources().getStringArray(R.array.pref_repoVisibilityFull_entries)[2]);
+        sb.append(")");
+      }
+      tvNotifFilter.setText(sb);
+    }
 
     View.OnClickListener cl = new View.OnClickListener() {
 
@@ -143,6 +175,7 @@ public class WatchedRepositoryListAdapter extends BaseAdapter {
     };
     listItem.setOnClickListener(cl);
 
+    final boolean nfiv = notifFilterVisible;
     ImageButton imgButton = (ImageButton) listItem.findViewById(R.id.button_menu);
     imgButton.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -150,6 +183,7 @@ public class WatchedRepositoryListAdapter extends BaseAdapter {
         PopupMenu popup = new PopupMenu(context, v);
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.list_watched_repos_context, popup.getMenu());
+        popup.getMenu().getItem(3).setEnabled(nfiv);
         popup.show();
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 

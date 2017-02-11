@@ -14,7 +14,17 @@
    limitations under the License.
  -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
+  <PreferenceCategory
+    android:key="pref_cat_repoSettings"
+    android:title="@string/pref_repoSettings_title">
+    <ListPreference
+      android:defaultValue="@string/pref_repoVisibility_default"
+      android:dialogTitle="@string/pref_repoVisibility"
+      android:entries="@array/pref_repoVisibility_entries"
+      android:entryValues="@array/pref_repoVisibility_values"
+      android:key="pref_repoVisibility"
+      android:title="@string/pref_repoVisibility"/>
+  </PreferenceCategory>
   <PreferenceCategory
     android:key="pref_cat_notificationSettings"
     android:title="@string/pref_notificationSettings_title">

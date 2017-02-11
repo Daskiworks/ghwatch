@@ -148,6 +148,9 @@ public class WatchedRepositoriesActivity extends ActivityBase implements LoginDi
       case R.id.action_pref_notifyFilter:
         showPrefNotifFilterDialog(repository);
         return true;
+        case R.id.action_pref_repoVisibility:
+          showPrefRepoVisibilityDialog(repository);
+          return true;
       default:
         return false;
       }
@@ -162,6 +165,20 @@ public class WatchedRepositoriesActivity extends ActivityBase implements LoginDi
       public void onClick(DialogInterface dialog, int which) {
         PreferencesUtils.setNotificationFilterForRepository(WatchedRepositoriesActivity.this, repository.getRepositoryFullName(), which + "");
         ActivityTracker.sendEvent(WatchedRepositoriesActivity.this, ActivityTracker.CAT_PREF, "notif_filter_repo", "" + which, 0L);
+        notifyDataSetChanged();
+      }
+    });
+    builder.create().show();
+  }
+
+  public void showPrefRepoVisibilityDialog(final Repository repository) {
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    final String[] sa = getResources().getStringArray(R.array.pref_repoVisibilityFull_entries);
+    sa[0] = sa[0] + " (" + sa[Integer.parseInt(PreferencesUtils.getRepoVisibility(this))] + ")";
+    builder.setTitle(R.string.pref_repoVisibility).setNegativeButton(android.R.string.cancel, null).setItems(sa, new DialogInterface.OnClickListener() {
+      public void onClick(DialogInterface dialog, int which) {
+        PreferencesUtils.setRepoVisibilityForRepository(WatchedRepositoriesActivity.this, repository.getRepositoryFullName(), which + "");
+        ActivityTracker.sendEvent(WatchedRepositoriesActivity.this, ActivityTracker.CAT_PREF, "repo_visibility_repo", "" + which, 0L);
         notifyDataSetChanged();
       }
     });

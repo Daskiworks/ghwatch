@@ -616,7 +616,7 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
                   Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + MainActivity.this.getPackageName()));
                   startActivity(browserIntent);
                   ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "app_rateus_btn_rate", null, 0L);
-                  MainActivity.this.storeTimestampOfLastRateusShow(System.currentTimeMillis());
+                  MainActivity.this.storeTimestampOfLastRateusShow(System.currentTimeMillis() + (365*Utils.MILLIS_DAY));
                   MainActivity.this.finish();
                 }
               })

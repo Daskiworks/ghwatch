@@ -27,8 +27,9 @@
   <string name="action_all_read">Mark Everything as Read</string>
   <string name="action_mark_read">Mark as Read</string>
   <string name="action_view">View</string>
+  <string name="action_view_on_github">View on Github</string>
   <string name="action_mute_thread">Unsubscribe</string>
-  <string name="action_unwatch">Unwatch</string>
+  <string name="action_unwatch">Unwatch on Github</string>
   <string name="button_cancel">Cancel</string>
   <string name="button_close">Close</string>
   <string name="button_ok">OK</string>
@@ -96,12 +97,34 @@
   <!-- Watched repositories list page -->
   <string name="watched_repos_list_title">Watched Repositories</string>
   <string name="message_no_watched_repos">No watched repositories available. Pull down to refresh.</string>
-  <string name="message_confirm_unwatch_repository_title">Unwatch repository?</string>
-  <string name="message_confirm_unwatch_repository">Do you really want to unwatch the selected repository? This can\'t be undone from this application!</string>
+  <string name="message_confirm_unwatch_repository_title">Unwatch repository on Github?</string>
+  <string name="message_confirm_unwatch_repository">Do you really want to unwatch the selected repository on Github? This can\'t be undone from this application!</string>
 
 
   <!-- Preferences related strings -->
   <string name="activity_settings_title">Preferences</string>
+  <string name="pref_repoSettings_title">Repositories</string>
+  <string name="pref_repoVisibility">Default Repository visibility</string>
+  <string name="pref_repoVisibility_context">Repository visibility</string>
+  <string name="pref_repoVisibility_default">1</string>
+  <string-array name="pref_repoVisibility_entries">
+    <item>Visible</item>
+    <item>Invisible</item>
+  </string-array>
+  <string-array name="pref_repoVisibility_values">
+    <item>1</item>
+    <item>2</item>
+  </string-array>
+  <string-array name="pref_repoVisibilityFull_entries">
+    <item>Default</item>
+    <item>Visible</item>
+    <item>Invisible</item>
+  </string-array>
+  <string-array name="pref_repoVisibilityFull_values">
+    <item>0</item>
+    <item>1</item>
+    <item>2</item>
+  </string-array>
   <string name="pref_notificationSettings_title">Android notifications</string>
   <string name="pref_notify">Notifications enabled</string>
   <string name="pref_notify_summ">Fire Android notification when a new GitHub notification is available</string>
@@ -129,6 +152,7 @@
     <item>2</item>
     <item>3</item>
   </string-array>
+  <string name="text_because">because</string>
   <string name="pref_notifySound">Notification sound</string>
   <string name="notificationSoundDisabled">None</string>
   <string name="pref_notifyVibrate">Vibrate</string>

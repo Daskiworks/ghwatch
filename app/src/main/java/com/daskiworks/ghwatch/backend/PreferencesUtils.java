@@ -51,6 +51,11 @@ public class PreferencesUtils {
   public static final String PREF_NOTIFY_FILTER_PARTICIPATING = "2";
   public static final String PREF_NOTIFY_FILTER_NOTHING = "3";
 
+  public static final String PREF_REPO_VISIBILITY = "pref_repoVisibility";
+  public static final String PREF_REPO_VISIBILITY_INHERITED = "0";
+  public static final String PREF_REPO_VISIBILITY_VISIBLE = "1";
+  public static final String PREF_REPO_VISIBILITY_INVISIBLE = "2";
+
   /*
    * Names of internal preferences
    */
@@ -109,6 +114,24 @@ public class PreferencesUtils {
   }
 
   /**
+   * Read Repository Visibility setting for defined repository.
+   *
+   * @param context to read preference over
+   * @param repositoryName to get preference for
+   * @param inheritResolve if true then {@link #PREF_REPO_VISIBILITY_INHERITED} is not returned but resolved from master preference
+   * @return some of {@link #PREF_REPO_VISIBILITY_INVISIBLE} {@link #PREF_REPO_VISIBILITY_VISIBLE} or
+   *         {@link #PREF_REPO_VISIBILITY_INHERITED}
+   */
+  public static String getRepoVisibilityForRepository(Context context, String repositoryName, boolean inheritResolve) {
+    String rs = getString(context, getRepoVisibilityRepositoryPrefName(repositoryName), PREF_REPO_VISIBILITY_INHERITED);
+    if (inheritResolve && PREF_REPO_VISIBILITY_INHERITED.equals(rs)) {
+      return getRepoVisibility(context);
+    } else {
+      return rs;
+    }
+  }
+
+  /**
    * Read Notification Filter master setting
    * 
    * @param context to read preference over
@@ -117,6 +140,17 @@ public class PreferencesUtils {
    */
   public static String getNotificationFilter(Context context) {
     return getString(context, PREF_NOTIFY_FILTER, PREF_NOTIFY_FILTER_ALL);
+  }
+
+  /**
+   * Read Repository Visibility master setting
+   *
+   * @param context to read preference over
+   * @return some of {@link #PREF_REPO_VISIBILITY_INHERITED} {@link #PREF_REPO_VISIBILITY_INVISIBLE} or
+   *         {@link #PREF_REPO_VISIBILITY_VISIBLE}
+   */
+  public static String getRepoVisibility(Context context) {
+    return getString(context, PREF_REPO_VISIBILITY, PREF_REPO_VISIBILITY_VISIBLE);
   }
 
   /**
@@ -134,6 +168,23 @@ public class PreferencesUtils {
 
   protected static String getNotificationFilterRepositoryPrefName(String repositoryName) {
     return PREF_NOTIFY_FILTER + "-" + repositoryName;
+  }
+
+  /**
+   * Store Repository Visibility setting for defined repository.
+   *
+   * @param context used to write preference
+   * @param repositoryName to write preference for
+   * @param value of preference, some of {@link #PREF_REPO_VISIBILITY_VISIBLE} {@link #PREF_REPO_VISIBILITY_INVISIBLE} or
+   *          {@link #PREF_REPO_VISIBILITY_INHERITED}
+   */
+  public static void setRepoVisibilityForRepository(Context context, String repositoryName, String value) {
+    storeString(context, getRepoVisibilityRepositoryPrefName(repositoryName), value);
+    (new BackupManager(context)).dataChanged();
+  }
+
+  protected static String getRepoVisibilityRepositoryPrefName(String repositoryName) {
+    return PREF_REPO_VISIBILITY + "-" + repositoryName;
   }
 
   /**
