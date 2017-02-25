@@ -58,7 +58,7 @@ public class WatchedRepositoriesService {
   /**
    * Reload from server is forced automatically if data in persistent store are older than this timeout [millis]
    */
-  private static final long FORCE_VIEW_RELOAD_AFTER = Utils.MILLIS_HOUR;
+  private static final long FORCE_VIEW_RELOAD_AFTER = 12 * Utils.MILLIS_HOUR;
 
   private Context context;
 
@@ -83,7 +83,7 @@ public class WatchedRepositoriesService {
    * @param reloadStrategy if data should be reloaded from server
    * @return view data
    */
-  public WatchedRepositoriesViewData getNotificationStreamForView(ViewDataReloadStrategy reloadStrategy) {
+  public WatchedRepositoriesViewData getWatchedRepositoriesForView(ViewDataReloadStrategy reloadStrategy) {
 
     WatchedRepositoriesViewData nswd = new WatchedRepositoriesViewData();
     WatchedRepositories ns = null;

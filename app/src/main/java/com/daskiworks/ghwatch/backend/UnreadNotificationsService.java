@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -40,7 +41,9 @@ import com.daskiworks.ghwatch.model.Notification;
 import com.daskiworks.ghwatch.model.NotificationStream;
 import com.daskiworks.ghwatch.model.NotificationStreamViewData;
 import com.daskiworks.ghwatch.model.NotificationViewData;
+import com.daskiworks.ghwatch.model.Repository;
 import com.daskiworks.ghwatch.model.StringViewData;
+import com.daskiworks.ghwatch.model.WatchedRepositoriesViewData;
 
 import org.apache.http.auth.AuthenticationException;
 import org.json.JSONArray;
@@ -52,8 +55,10 @@ import java.io.InvalidObjectException;
 import java.net.NoRouteToHostException;
 import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import me.leolin.shortcutbadger.ShortcutBadger;
 
@@ -422,8 +427,9 @@ public class UnreadNotificationsService {
   protected NotificationStream readNotificationStreamFromServer(String lastModified) throws InvalidObjectException, NoRouteToHostException,
       AuthenticationException, IOException, JSONException, URISyntaxException {
 
-    //TODO #80 detect which URL should be used, call repo based url if only one repo is visible
-    String url = URL_NOTIFICATIONS;
+    NotificationStreamParser.IRepoVisibilityAdapter rva = createRepoVisibilityAdapter();
+
+    String url = prepareNotificationLoadingURL(rva);
 
     Map<String, String> headers = null;
     if (lastModified != null) {
@@ -436,16 +442,42 @@ public class UnreadNotificationsService {
     if (resp.notModified)
       return null;
 
-    NotificationStream ns = NotificationStreamParser.parseNotificationStream(resp.data, new NotificationStreamParser.IRepoVisibilityAdapter(){
-      @Override
-      public boolean isRepoVisibile(String repoFullName) {
-        return PreferencesUtils.PREF_REPO_VISIBILITY_VISIBLE.equals(PreferencesUtils.getRepoVisibilityForRepository(context, repoFullName, true));
-      }
-    });
+    NotificationStream ns = NotificationStreamParser.parseNotificationStream(resp.data,rva);
     ns.setLastModified(resp.lastModified);
     if (lastModified == null)
       ns.setLastFullUpdateTimestamp(System.currentTimeMillis());
     return ns;
+  }
+
+  @NonNull
+  private String prepareNotificationLoadingURL(NotificationStreamParser.IRepoVisibilityAdapter rva) {
+    String url = URL_NOTIFICATIONS;
+    //#80 detect which URL should be used, call repo based url if only one repo is visible
+    WatchedRepositoriesService wrs = new WatchedRepositoriesService(context);
+    WatchedRepositoriesViewData wr = wrs.getWatchedRepositoriesForView(ViewDataReloadStrategy.IF_TIMED_OUT);
+    if(wr.loadingStatus == LoadingStatus.OK) {
+      Set<String> visibleRepos = new HashSet();
+      for (Repository r : wr.repositories) {
+        if(rva.isRepoVisibile(r.getRepositoryFullName())){
+          visibleRepos.add(r.getRepositoryFullName());
+        }
+      }
+      if(visibleRepos.size()==1){
+        url = GHConstants.URL_BASE + "/repos/" + visibleRepos.iterator().next() + "/notifications";
+      }
+    }
+    Log.d(TAG, "Notification loading URL: " + url);
+    return url;
+  }
+
+  @NonNull
+  private NotificationStreamParser.IRepoVisibilityAdapter createRepoVisibilityAdapter() {
+    return new NotificationStreamParser.IRepoVisibilityAdapter(){
+        @Override
+        public boolean isRepoVisibile(String repoFullName) {
+          return PreferencesUtils.PREF_REPO_VISIBILITY_VISIBLE.equals(PreferencesUtils.getRepoVisibilityForRepository(context, repoFullName, true));
+        }
+      };
   }
 
   /**

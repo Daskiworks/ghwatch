@@ -203,7 +203,7 @@ public class WatchedRepositoriesActivity extends ActivityBase implements LoginDi
 
     @Override
     protected WatchedRepositoriesViewData doInBackground(String... args) {
-      return watchedRepositoriesService.getNotificationStreamForView(reloadStrategy);
+      return watchedRepositoriesService.getWatchedRepositoriesForView(reloadStrategy);
     }
 
     @Override

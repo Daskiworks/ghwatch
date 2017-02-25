@@ -2,7 +2,8 @@ GH::watch changelog
 ===================
 
 ## v1.19 (ToDo)
-- \#75 show Labels related to the notification subject (Issue, Pull Request)
+- \#80 control visibility of repositories in this app, use optimized REST API call if only one repo is visible
+- \#75 show Labels related to the notification subject (Issue, Pull Request) - enable in preferences
 - \#76 don't clear status bar color when updating notifications list, wait to get new status to change color
 - \#77 added launcher icon badge with number of new notifications for launchers which support badges (using https://github.com/leolin310148/ShortcutBadger)  
 - \#78 bigger menu button in notification list item for easier usability
