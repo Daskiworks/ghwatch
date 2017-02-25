@@ -29,9 +29,9 @@ repositories {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:25.1.0'
-    compile 'com.google.android.gms:play-services:10.0.1'
+    compile 'com.android.support:support-v4:25.2.0'
+    compile 'com.google.android.gms:play-services:10.2.0'
     compile 'me.leolin:ShortcutBadger:1.1.11@aar'
     compile 'com.github.fiskurgit:ChipCloud:2.1.1'
-    androidTestCompile 'com.android.support:support-v4:25.1.0'
+    androidTestCompile 'com.android.support:support-v4:25.2.0'
 }
