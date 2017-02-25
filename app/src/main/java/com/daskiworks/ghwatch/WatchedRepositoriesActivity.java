@@ -179,6 +179,7 @@ public class WatchedRepositoriesActivity extends ActivityBase implements LoginDi
       public void onClick(DialogInterface dialog, int which) {
         PreferencesUtils.setRepoVisibilityForRepository(WatchedRepositoriesActivity.this, repository.getRepositoryFullName(), which + "");
         ActivityTracker.sendEvent(WatchedRepositoriesActivity.this, ActivityTracker.CAT_PREF, "repo_visibility_repo", "" + which, 0L);
+        MainActivity.refreshInNextResume();
         notifyDataSetChanged();
       }
     });

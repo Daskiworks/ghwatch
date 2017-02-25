@@ -120,6 +120,7 @@ public class SettingsActivity extends ActivityBase implements OnSharedPreference
       ListPreference notifFilterPref = (ListPreference) sf.findPreference(PreferencesUtils.PREF_REPO_VISIBILITY);
       notifFilterPref.setSummary(notifFilterPref.getEntry());
       ActivityTracker.sendEvent(this, ActivityTracker.CAT_PREF, "repo_visibility", notifFilterPref.getEntry().toString(), 0L);
+      MainActivity.refreshInNextResume();
     }
     mBackupManager.dataChanged();
   }

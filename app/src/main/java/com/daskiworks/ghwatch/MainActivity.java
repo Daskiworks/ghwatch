@@ -129,6 +129,15 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
     super.onNewIntent(intent);
   }
 
+  private static boolean refreshOnNextResume;
+
+  /**
+   * Call if you want shown data to be fully refreshed on next resume of this activity
+   */
+  public static void refreshInNextResume(){
+    refreshOnNextResume = true;
+  }
+
   @Override
   protected void onResume() {
     super.onResume();
@@ -153,7 +162,8 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
       }
     }
     intent.setAction(null);
-    refreshList(ViewDataReloadStrategy.IF_TIMED_OUT, false);
+    refreshList(refreshOnNextResume ? ViewDataReloadStrategy.ALWAYS : ViewDataReloadStrategy.IF_TIMED_OUT, false);
+    refreshOnNextResume = false;
     unreadNotificationsService.markAndroidWidgetsAsRead();
     unreadNotificationsService.markAndroidNotificationsRead();
     ShortcutBadger.removeCount(getApplicationContext());

@@ -422,7 +422,7 @@ public class UnreadNotificationsService {
   protected NotificationStream readNotificationStreamFromServer(String lastModified) throws InvalidObjectException, NoRouteToHostException,
       AuthenticationException, IOException, JSONException, URISyntaxException {
 
-    //TODO #80 detect which URL should be used
+    //TODO #80 detect which URL should be used, call repo based url if only one repo is visible
     String url = URL_NOTIFICATIONS;
 
     Map<String, String> headers = null;
@@ -436,7 +436,12 @@ public class UnreadNotificationsService {
     if (resp.notModified)
       return null;
 
-    NotificationStream ns = NotificationStreamParser.parseNotificationStream(resp.data);
+    NotificationStream ns = NotificationStreamParser.parseNotificationStream(resp.data, new NotificationStreamParser.IRepoVisibilityAdapter(){
+      @Override
+      public boolean isRepoVisibile(String repoFullName) {
+        return PreferencesUtils.PREF_REPO_VISIBILITY_VISIBLE.equals(PreferencesUtils.getRepoVisibilityForRepository(context, repoFullName, true));
+      }
+    });
     ns.setLastModified(resp.lastModified);
     if (lastModified == null)
       ns.setLastFullUpdateTimestamp(System.currentTimeMillis());
