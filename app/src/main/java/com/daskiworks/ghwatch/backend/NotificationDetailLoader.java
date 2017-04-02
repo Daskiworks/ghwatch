@@ -65,7 +65,7 @@ public class NotificationDetailLoader extends RemoteJSONObjectGetTemplate<Notifi
 
       if (remoteResponse.has("merged") && remoteResponse.getBoolean("merged")) {
         inputObject.setSubjectStatus("merged");
-      } else {
+      } else if(remoteResponse.has("state")) {
         inputObject.setSubjectStatus(Utils.trimToNull(remoteResponse.getString("state")));
       }
 
