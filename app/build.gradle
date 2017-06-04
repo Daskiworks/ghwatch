@@ -29,9 +29,12 @@ repositories {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:25.2.0'
-    compile 'com.google.android.gms:play-services:10.2.0'
-    compile 'me.leolin:ShortcutBadger:1.1.11@aar'
-    compile 'com.github.fiskurgit:ChipCloud:2.1.1'
-    androidTestCompile 'com.android.support:support-v4:25.2.0'
+    compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.google.android.gms:play-services-wallet:10.2.6'
+    compile 'com.google.android.gms:play-services-analytics:10.2.6'
+    compile 'me.leolin:ShortcutBadger:1.1.17@aar'
+    compile 'com.github.fiskurgit:ChipCloud:2.2.3'
+    androidTestCompile 'com.android.support:support-v4:25.3.1'
+    compile 'com.android.support:animated-vector-drawable:25.3.1'
+    compile 'com.android.support:appcompat-v7:25.3.1'
 }
