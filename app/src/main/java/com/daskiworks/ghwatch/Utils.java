@@ -230,7 +230,7 @@ public class Utils {
   }
 
   public static String trimToNull(String value) {
-    if (value == null)
+    if (value == null || "null".equalsIgnoreCase(value))
       return null;
     value = value.trim();
     if (value.isEmpty())
