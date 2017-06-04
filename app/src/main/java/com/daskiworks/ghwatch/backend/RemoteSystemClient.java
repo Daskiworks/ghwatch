@@ -70,7 +70,7 @@ import com.daskiworks.ghwatch.model.GHCredentials;
 
 /**
  * Helper class used to communicate with server.
- * 
+ *
  * @author Vlastimil Elias <vlastimil.elias@worldonline.cz>
  */
 public class RemoteSystemClient {
@@ -114,18 +114,18 @@ public class RemoteSystemClient {
 
   /**
    * Get JSON array from specified url. It is contained in <code>list</code> item of output JSO
-   * 
+   *
    * @param context used to access services
-   * @param url to load data from
+   * @param url     to load data from
    * @return JSON array object
-   * @throws NoRouteToHostException if internet connection is not available
+   * @throws NoRouteToHostException  if internet connection is not available
    * @throws AuthenticationException if authentication fails
-   * @throws IOException if there is problem during data readig from server
-   * @throws JSONException if returned JSON is invalid
-   * @throws URISyntaxException if url is invalid
+   * @throws IOException             if there is problem during data readig from server
+   * @throws JSONException           if returned JSON is invalid
+   * @throws URISyntaxException      if url is invalid
    */
   public static Response<JSONArray> getJSONArrayFromUrl(Context context, GHCredentials apiCredentials, String url, Map<String, String> headers)
-      throws NoRouteToHostException, AuthenticationException, IOException, JSONException, URISyntaxException {
+          throws NoRouteToHostException, AuthenticationException, IOException, JSONException, URISyntaxException {
     Response<String> wr = readInternetDataGet(context, apiCredentials, url, headers);
     Response<JSONArray> ret = new Response<JSONArray>();
     wr.fill(ret);
@@ -137,18 +137,18 @@ public class RemoteSystemClient {
 
   /**
    * Get JSON object from specified url. It is contained in <code>list</code> item of output JSO
-   * 
+   *
    * @param context used to get services over
-   * @param url to load data from
+   * @param url     to load data from
    * @return JSON object
-   * @throws NoRouteToHostException if internet connection is not available
+   * @throws NoRouteToHostException  if internet connection is not available
    * @throws AuthenticationException if authentication fails
-   * @throws IOException if there is problem during data readig from server
-   * @throws JSONException if returned JSON is invalid
-   * @throws URISyntaxException if url is invalid
+   * @throws IOException             if there is problem during data readig from server
+   * @throws JSONException           if returned JSON is invalid
+   * @throws URISyntaxException      if url is invalid
    */
   public static Response<JSONObject> getJSONObjectFromUrl(Context context, GHCredentials apiCredentials, String url, Map<String, String> headers)
-      throws NoRouteToHostException, AuthenticationException, IOException, JSONException, URISyntaxException {
+          throws NoRouteToHostException, AuthenticationException, IOException, JSONException, URISyntaxException {
     Response<String> wr = readInternetDataGet(context, apiCredentials, url, headers);
     Response<JSONObject> ret = new Response<JSONObject>();
     wr.fill(ret);
@@ -159,7 +159,7 @@ public class RemoteSystemClient {
   }
 
   private static Response<String> readInternetDataGet(Context context, GHCredentials apiCredentials, String url, Map<String, String> headers)
-      throws NoRouteToHostException, URISyntaxException, IOException, ClientProtocolException, AuthenticationException, UnsupportedEncodingException {
+          throws NoRouteToHostException, URISyntaxException, IOException, ClientProtocolException, AuthenticationException, UnsupportedEncodingException {
     if (!Utils.isInternetConnectionAvailable(context))
       throw new NoRouteToHostException("Network not available");
 
@@ -228,7 +228,7 @@ public class RemoteSystemClient {
   }
 
   public static Response<?> postNoData(Context context, GHCredentials apiCredentials, String url, Map<String, String> headers) throws NoRouteToHostException,
-      URISyntaxException, IOException, ClientProtocolException, AuthenticationException, UnsupportedEncodingException {
+          URISyntaxException, IOException, ClientProtocolException, AuthenticationException, UnsupportedEncodingException {
     if (!Utils.isInternetConnectionAvailable(context))
       throw new NoRouteToHostException("Network not available");
 
@@ -254,7 +254,7 @@ public class RemoteSystemClient {
   }
 
   public static Response<String> putToURL(Context context, GHCredentials apiCredentials, String url, Map<String, String> headers, String content)
-      throws NoRouteToHostException, URISyntaxException, IOException, ClientProtocolException, AuthenticationException {
+          throws NoRouteToHostException, URISyntaxException, IOException, ClientProtocolException, AuthenticationException {
     if (!Utils.isInternetConnectionAvailable(context))
       throw new NoRouteToHostException("Network not available");
 
@@ -286,7 +286,7 @@ public class RemoteSystemClient {
   }
 
   public static Response<String> deleteToURL(Context context, GHCredentials apiCredentials, String url, Map<String, String> headers)
-      throws NoRouteToHostException, URISyntaxException, IOException, ClientProtocolException, AuthenticationException {
+          throws NoRouteToHostException, URISyntaxException, IOException, ClientProtocolException, AuthenticationException {
     if (!Utils.isInternetConnectionAvailable(context))
       throw new NoRouteToHostException("Network not available");
 
@@ -341,7 +341,7 @@ public class RemoteSystemClient {
 
     if (apiCredentials != null) {
       httpClient.getCredentialsProvider().setCredentials(new AuthScope(uri.getHost(), uri.getPort(), AuthScope.ANY_SCHEME),
-          new UsernamePasswordCredentials(apiCredentials.getUsername(), apiCredentials.getPassword()));
+              new UsernamePasswordCredentials(apiCredentials.getUsername(), apiCredentials.getPassword()));
     }
     return httpClient;
   }
@@ -354,11 +354,7 @@ public class RemoteSystemClient {
     Header rlr = httpResponse.getLastHeader("X-RateLimit-Remaining");
     Header rlreset = httpResponse.getLastHeader("X-RateLimit-Reset");
 
-    Log.d(TAG, "Response header Last-Modified: " + lm);
-    Log.d(TAG, "Response header X-Poll-Interval: " + pi);
-    Log.d(TAG, "Response header X-RateLimit-Limit: " + rll);
-    Log.d(TAG, "Response header X-RateLimit-Remaining: " + rlr);
-    Log.d(TAG, "Response header X-RateLimit-Reset: " + rlreset);
+    Log.d(TAG, "HTTP Response headers: " + dumpHeaders(httpResponse.getAllHeaders()));
 
     ret.lastModified = getHeaderValue(lm);
     ret.rateLimit = getHeaderValue(rll);
@@ -382,6 +378,17 @@ public class RemoteSystemClient {
         Log.w(TAG, "'X-Poll-Interval' header value is not a number: " + vpi);
       }
     }
+  }
+
+  private static String dumpHeaders(Header[] headers) {
+    if (headers == null || headers.length == 0)
+      return "";
+
+    StringBuilder sb = new StringBuilder();
+    for (Header h : headers) {
+      sb.append("\n").append(h.getName()).append(": ").append(h.getValue());
+    }
+    return sb.toString();
   }
 
   private static void writeReponseInfo(Response<?> response, Context context) {
