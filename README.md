@@ -45,6 +45,8 @@ Main features
 * Configurable vibration
 * Inbox style Big view when more GitHub notifications available
 * Action to directly mark GitHub notification as read
+* Launcher icon badges with number of new notifications for launchers which support badges 
+  (using https://github.com/leolin310148/ShortcutBadger) - **new in 1.19**
   
 ###Homescreen and Lockscreen widget
 * Shows number of unread Github notifications
@@ -53,10 +55,11 @@ Main features
 * Resizeable  
   
 ###Unread notifications list view
-* Shows list of unread GitHub notifications
+* Shows list of unread GitHub notifications from repositories enabled in this app (all by default)
 * Shows notification type (Issue, Pull Request, ...) 
 * Shows reason why you received notification (subscribed, author, comment, ...)
 * Shows current status of Issue or Pull Request the notification is for by color bar on left side (open - green, closed - red, merged - purple) - this is a gift for users who support app development by small donation - **new in 1.18**
+* Shows Labels of Issue or Pull Request the notification is for (if enabled in Preferences) - this is a gift for users who support app development by small donation - **new in 1.19**
 * Swipe down to refresh list
 * Swipe right to mark notification as read
 * Click notification to view details - Detail informations are shown by 
@@ -79,7 +82,10 @@ Main features
 * Manually refresh list of watched repositories from server
 * Notification Filter shown for each repository, you can overwrite 
   globally set filter on per repository basis there
-
+* Repository visibility in this app shown for each repository, you can overwrite 
+  globally set visibility on per repository basis there (so it is possible to hide 
+  all repos in main Preferences and only selectively show ones you want)
+    
 ###GitHub API request info
 * Available from Preferences
 * Shows info about GitHub API limit (limit, remaining, reset timestamp)

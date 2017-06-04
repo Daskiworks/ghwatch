@@ -1,7 +1,7 @@
 GH::watch changelog
 ===================
 
-## v1.19 (ToDo)
+## v1.19 (Jun 4th, 2017)
 - \#80 control visibility of repositories in this app, use optimized REST API call if only one repo is visible
 - \#75 show Labels related to the notification subject (Issue, Pull Request) - enable in preferences
 - \#76 don't clear status bar color when updating notifications list, wait to get new status to change color
@@ -9,6 +9,7 @@ GH::watch changelog
 - \#78 bigger menu button in notification list item for easier usability
 - \#73 project updated to Android Studio and gradle build
 - \#81 updated targetSdkVersion to 25, minSdkVersion to 16 (from 15), updated build tools, Google Play service and support libraries to latest versions
+- \#87 \#89 patched bug in some notification view URL loading
 
 ## v1.18 (Nov 28th, 2015)
 - \#57 - Shows current status of Issue or Pull Request the notification is for by color bar on left side (open - green, closed - red, merged - purple)
