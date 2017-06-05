@@ -17,14 +17,12 @@ Release steps for GH::watch app
 1. check [Issue tracker](https://github.com/Daskiworks/ghwatch/issues) - relevant Issues are in Milestone and are Closed
 2. close current Milestone
 3. prepare next Milestone
+4. create `vX.Y` tag in code git repo and push it
+5. create new Release on GitHub for given tag, add changelog and `.apk` file to it
 
 ### Google Play
 
 1. deploy signed APK, use changes description from `CHANGES.md` file
-
-### Github repo release
-1. create `vX.Y` tag in code git repo and push it
-2. create new Release on GitHub for given tag, add changelog and `.apk` file to it
 
 ### Android Studio project prepare for next version devel
 
