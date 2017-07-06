@@ -65,6 +65,7 @@ Main features
 * Click notification to view details - Detail informations are shown by 
   GitHub web (which is mobile friendly) or using GitHub android application, 
   so you see all necessary details and performs distinct actions (eg. reply in discussions etc.) directly.
+* Option to mark notification as read when clicked to be shown (because GitHub android application doesn't do it) - **new in 1.20**
 * Shows list of repositories some notifications are available for, together with notifications count
 * Notifications filtering by repository
 * Context menu to Unsubscribe from selected notification thread, given notification is marked as read also

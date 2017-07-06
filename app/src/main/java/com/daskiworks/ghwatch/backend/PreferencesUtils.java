@@ -15,18 +15,19 @@
  */
 package com.daskiworks.ghwatch.backend;
 
-import java.io.File;
-
 import android.app.backup.BackupManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.daskiworks.ghwatch.ActivityTracker;
 import com.daskiworks.ghwatch.Utils;
+
+import java.io.File;
 
 /**
  * Utilities to work with default preferences.
- * 
+ *
  * @author Vlastimil Elias <vlastimil.elias@worldonline.cz>
  */
 public class PreferencesUtils {
@@ -56,6 +57,11 @@ public class PreferencesUtils {
   public static final String PREF_REPO_VISIBILITY_VISIBLE = "1";
   public static final String PREF_REPO_VISIBILITY_INVISIBLE = "2";
 
+  public static final String PREF_MARK_READ_ON_SHOW = "pref_markReadOnShow";
+  public static final String PREF_MARK_READ_ON_SHOW_ASK = "ask";
+  public static final String PREF_MARK_READ_ON_SHOW_YES = "yes";
+  public static final String PREF_MARK_READ_ON_SHOW_NO = "no";
+
   /*
    * Names of internal preferences
    */
@@ -71,9 +77,9 @@ public class PreferencesUtils {
 
   /**
    * Get string preference.
-   * 
-   * @param context to get preferences for
-   * @param key of preference
+   *
+   * @param context      to get preferences for
+   * @param key          of preference
    * @param defaultValue
    * @return preference value
    */
@@ -83,7 +89,7 @@ public class PreferencesUtils {
 
   /**
    * Patch preferences after restored from cloud - remove preferences which shouldn't be restored on new device.
-   * 
+   *
    * @param context
    */
   public static void patchAfterRestore(Context context) {
@@ -97,12 +103,12 @@ public class PreferencesUtils {
 
   /**
    * Read Notification Filter setting for defined repository.
-   * 
-   * @param context to read preference over
+   *
+   * @param context        to read preference over
    * @param repositoryName to get preference for
    * @param inheritResolve if true then {@link #PREF_NOTIFY_FILTER_INHERITED} is not returned but resolved from master preference
    * @return some of {@link #PREF_NOTIFY_FILTER_ALL} {@link #PREF_NOTIFY_FILTER_PARTICIPATING}, {@link #PREF_NOTIFY_FILTER_NOTHING} or
-   *         {@link #PREF_NOTIFY_FILTER_INHERITED}
+   * {@link #PREF_NOTIFY_FILTER_INHERITED}
    */
   public static String getNotificationFilterForRepository(Context context, String repositoryName, boolean inheritResolve) {
     String rs = getString(context, getNotificationFilterRepositoryPrefName(repositoryName), PREF_NOTIFY_FILTER_INHERITED);
@@ -116,11 +122,11 @@ public class PreferencesUtils {
   /**
    * Read Repository Visibility setting for defined repository.
    *
-   * @param context to read preference over
+   * @param context        to read preference over
    * @param repositoryName to get preference for
    * @param inheritResolve if true then {@link #PREF_REPO_VISIBILITY_INHERITED} is not returned but resolved from master preference
    * @return some of {@link #PREF_REPO_VISIBILITY_INVISIBLE} {@link #PREF_REPO_VISIBILITY_VISIBLE} or
-   *         {@link #PREF_REPO_VISIBILITY_INHERITED}
+   * {@link #PREF_REPO_VISIBILITY_INHERITED}
    */
   public static String getRepoVisibilityForRepository(Context context, String repositoryName, boolean inheritResolve) {
     String rs = getString(context, getRepoVisibilityRepositoryPrefName(repositoryName), PREF_REPO_VISIBILITY_INHERITED);
@@ -133,10 +139,10 @@ public class PreferencesUtils {
 
   /**
    * Read Notification Filter master setting
-   * 
+   *
    * @param context to read preference over
    * @return some of {@link #PREF_NOTIFY_FILTER_ALL} {@link #PREF_NOTIFY_FILTER_PARTICIPATING}, {@link #PREF_NOTIFY_FILTER_NOTHING} or
-   *         {@link #PREF_NOTIFY_FILTER_INHERITED}
+   * {@link #PREF_NOTIFY_FILTER_INHERITED}
    */
   public static String getNotificationFilter(Context context) {
     return getString(context, PREF_NOTIFY_FILTER, PREF_NOTIFY_FILTER_ALL);
@@ -147,7 +153,7 @@ public class PreferencesUtils {
    *
    * @param context to read preference over
    * @return some of {@link #PREF_REPO_VISIBILITY_INHERITED} {@link #PREF_REPO_VISIBILITY_INVISIBLE} or
-   *         {@link #PREF_REPO_VISIBILITY_VISIBLE}
+   * {@link #PREF_REPO_VISIBILITY_VISIBLE}
    */
   public static String getRepoVisibility(Context context) {
     return getString(context, PREF_REPO_VISIBILITY, PREF_REPO_VISIBILITY_VISIBLE);
@@ -155,11 +161,11 @@ public class PreferencesUtils {
 
   /**
    * Store Notification Filter setting for defined repository.
-   * 
-   * @param context used to write preference
+   *
+   * @param context        used to write preference
    * @param repositoryName to write preference for
-   * @param value of preference, some of {@link #PREF_NOTIFY_FILTER_ALL} {@link #PREF_NOTIFY_FILTER_PARTICIPATING}, {@link #PREF_NOTIFY_FILTER_NOTHING} or
-   *          {@link #PREF_NOTIFY_FILTER_INHERITED}
+   * @param value          of preference, some of {@link #PREF_NOTIFY_FILTER_ALL} {@link #PREF_NOTIFY_FILTER_PARTICIPATING}, {@link #PREF_NOTIFY_FILTER_NOTHING} or
+   *                       {@link #PREF_NOTIFY_FILTER_INHERITED}
    */
   public static void setNotificationFilterForRepository(Context context, String repositoryName, String value) {
     storeString(context, getNotificationFilterRepositoryPrefName(repositoryName), value);
@@ -173,10 +179,10 @@ public class PreferencesUtils {
   /**
    * Store Repository Visibility setting for defined repository.
    *
-   * @param context used to write preference
+   * @param context        used to write preference
    * @param repositoryName to write preference for
-   * @param value of preference, some of {@link #PREF_REPO_VISIBILITY_VISIBLE} {@link #PREF_REPO_VISIBILITY_INVISIBLE} or
-   *          {@link #PREF_REPO_VISIBILITY_INHERITED}
+   * @param value          of preference, some of {@link #PREF_REPO_VISIBILITY_VISIBLE} {@link #PREF_REPO_VISIBILITY_INVISIBLE} or
+   *                       {@link #PREF_REPO_VISIBILITY_INHERITED}
    */
   public static void setRepoVisibilityForRepository(Context context, String repositoryName, String value) {
     storeString(context, getRepoVisibilityRepositoryPrefName(repositoryName), value);
@@ -188,8 +194,31 @@ public class PreferencesUtils {
   }
 
   /**
+   * Read 'Mark notification as read on show' setting
+   *
+   * @param context to read preference over
+   * @return some of {@link #PREF_MARK_READ_ON_SHOW_ASK} {@link #PREF_MARK_READ_ON_SHOW_YES} or
+   * {@link #PREF_MARK_READ_ON_SHOW_NO}
+   */
+  public static String getMarkReadOnShow(Context context) {
+    return getString(context, PREF_MARK_READ_ON_SHOW, PREF_MARK_READ_ON_SHOW_ASK);
+  }
+
+  /**
+   * Store 'Mark notification as read on show' setting
+   *
+   * @param context to read preference over
+   * @param value   some of {@link #PREF_MARK_READ_ON_SHOW_ASK} {@link #PREF_MARK_READ_ON_SHOW_YES} or
+   *                {@link #PREF_MARK_READ_ON_SHOW_NO}
+   */
+  public static void setMarkReadOnShow(Context context, String value) {
+    ActivityTracker.sendEvent(context, ActivityTracker.CAT_PREF, "PREF_MARK_READ_ON_SHOW", value, 0L);
+    storeString(context, PREF_MARK_READ_ON_SHOW, value);
+  }
+
+  /**
    * Get boolean preference.
-   * 
+   *
    * @param context
    * @param key
    * @param defaultValue
@@ -208,7 +237,7 @@ public class PreferencesUtils {
 
   /**
    * Get long preference.
-   * 
+   *
    * @param context
    * @param key
    * @param defaultValue
@@ -220,7 +249,7 @@ public class PreferencesUtils {
 
   /**
    * Store long preference.
-   * 
+   *
    * @param context
    * @param key
    * @param value
@@ -234,7 +263,7 @@ public class PreferencesUtils {
 
   /**
    * Store boolean preference.
-   * 
+   *
    * @param context
    * @param key
    * @param value
@@ -248,10 +277,10 @@ public class PreferencesUtils {
 
   /**
    * Store String preference.
-   * 
+   *
    * @param context
-   * @param key of preference
-   * @param value to store
+   * @param key     of preference
+   * @param value   to store
    */
   public static void storeString(Context context, String key, String value) {
     SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(context);
@@ -262,9 +291,9 @@ public class PreferencesUtils {
 
   /**
    * Remove preference.
-   * 
+   *
    * @param context
-   * @param key of preference to remove
+   * @param key     of preference to remove
    */
   public static void remove(Context context, String key) {
     SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(context);
@@ -277,7 +306,7 @@ public class PreferencesUtils {
 
   /**
    * Store donation timestamp.
-   * 
+   *
    * @param context
    * @param timestamp to store
    */
@@ -288,7 +317,7 @@ public class PreferencesUtils {
 
   /**
    * Read donation timestamp.
-   * 
+   *
    * @param context
    * @return donation timestamp or null if not donated yet.
    */

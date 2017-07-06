@@ -1,6 +1,9 @@
 GH::watch changelog
 ===================
 
+## v.1.20 (ToDo)
+- \#88 added option to mark notification as read when clicked to be shown
+
 ## v1.19 (Jun 4th, 2017)
 - \#80 control visibility of repositories in this app, use optimized REST API call if only one repo is visible
 - \#75 show Labels related to the notification subject (Issue, Pull Request) - enable in preferences

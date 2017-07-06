@@ -15,8 +15,8 @@
  -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
   <PreferenceCategory
-    android:key="pref_cat_repoSettings"
-    android:title="@string/pref_repoSettings_title">
+    android:key="pref_cat_generalSettings"
+    android:title="@string/pref_generalSettings_title">
     <ListPreference
       android:defaultValue="@string/pref_repoVisibility_default"
       android:dialogTitle="@string/pref_repoVisibility"
@@ -24,6 +24,13 @@
       android:entryValues="@array/pref_repoVisibility_values"
       android:key="pref_repoVisibility"
       android:title="@string/pref_repoVisibility"/>
+    <ListPreference
+      android:defaultValue="@string/pref_markReadOnShow"
+      android:dialogTitle="@string/pref_markReadOnShow"
+      android:entries="@array/pref_markReadOnShow_entries"
+      android:entryValues="@array/pref_markReadOnShow_values"
+      android:key="pref_markReadOnShow"
+      android:title="@string/pref_markReadOnShow"/>
   </PreferenceCategory>
   <PreferenceCategory
     android:key="pref_cat_notificationSettings"

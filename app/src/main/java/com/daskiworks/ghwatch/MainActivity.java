@@ -25,12 +25,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -134,7 +136,7 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
   /**
    * Call if you want shown data to be fully refreshed on next resume of this activity
    */
-  public static void refreshInNextResume(){
+  public static void refreshInNextResume() {
     refreshOnNextResume = true;
   }
 
@@ -289,15 +291,64 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
 
   private final class NotificationsListItemClickListener implements OnItemClickListener {
 
+    private CheckBox rememberCheckbox;
+
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-      Notification notification = (Notification) notificationsListAdapter.getItem(position);
+    public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+      final Notification notification = (Notification) notificationsListAdapter.getItem(position);
       if (notification != null) {
-        showNotificationTask = new ShowNotificationTask();
-        showNotificationTask.execute(notification);
-        ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_show", "", 0L);
+        String mrow = PreferencesUtils.getMarkReadOnShow(MainActivity.this);
+        if (PreferencesUtils.PREF_MARK_READ_ON_SHOW_YES.equals(mrow)) {
+          showNotification(notification, position,true);
+        } else if (PreferencesUtils.PREF_MARK_READ_ON_SHOW_ASK.equals(mrow)) {
+          AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+          builder.setMessage(R.string.dialog_mnar_text)
+                  .setCancelable(true)
+                  .setPositiveButton(R.string.dialog_mnar_btn_yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                      if(rememberCheckbox != null && rememberCheckbox.isChecked()){
+                        PreferencesUtils.setMarkReadOnShow(MainActivity.this, PreferencesUtils.PREF_MARK_READ_ON_SHOW_YES);
+                      }
+                      ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_mark_read_on_show_dialog_yes", null, 0L);
+                      showNotification(notification,position, true);
+                    }
+                  })
+                  .setNegativeButton(R.string.dialog_mnar_btn_no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                      if(rememberCheckbox != null && rememberCheckbox.isChecked()){
+                        PreferencesUtils.setMarkReadOnShow(MainActivity.this, PreferencesUtils.PREF_MARK_READ_ON_SHOW_NO);
+                      }
+                      ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_mark_read_on_show_dialog_no", null, 0L);
+                      showNotification(notification,position,false);
+                    }
+                  });
+
+          LayoutInflater inflater = MainActivity.this.getLayoutInflater();
+          View dialogView = inflater.inflate(R.layout.notification_mark_read_on_show_dialog, null);
+          builder.setView(dialogView);
+          rememberCheckbox = (CheckBox) dialogView.findViewById(R.id.remember);
+
+          AlertDialog alert = builder.create();
+          ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_mark_read_on_show_dialog_show", null, 0L);
+          alert.show();
+        } else {
+          showNotification(notification,position,false);
+        }
       }
     }
+  }
+
+  protected void showNotification(Notification notification,int position, boolean markAsReadOnShow) {
+    showNotificationTask = new ShowNotificationTask(notification, markAsReadOnShow, position);
+    showNotificationTask.execute();
+    ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_show", "", 0L);
+  }
+
+  protected void markNotificationAsReadOnShow(int position, Notification notification) {
+    new MarkNotificationAsReadTask().execute(notification.getId());
+    ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_mark_read_on_show", "", 0L);
+    notificationsListAdapter.removeNotificationByPosition(position);
+    notifyDataSetChanged();
   }
 
   private final class NotificationsListItemMenuClickListener implements NotificationListAdapter.OnItemMenuClickedListener {
@@ -422,6 +473,16 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
 
   private final class ShowNotificationTask extends AsyncTask<Notification, String, StringViewData> {
 
+    boolean markAsReadOnShow = false;
+    int position;
+    Notification notification;
+
+    public ShowNotificationTask(Notification notification, boolean markAsReadOnShow, int position){
+      this.markAsReadOnShow = markAsReadOnShow;
+      this.position = position;
+      this.notification = notification;
+    }
+
     ProgressDialog progress;
 
     @Override
@@ -437,7 +498,7 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
 
     @Override
     protected StringViewData doInBackground(Notification... params) {
-      return unreadNotificationsService.getNotificationViewUrl(params[0]);
+      return unreadNotificationsService.getNotificationViewUrl(notification);
     }
 
     @Override
@@ -451,6 +512,9 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
           Utils.dismissDialogSafe(progress);
           showServerCommunicationErrorAllertDialog(result.loadingStatus, false);
         } else if (result.data != null) {
+          if(markAsReadOnShow){
+            markNotificationAsReadOnShow(position, notification);
+          }
           Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(result.data));
           startActivity(browserIntent);
           Utils.dismissDialogSafe(progress);
@@ -597,7 +661,7 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
 
   protected static final String PREF_LAST_RATEUS_SHOW_TIMESTAMP = "LAST_RATEUS_SHOW_TIMESTAMP";
 
-  protected long RATEUS_SHOW_PERIOD = 5 * Utils.MILLIS_DAY ;
+  protected long RATEUS_SHOW_PERIOD = 5 * Utils.MILLIS_DAY;
 
   protected void storeTimestampOfLastRateusShow(long timestamp) {
     PreferencesUtils.storeLong(this, PREF_LAST_RATEUS_SHOW_TIMESTAMP, timestamp);
@@ -626,23 +690,23 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
                   Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + MainActivity.this.getPackageName()));
                   startActivity(browserIntent);
                   ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "app_rateus_btn_rate", null, 0L);
-                  MainActivity.this.storeTimestampOfLastRateusShow(System.currentTimeMillis() + (365*Utils.MILLIS_DAY));
+                  MainActivity.this.storeTimestampOfLastRateusShow(System.currentTimeMillis() + (365 * Utils.MILLIS_DAY));
                   MainActivity.this.finish();
                 }
               })
               .setNeutralButton(R.string.dialog_rateus_btn_never, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                   ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "app_rateus_btn_never", null, 0L);
-                  MainActivity.this.storeTimestampOfLastRateusShow(System.currentTimeMillis() + (365*Utils.MILLIS_DAY));
+                  MainActivity.this.storeTimestampOfLastRateusShow(System.currentTimeMillis() + (365 * Utils.MILLIS_DAY));
                   MainActivity.this.finish();
                 }
               }).setNegativeButton(R.string.dialog_rateus_btn_later, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                  ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "app_rateus_btn_later", null, 0L);
-                  MainActivity.this.storeTimestampOfLastRateusShow(System.currentTimeMillis());
-                  MainActivity.this.finish();
-                }
-              });
+        public void onClick(DialogInterface dialog, int id) {
+          ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "app_rateus_btn_later", null, 0L);
+          MainActivity.this.storeTimestampOfLastRateusShow(System.currentTimeMillis());
+          MainActivity.this.finish();
+        }
+      });
       AlertDialog alert = builder.create();
       ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "app_rateus_show", null, 0L);
       alert.show();

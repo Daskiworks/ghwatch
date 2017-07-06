@@ -116,6 +116,10 @@ public class SettingsActivity extends ActivityBase implements OnSharedPreference
       ActivityTracker.sendEvent(this, ActivityTracker.CAT_PREF, "notif_filter", notifFilterPref.getEntry().toString(), 0L);
     } else if (key.equals(PreferencesUtils.PREF_SERVER_DETAIL_LOADING) || key.equals(PreferencesUtils.PREF_SERVER_LABELS_LOADING)) {
       ActivityTracker.sendEvent(this, ActivityTracker.CAT_PREF, key, "" + sharedPreferences.getBoolean(key, false), 0L);
+    } else if (key.equals(PreferencesUtils.PREF_MARK_READ_ON_SHOW)) {
+      ListPreference notifFilterPref = (ListPreference) sf.findPreference(PreferencesUtils.PREF_MARK_READ_ON_SHOW);
+      notifFilterPref.setSummary(notifFilterPref.getEntry());
+      ActivityTracker.sendEvent(this, ActivityTracker.CAT_PREF, key, sharedPreferences.getString(key,PreferencesUtils.PREF_MARK_READ_ON_SHOW_ASK), 0L);
     } else if (key.equals(PreferencesUtils.PREF_REPO_VISIBILITY)) {
       ListPreference notifFilterPref = (ListPreference) sf.findPreference(PreferencesUtils.PREF_REPO_VISIBILITY);
       notifFilterPref.setSummary(notifFilterPref.getEntry());
@@ -152,6 +156,7 @@ public class SettingsActivity extends ActivityBase implements OnSharedPreference
       initListPrefSummary(PreferencesUtils.PREF_SERVER_CHECK_PERIOD);
       initListPrefSummary(PreferencesUtils.PREF_NOTIFY_FILTER);
       initListPrefSummary(PreferencesUtils.PREF_REPO_VISIBILITY);
+      initListPrefSummary(PreferencesUtils.PREF_MARK_READ_ON_SHOW);
 
       Preference userAccountPref = findPreference(PreferencesUtils.PREF_SERVER_ACCOUNT);
       GHUserLoginInfo currentUser = ((SettingsActivity) getActivity()).authenticationManager.loadCurrentUser(getActivity());

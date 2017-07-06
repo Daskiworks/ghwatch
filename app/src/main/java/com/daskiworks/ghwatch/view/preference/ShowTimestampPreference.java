@@ -58,7 +58,7 @@ public class ShowTimestampPreference extends ShowTextPreference {
     }
     if (ts > 0) {
       Date d = new Date(ts);
-      return DateFormat.getDateFormat(getContext()).format(d) + " " + DateFormat.getTimeFormat(getContext()).format(d);
+      return DateFormat.getLongDateFormat(getContext()).format(d) + " " + DateFormat.getTimeFormat(getContext()).format(d);
     } else {
       return "";
     }

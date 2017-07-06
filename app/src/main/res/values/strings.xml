@@ -103,7 +103,19 @@
 
   <!-- Preferences related strings -->
   <string name="activity_settings_title">Preferences</string>
-  <string name="pref_repoSettings_title">Repositories</string>
+  <string name="pref_generalSettings_title">General settings</string>
+  <string name="pref_markReadOnShow">Mark notification as read on show</string>
+  <string name="pref_markReadOnShow_default">ask</string>
+  <string-array name="pref_markReadOnShow_entries">
+    <item>Ask me</item>
+    <item>Yes</item>
+    <item>No</item>
+  </string-array>
+  <string-array name="pref_markReadOnShow_values">
+    <item>ask</item>
+    <item>yes</item>
+    <item>no</item>
+  </string-array>
   <string name="pref_repoVisibility">Default Repository visibility</string>
   <string name="pref_repoVisibility_context">Repository visibility</string>
   <string name="pref_repoVisibility_default">1</string>
@@ -239,5 +251,12 @@
   <string name="dialog_rateus_btn_later">Later</string>
   <string name="dialog_rateus_btn_never">Never</string>
   <string name="dialog_rateus_btn_rate">RATE NOW</string>
+
+  <!-- "Mark notification as read?" dialog shown on notification show -->
+  <string name="dialog_mnar_text">Mark notification as read on show?</string>
+  <string name="dialog_mnar_remember">Remember my choice (you can change it later in Preferences).</string>
+  <string name="dialog_mnar_btn_yes">Yes</string>
+  <string name="dialog_mnar_btn_no">No</string>
+
 
 </resources>
