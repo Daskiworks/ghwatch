@@ -20,14 +20,14 @@ Simply go to the GitHub.com > 'Account settings' > 'Notification center' and dis
 Main features
 -------------
 
-###Authentication
+### Authentication
 * OAuth used
 * No GithHub password stored on device
 * You can revoke access from GitHub website at any time
 * Support for GitHub two-factor authentication
 * Info about logged in user in navigation drawer
 
-###New GitHub notification detection
+### New GitHub notification detection
 * Configurable pooling interval
 * GitHub API limit saving pooling method used (with full check once a six hours on mobile 
   and one hour on WiFi to prevent problems and allow widget decrease count/android notification remove when 
@@ -35,7 +35,7 @@ Main features
 * Preference to configure full update for all background checks to better detect notification reads 
   on another device/web. Use may lead to a bit higher consumption of resources (network, battery, GitHub API limit)
 
-###Android notification
+### Android notification
 * Android notification is fired when new unread GithHub notification is detected
 * Notifications filter can be set in global Preferences and 'per watched repository' level. 
   This allows you to flexibly configure which type of GitHub notifications will be 
@@ -48,13 +48,13 @@ Main features
 * Launcher icon badges with number of new notifications for launchers which support badges 
   (using https://github.com/leolin310148/ShortcutBadger) - **new in 1.19**
   
-###Homescreen and Lockscreen widget
+### Homescreen and Lockscreen widget
 * Shows number of unread Github notifications
 * Number is highlighted if there are some new unread notifications from your last view of app. So you can use 
   widget as less obtrusive way instead of Android notifications.
 * Resizeable  
   
-###Unread notifications list view
+### Unread notifications list view
 * Shows list of unread GitHub notifications from repositories enabled in this app (all by default)
 * Shows notification type (Issue, Pull Request, ...) 
 * Shows reason why you received notification (subscribed, author, comment, ...)
@@ -73,7 +73,7 @@ Main features
 * Mark all unread notifications from selected repository as read by one action
 * Manually refresh unread notifications list from server
 
-###Watched repositories list view
+### Watched repositories list view
 * Shows list of repositories you watch on GitHub
 * Swipe down to refresh list
 * Click repository to view details - Detail informations are shown 
@@ -87,12 +87,12 @@ Main features
   globally set visibility on per repository basis there (so it is possible to hide 
   all repos in main Preferences and only selectively show ones you want)
     
-###GitHub API request info
+### GitHub API request info
 * Available from Preferences
 * Shows info about GitHub API limit (limit, remaining, reset timestamp)
 * Shows info about last GitHub API call 
 
-###Support GH::watch Development dialog
+### Support GH::watch Development dialog
 * Dialog where you can take some actions to support GH::watch development
   * Donate small amount to the app development by In App payment, you get small gift for this 
   * Rate app in Google Play
@@ -100,7 +100,7 @@ Main features
   * Report a Bug
   * Add Feature request
 
-###Preferences persistence
+### Preferences persistence
 * All important preferences (but no GitHub authentication details) are stored in Google 
   cloud to be restored after device reset or on new device
   
