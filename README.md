@@ -17,6 +17,13 @@ detailed informations.
 Tip: You can lighten your email box thanks to this application also. 
 Simply go to the GitHub.com > 'Account settings' > 'Notification center' and disable emails for notifications there.
 
+Notifications from GitHub Private repositories
+----------------------------------------------
+It is possible that your GitHub Organization uses OAuth App access restrictions as documented 
+in https://help.github.com/articles/about-oauth-app-access-restrictions, which prevents GH::watch 
+to read notifications from private repositories. In this case you have to ask organization owner 
+to allow access for gh::watch application.
+
 Main features
 -------------
 
