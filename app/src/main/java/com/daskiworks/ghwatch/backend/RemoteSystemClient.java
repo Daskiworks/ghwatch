@@ -92,6 +92,8 @@ public class RemoteSystemClient {
     public long requestStopTime;
     public long requestDuration;
 
+    public String linkNext;
+
     protected void snapRequestDuration() {
       requestStopTime = System.currentTimeMillis();
       requestDuration = requestStopTime - requestStartTime;
@@ -107,6 +109,7 @@ public class RemoteSystemClient {
       r2.requestDuration = requestDuration;
       r2.requestStartTime = requestStartTime;
       r2.requestStopTime = requestStopTime;
+      r2.linkNext = linkNext;
     }
   }
 
@@ -320,7 +323,7 @@ public class RemoteSystemClient {
     if (code >= 200 && code <= 299)
       return;
     if (code == HttpStatus.SC_UNAUTHORIZED || code == HttpStatus.SC_FORBIDDEN) {
-      String OTP = getHeaderValue(httpResponse.getFirstHeader("X-GitHub-OTP"));
+      String OTP = getHeaderValue(httpResponse,"X-GitHub-OTP");
       if (code == HttpStatus.SC_UNAUTHORIZED && OTP != null && OTP.contains("required")) {
         throw new OTPAuthenticationException(Utils.trimToNull(OTP.replace("required;", "")));
       }
@@ -347,20 +350,14 @@ public class RemoteSystemClient {
   }
 
   protected static void parseResponseHeaders(Context context, HttpResponse httpResponse, Response<String> ret) {
-    Header lm = httpResponse.getLastHeader("Last-Modified");
-    Header pi = httpResponse.getLastHeader("X-Poll-Interval");
+    if (Log.isLoggable(TAG, Log.DEBUG))
+      Log.d(TAG, "HTTP Response headers: " + dumpHeaders(httpResponse.getAllHeaders()));
 
-    Header rll = httpResponse.getLastHeader("X-RateLimit-Limit");
-    Header rlr = httpResponse.getLastHeader("X-RateLimit-Remaining");
-    Header rlreset = httpResponse.getLastHeader("X-RateLimit-Reset");
+    ret.lastModified = getHeaderValue(httpResponse, "Last-Modified");
+    ret.rateLimit = getHeaderValue(httpResponse, "X-RateLimit-Limit");
+    ret.rateLimitRemaining = getHeaderValue(httpResponse, "X-RateLimit-Remaining");
 
-    Log.d(TAG, "HTTP Response headers: " + dumpHeaders(httpResponse.getAllHeaders()));
-
-    ret.lastModified = getHeaderValue(lm);
-    ret.rateLimit = getHeaderValue(rll);
-    ret.rateLimitRemaining = getHeaderValue(rlr);
-
-    String v = getHeaderValue(rlreset);
+    String v = getHeaderValue(httpResponse, "X-RateLimit-Reset");
     if (v != null) {
       try {
         ret.rateLimitReset = Long.parseLong(v) * 1000;
@@ -370,7 +367,7 @@ public class RemoteSystemClient {
       }
     }
 
-    String vpi = getHeaderValue(pi);
+    String vpi = getHeaderValue(httpResponse, "X-Poll-Interval");
     if (vpi != null) {
       try {
         ret.poolInterval = Long.valueOf(vpi);
@@ -378,6 +375,16 @@ public class RemoteSystemClient {
         Log.w(TAG, "'X-Poll-Interval' header value is not a number: " + vpi);
       }
     }
+
+    String linkH = getHeaderValue(httpResponse, "Link");
+    if(linkH != null){
+      for (String linkPart:linkH.split(",")){
+        if(linkPart!=null && linkPart.contains("rel=\"next\"")){
+          ret.linkNext = Utils.trimToNull(linkPart.substring(1,linkPart.indexOf(">;")));
+        }
+      }
+    }
+    Log.d(TAG, "Response Link.next parsed: " + ret.linkNext);
   }
 
   private static String dumpHeaders(Header[] headers) {
@@ -401,7 +408,8 @@ public class RemoteSystemClient {
     editor.commit();
   }
 
-  private static String getHeaderValue(Header header) {
+  private static String getHeaderValue(HttpResponse httpResponse, String headerName) {
+    Header header = httpResponse.getLastHeader(headerName);
     if (header != null)
       return Utils.trimToNull(header.getValue());
     return null;

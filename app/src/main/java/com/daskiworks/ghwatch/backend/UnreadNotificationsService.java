@@ -289,7 +289,7 @@ public class UnreadNotificationsService {
       if (notification.isDetailLoaded() && apiUrl.equals(notification.getSubjectUrl())) {
         nswd.data = notification.getSubjectDetailHtmlUrl();
       } else if (apiUrl.equals(notification.getSubjectUrl()) && PreferencesUtils.getBoolean(context, PreferencesUtils.PREF_SERVER_DETAIL_LOADING)
-          && PreferencesUtils.readDonationTimestamp(context) != null) {
+              && PreferencesUtils.readDonationTimestamp(context) != null) {
         NotificationViewData nvd = getNotificationDetailForView(notification);
         nswd.loadingStatus = nvd.loadingStatus;
         if (nvd.notification != null) {
@@ -353,7 +353,7 @@ public class UnreadNotificationsService {
    */
   public static boolean isUnreadNotificationsServerCheckNecessary(Context context) {
     return PreferencesUtils.getBoolean(context, PreferencesUtils.PREF_NOTIFY, true)
-        || PreferencesUtils.getBoolean(context, PreferencesUtils.PREF_WIDGET_UNREAD_EXISTS, false);
+            || PreferencesUtils.getBoolean(context, PreferencesUtils.PREF_WIDGET_UNREAD_EXISTS, false);
   }
 
   /**
@@ -425,7 +425,7 @@ public class UnreadNotificationsService {
    * @throws URISyntaxException
    */
   protected NotificationStream readNotificationStreamFromServer(String lastModified) throws InvalidObjectException, NoRouteToHostException,
-      AuthenticationException, IOException, JSONException, URISyntaxException {
+          AuthenticationException, IOException, JSONException, URISyntaxException {
 
     NotificationStreamParser.IRepoVisibilityAdapter rva = createRepoVisibilityAdapter();
 
@@ -442,10 +442,17 @@ public class UnreadNotificationsService {
     if (resp.notModified)
       return null;
 
-    NotificationStream ns = NotificationStreamParser.parseNotificationStream(resp.data,rva);
+    NotificationStream ns = NotificationStreamParser.parseNotificationStream(null, resp.data, rva);
     ns.setLastModified(resp.lastModified);
     if (lastModified == null)
       ns.setLastFullUpdateTimestamp(System.currentTimeMillis());
+
+    //handle paging
+    while(resp.linkNext!=null){
+      resp = RemoteSystemClient.getJSONArrayFromUrl(context, authenticationManager.getGhApiCredentials(context), resp.linkNext, headers);
+      NotificationStreamParser.parseNotificationStream(ns, resp.data, rva);
+    }
+
     return ns;
   }
 
@@ -455,14 +462,14 @@ public class UnreadNotificationsService {
     //#80 detect which URL should be used, call repo based url if only one repo is visible
     WatchedRepositoriesService wrs = new WatchedRepositoriesService(context);
     WatchedRepositoriesViewData wr = wrs.getWatchedRepositoriesForView(ViewDataReloadStrategy.IF_TIMED_OUT);
-    if(wr.loadingStatus == LoadingStatus.OK) {
+    if (wr.loadingStatus == LoadingStatus.OK) {
       Set<String> visibleRepos = new HashSet();
       for (Repository r : wr.repositories) {
-        if(rva.isRepoVisibile(r.getRepositoryFullName())){
+        if (rva.isRepoVisibile(r.getRepositoryFullName())) {
           visibleRepos.add(r.getRepositoryFullName());
         }
       }
-      if(visibleRepos.size()==1){
+      if (visibleRepos.size() == 1) {
         url = GHConstants.URL_BASE + "/repos/" + visibleRepos.iterator().next() + "/notifications";
       }
     }
@@ -472,12 +479,12 @@ public class UnreadNotificationsService {
 
   @NonNull
   private NotificationStreamParser.IRepoVisibilityAdapter createRepoVisibilityAdapter() {
-    return new NotificationStreamParser.IRepoVisibilityAdapter(){
-        @Override
-        public boolean isRepoVisibile(String repoFullName) {
-          return PreferencesUtils.PREF_REPO_VISIBILITY_VISIBLE.equals(PreferencesUtils.getRepoVisibilityForRepository(context, repoFullName, true));
-        }
-      };
+    return new NotificationStreamParser.IRepoVisibilityAdapter() {
+      @Override
+      public boolean isRepoVisibile(String repoFullName) {
+        return PreferencesUtils.PREF_REPO_VISIBILITY_VISIBLE.equals(PreferencesUtils.getRepoVisibilityForRepository(context, repoFullName, true));
+      }
+    };
   }
 
   /**
@@ -522,7 +529,7 @@ public class UnreadNotificationsService {
     if (newStream.isNewNotification(oldStream)) {
 
       NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.github_notification)
-          .setContentTitle(context.getString(R.string.an_title_more)).setPriority(NotificationCompat.PRIORITY_DEFAULT);
+              .setContentTitle(context.getString(R.string.an_title_more)).setPriority(NotificationCompat.PRIORITY_DEFAULT);
       mBuilder.setAutoCancel(true);
 
       ShortcutBadger.applyCount(context, newStream.size());
@@ -559,7 +566,7 @@ public class UnreadNotificationsService {
         Intent actionIntent = new Intent(context, MarkNotifiationAsReadReceiver.class);
         actionIntent.putExtra(MarkNotifiationAsReadReceiver.INTENT_EXTRA_KEY_ID, n.getId());
         mBuilder.addAction(R.drawable.ic_action_dismis_all, context.getString(R.string.action_mark_read),
-            PendingIntent.getBroadcast(context, 0, actionIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+                PendingIntent.getBroadcast(context, 0, actionIntent, PendingIntent.FLAG_UPDATE_CURRENT));
 
         resultIntent = new Intent(context, MainActivity.class);
       } else {
@@ -581,7 +588,7 @@ public class UnreadNotificationsService {
         actionIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         actionIntent.setAction(MainActivity.INTENT_ACTION_DISMISS_ALL);
         mBuilder
-            .addAction(R.drawable.ic_action_dismis_all, context.getString(R.string.action_all_read), PendingIntent.getActivity(context, 0, actionIntent, 0));
+                .addAction(R.drawable.ic_action_dismis_all, context.getString(R.string.action_all_read), PendingIntent.getActivity(context, 0, actionIntent, 0));
 
         resultIntent = new Intent(context, MainActivity.class);
       }

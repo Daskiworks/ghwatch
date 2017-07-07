@@ -33,7 +33,7 @@ import java.util.Set;
 
 /**
  * Helper class used to parse {@link NotificationStream} from JSON data read from server.
- * 
+ *
  * @author Vlastimil Elias <vlastimil.elias@worldonline.cz>
  */
 public class NotificationStreamParser {
@@ -46,8 +46,9 @@ public class NotificationStreamParser {
     public boolean isRepoVisibile(String repoFullName);
   }
 
-  public static NotificationStream parseNotificationStream(JSONArray json, IRepoVisibilityAdapter repoVisibilityAdapter) throws InvalidObjectException {
-    NotificationStream ret = new NotificationStream();
+  public static NotificationStream parseNotificationStream(NotificationStream ret, JSONArray json, IRepoVisibilityAdapter repoVisibilityAdapter) throws InvalidObjectException {
+    if (ret == null)
+      ret = new NotificationStream();
     try {
 
       for (int i = 0; i < json.length(); i++) {
@@ -55,7 +56,7 @@ public class NotificationStreamParser {
         JSONObject subject = notification.getJSONObject("subject");
         JSONObject repository = notification.getJSONObject("repository");
         String repoFullName = Utils.trimToNull(repository.getString("full_name"));
-        if(repoFullName == null || !repoVisibilityAdapter.isRepoVisibile(repoFullName))
+        if (repoFullName == null || !repoVisibilityAdapter.isRepoVisibile(repoFullName))
           continue;
         String updatedAtStr = Utils.trimToNull(notification.getString("updated_at"));
         Date updatedAt = null;
@@ -70,7 +71,7 @@ public class NotificationStreamParser {
         }
 
         ret.addNotification(new Notification(notification.getLong("id"), notification.getString("url"), subject.getString("title"), subject.getString("type"),
-            subject.getString("url"), subject.getString("latest_comment_url"), repoFullName, repository.getJSONObject("owner").getString(
+                subject.getString("url"), subject.getString("latest_comment_url"), repoFullName, repository.getJSONObject("owner").getString(
                 "avatar_url"), updatedAt, notification.getString("reason")));
 
       }
