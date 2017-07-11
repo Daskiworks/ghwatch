@@ -19,6 +19,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.Fragment;
 import android.app.backup.BackupManager;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -39,7 +40,7 @@ public class NewVersionInfoDialogFragment extends DialogFragment {
 
   private static final String TAG = NewVersionInfoDialogFragment.class.getSimpleName();
 
-  private static final String VERSION_VALUE = "1.19";
+  private static final String VERSION_VALUE = "1.20";
 
   protected View view;
 
@@ -79,6 +80,14 @@ public class NewVersionInfoDialogFragment extends DialogFragment {
       @Override
       public void onClick(DialogInterface dialog, int id) {
         storeShowOccurence();
+      }
+    });
+    builder.setNegativeButton(R.string.dialog_sad_title, new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialog, int id) {
+        ActivityTracker.sendEvent(getActivity(), ActivityTracker.CAT_UI, "new_version_dialog_app_support", null, 0L);
+        DialogFragment d = new SupportAppDevelopmentDialogFragment();
+        d.show(NewVersionInfoDialogFragment.this.getFragmentManager(), ActivityBase.FRAGMENT_DIALOG);
       }
     });
 

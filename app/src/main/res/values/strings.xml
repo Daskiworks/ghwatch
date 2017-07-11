@@ -238,7 +238,12 @@
 
   <!-- New Version dialog -->
   <string name="dialog_nv_title">New version</string>
-  <string name="dialog_nv_intro_text">Thanks everybody who supports this app development by donation. Version 1.19. brings a new small gift for you. Issue or Pull Request Labels may be shown for the notification if enabled in app Preferences. Visit "Support Development" item of main menu please to donate or restore previous donation status and claim your gift. \nThere is also a bunch of other small features (possibility to select repositories visible in the app, launcher icon badges) and bugfixes for everybody.</string>
+  <string name="dialog_nv_intro_text">Version 1.20 brings two improvements.
+    You can let GH::watch to mark notification as read when you open it\'s detail.
+    Useful when you use app like OctoDroid to view notification detail, as this app doesn\'t mark notification as read on show.\n
+    \nSecond improvement is that GH::watch is now able to load more than 50 notifications.\n
+\nThanks everybody who supports this app development by donation, enjoy your additional features.
+  </string>
 
 
   <!-- About dialog -->

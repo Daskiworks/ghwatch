@@ -4,7 +4,7 @@ Release steps for GH::watch app
 ### Android Studio project build 
 
 1. `com.daskiworks.ghwatch.backend.GHConstants` - set `DEBUG` to `false`
-2. update `NewVersionInfoDialogFragment` version value and text if necessary (nothing shown if not changed)
+2. update `NewVersionInfoDialogFragment.VERSION_VALUE` value and `dialog_nv_intro_text` text if necessary (nothing shown if not changed)
 3. `AndroidManifest.xml` - check android:versionCode and android:versionName
 4. update `CHANGES.md` file 
 5. update `README.md` file (mark features with `- **improved in x.y**` or `- **new in x.y**`)
