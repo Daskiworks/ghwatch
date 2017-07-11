@@ -1,7 +1,7 @@
 GH::watch changelog
 ===================
 
-## v1.20 (ToDo)
+## v1.20 (Jul 11th, 2017)
 - \#88 added option to mark notification as read when clicked to be shown
 - \#85 added support to load all notifications (more than 50 returned by one REST API call) 
 
