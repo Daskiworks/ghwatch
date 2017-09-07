@@ -15,7 +15,7 @@ detailed informations.
 </a>
 
 Tip: You can lighten your email box thanks to this application also. 
-Simply go to the GitHub.com > 'Account settings' > 'Notification center' and disable emails for notifications there.
+Simply go to the [GitHub.com > 'Account settings' > 'Notifications'](https://github.com/settings/notifications) and disable emails for notifications there.
 
 Notifications from GitHub Private repositories
 ----------------------------------------------
