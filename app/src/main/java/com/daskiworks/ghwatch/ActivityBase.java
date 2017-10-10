@@ -31,6 +31,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -53,12 +54,12 @@ import com.daskiworks.ghwatch.model.GHUserInfo;
 /**
  * Abstract base for activities in this app.
  * <p>
- * Contains navigation drawer support over, you can init drawer using {@link #navigationDrawerInit()} in your {@link #onCreate(Bundle)} implementation.
+ * Contains navigation drawer support over, you can init drawer using {@link #initNavigationDrawer(int)} in your {@link #onCreate(Bundle)} implementation.
  * 
  * @author Vlastimil Elias <vlastimil.elias@worldonline.cz>
  * 
  */
-public abstract class ActivityBase extends Activity {
+public abstract class ActivityBase extends AppCompatActivity {
 
   private static final String TAG = ActivityBase.class.getSimpleName();
 
@@ -68,6 +69,9 @@ public abstract class ActivityBase extends Activity {
 
   protected static final int NAV_DRAWER_ITEM_UNREAD_NOTIF = 0;
   protected static final int NAV_DRAWER_ITEM_WATCHED_REPOS = 1;
+  protected static final int NAV_DRAWER_ITEM_SETTINGS = 2;
+  protected static final int NAV_DRAWER_ITEM_SUPPORT_DEV = 3;
+  protected static final int NAV_DRAWER_ITEM_ABOUT = 4;
 
   protected View mDrawerView;
   protected DrawerLayout mDrawerLayout;
@@ -96,13 +100,13 @@ public abstract class ActivityBase extends Activity {
     swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
     if (swipeLayout != null) {
       swipeLayout.setOnRefreshListener(listener);
-      swipeLayout.setColorSchemeResources(android.R.color.holo_red_light, R.color.apptheme_color, android.R.color.holo_orange_light, R.color.apptheme_color);
+      swipeLayout.setColorSchemeResources(android.R.color.holo_red_light, R.color.apptheme_colorPrimary, android.R.color.holo_orange_light, R.color.apptheme_colorPrimary);
     }
 
     swipeLayout2 = (SwipeRefreshLayout) findViewById(R.id.swipe_container_2);
     if (swipeLayout2 != null) {
       swipeLayout2.setOnRefreshListener(listener);
-      swipeLayout2.setColorSchemeResources(android.R.color.holo_red_light, R.color.apptheme_color, android.R.color.holo_orange_light, R.color.apptheme_color);
+      swipeLayout2.setColorSchemeResources(android.R.color.holo_red_light, R.color.apptheme_colorPrimary, android.R.color.holo_orange_light, R.color.apptheme_colorPrimary);
     }
 
     initialProgressBar = (ProgressBar) findViewById(R.id.initial_progress);
@@ -138,22 +142,22 @@ public abstract class ActivityBase extends Activity {
       mDrawerMenuList.setAdapter(mDrawerAdapter);
       mDrawerMenuList.setOnItemClickListener(new DrawerItemClickListener());
 
-      mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_navigation_drawer, R.string.drawer_open, R.string.drawer_close) {
+      mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_launcher, R.string.drawer_open, R.string.drawer_close) {
 
         public void onDrawerClosed(View view) {
           super.onDrawerClosed(view);
-          getActionBar().setTitle(mTitle);
+          getSupportActionBar().setTitle(mTitle);
         }
 
         public void onDrawerOpened(View drawerView) {
           super.onDrawerOpened(drawerView);
-          getActionBar().setTitle(mDrawerTitle);
+          getSupportActionBar().setTitle(mDrawerTitle);
         }
 
       };
       mDrawerLayout.setDrawerListener(mDrawerToggle);
-      getActionBar().setDisplayHomeAsUpEnabled(true);
-      getActionBar().setHomeButtonEnabled(true);
+      getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+      getSupportActionBar().setHomeButtonEnabled(true);
       navigationDrawerShowUserInfo();
     }
   }
@@ -178,13 +182,23 @@ public abstract class ActivityBase extends Activity {
     if (navDrawerMenuSelectedItem != position) {
       Intent intent = null;
       switch (position) {
-      case NAV_DRAWER_ITEM_UNREAD_NOTIF:
-        intent = new Intent(this, MainActivity.class);
-        intent.setAction(MainActivity.INTENT_ACTION_RESET_FILTER);
-        break;
-      case NAV_DRAWER_ITEM_WATCHED_REPOS:
-        intent = new Intent(this, WatchedRepositoriesActivity.class);
-        break;
+        case NAV_DRAWER_ITEM_UNREAD_NOTIF:
+          intent = new Intent(this, MainActivity.class);
+          intent.setAction(MainActivity.INTENT_ACTION_RESET_FILTER);
+          break;
+        case NAV_DRAWER_ITEM_WATCHED_REPOS:
+          intent = new Intent(this, WatchedRepositoriesActivity.class);
+          break;
+        case NAV_DRAWER_ITEM_SETTINGS:
+          intent = new Intent(this, SettingsActivity.class);
+          break;
+        case NAV_DRAWER_ITEM_SUPPORT_DEV:
+          showSupportAppDevelopmentDialog();
+          break;
+        case NAV_DRAWER_ITEM_ABOUT:
+          AboutDialogFragment ldf = new AboutDialogFragment();
+          ldf.show(this.getFragmentManager(), FRAGMENT_DIALOG);
+          break;
       }
       if (intent != null) {
         Log.d(TAG, "Intent frow drawer navigation : " + intent + " with action " + intent.getAction());
@@ -262,16 +276,7 @@ public abstract class ActivityBase extends Activity {
     }
 
     switch (item.getItemId()) {
-    case R.id.action_settings:
-      this.startActivity(new Intent(this, SettingsActivity.class));
-      return true;
-    case R.id.action_supportAppDevelopment:
-      showSupportAppDevelopmentDialog();
-      return true;
-    case R.id.action_about:
-      AboutDialogFragment ldf = new AboutDialogFragment();
-      ldf.show(this.getFragmentManager(), FRAGMENT_DIALOG);
-      return true;
+      //we do not have any common item in the action bar currently
     default:
       return false;
     }

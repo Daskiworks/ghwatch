@@ -92,8 +92,8 @@
 
       <ImageButton
         android:id="@+id/button_menu"
-        android:layout_width="38dp"
-        android:layout_height="35dp"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
@@ -105,7 +105,7 @@
         android:padding="3dp"
         android:paddingRight="0dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/ic_action_overflow_dark"/>
+        android:src="@drawable/ic_more_vert_grey600_36dp"/>
 
       <TextView
         android:id="@+id/repo_name"
@@ -122,7 +122,6 @@
         android:maxLines="1"
         android:scrollHorizontally="true"
         android:singleLine="true"
-        android:textColor="@color/greyed_text_color"
         android:textSize="12sp"
         android:textStyle="bold"/>
 
@@ -137,7 +136,6 @@
         android:layout_toLeftOf="@id/button_menu"
         android:layout_toRightOf="@id/thumb"
         android:layout_toStartOf="@id/button_menu"
-        android:textColor="@color/greyed_text_color"
         android:textSize="12sp"/>
     </RelativeLayout>
 

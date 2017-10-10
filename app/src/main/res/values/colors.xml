@@ -14,8 +14,8 @@
    limitations under the License.
  -->
  <resources>
-    <color name="apptheme_color">#32689e</color>
-    <color name="greyed_text_color">#545454</color>
-    <color name="drawer_header_text_color">#ffffffff</color>
+    <color name="apptheme_colorPrimary">#5d4037</color>
+    <color name="apptheme_colorPrimaryDark">#5d4037</color>
+    <color name="apptheme_colorAccent">#fb8c00</color>
     <color name="start_page_text_color">#AF3B3E</color>
 </resources>

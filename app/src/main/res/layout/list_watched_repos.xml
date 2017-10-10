@@ -41,8 +41,8 @@
 
     <ImageButton
         android:id="@+id/button_menu"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_centerInParent="true"
@@ -53,7 +53,7 @@
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:scaleType="fitCenter"
-        android:src="@drawable/ic_action_overflow_dark" />
+        android:src="@drawable/ic_more_vert_grey600_36dp" />
 
     <TextView
         android:id="@+id/repo_name"
@@ -83,7 +83,6 @@
      android:layout_toStartOf="@id/button_menu"
      android:layout_toRightOf="@id/thumb"
      android:layout_toEndOf="@id/thumb"
-     android:textColor="@color/greyed_text_color"
      android:textSize="12sp"
      android:scrollHorizontally="true"
      android:ellipsize="marquee"
@@ -100,7 +99,6 @@
         android:layout_toStartOf="@id/button_menu"
         android:layout_toRightOf="@id/thumb"
         android:layout_toEndOf="@id/thumb"
-        android:textColor="@color/greyed_text_color"
         android:textSize="12sp" />
 
 </RelativeLayout>

@@ -12,40 +12,27 @@
    distributed under the License is distributed on an "AS IS" BASIS,
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
-   limitations under the License.
+   limitations under the License.
+
 -->
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/action_all_read"
         android:icon="@drawable/ic_action_dismis_all"
-        android:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:title="@string/action_all_read"/>
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/action_settings"/>
-    <item
-        android:id="@+id/action_supportAppDevelopment"
-        android:orderInCategory="101"
-        android:showAsAction="never"
-        android:title="@string/action_supportAppDevelopment"/>
-    <item
-        android:id="@+id/action_about"
-        android:orderInCategory="102"
-        android:showAsAction="never"
-        android:title="@string/action_about"/>
     <item
         android:id="@+id/action_notifCheck"
         android:orderInCategory="103"
-        android:showAsAction="never"
+        app:showAsAction="never"
         android:title="@string/action_notifCheck"
         android:visible="true"/>
     <item
         android:id="@+id/action_donationTogle"
         android:orderInCategory="104"
-        android:showAsAction="never"
+        app:showAsAction="never"
         android:title="@string/action_donationTogle"
         android:visible="true"/>
 
