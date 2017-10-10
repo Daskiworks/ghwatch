@@ -565,7 +565,7 @@ public class UnreadNotificationsService {
         mBuilder.setStyle(btStyle);
         Intent actionIntent = new Intent(context, MarkNotifiationAsReadReceiver.class);
         actionIntent.putExtra(MarkNotifiationAsReadReceiver.INTENT_EXTRA_KEY_ID, n.getId());
-        mBuilder.addAction(R.drawable.ic_action_dismis_all, context.getString(R.string.action_mark_read),
+        mBuilder.addAction(R.drawable.ic_clear_all_white_36dp, context.getString(R.string.action_mark_read),
                 PendingIntent.getBroadcast(context, 0, actionIntent, PendingIntent.FLAG_UPDATE_CURRENT));
 
         resultIntent = new Intent(context, MainActivity.class);
@@ -588,7 +588,7 @@ public class UnreadNotificationsService {
         actionIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         actionIntent.setAction(MainActivity.INTENT_ACTION_DISMISS_ALL);
         mBuilder
-                .addAction(R.drawable.ic_action_dismis_all, context.getString(R.string.action_all_read), PendingIntent.getActivity(context, 0, actionIntent, 0));
+                .addAction(R.drawable.ic_clear_all_white_36dp, context.getString(R.string.action_all_read), PendingIntent.getActivity(context, 0, actionIntent, 0));
 
         resultIntent = new Intent(context, MainActivity.class);
       }
