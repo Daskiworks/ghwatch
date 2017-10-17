@@ -33,19 +33,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingBottom="3dp"
-    android:paddingEnd="6dp"
-    android:paddingLeft="3dp"
-    android:paddingRight="0dp"
-    android:paddingStart="3dp"
-    android:paddingTop="6dp">
+    android:paddingBottom="4dp"
+    android:paddingEnd="8dp"
+    android:paddingLeft="12dp"
+    android:paddingRight="8dp"
+    android:paddingStart="12dp"
+    android:paddingTop="8dp">
 
     <LinearLayout
       android:id="@+id/line1"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
       android:orientation="horizontal"
-      android:paddingRight="3dp">
+      android:paddingRight="4dp">
 
       <TextView
         android:id="@+id/title"
@@ -59,8 +59,8 @@
         android:id="@+id/time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="5dp"
-        android:layout_marginRight="5dp"/>
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"/>
     </LinearLayout>
 
     <RelativeLayout
@@ -68,12 +68,12 @@
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
       android:layout_marginTop="4dp"
-      android:paddingBottom="3dp">
+      android:paddingBottom="4dp">
 
       <ImageView
         android:id="@+id/thumb"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
@@ -82,8 +82,8 @@
       <ProgressBar
         android:id="@android:id/progress"
         style="?android:attr/progressBarStyleSmall"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
@@ -102,7 +102,7 @@
         android:contentDescription="@string/context_menu"
         android:focusable="false"
         android:focusableInTouchMode="true"
-        android:padding="3dp"
+        android:padding="4dp"
         android:paddingRight="0dp"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_more_vert_grey600_36dp"/>
@@ -111,8 +111,8 @@
         android:id="@+id/repo_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="6dp"
-        android:layout_marginStart="6dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
         android:layout_toEndOf="@id/thumb"
         android:layout_toLeftOf="@id/button_menu"
         android:layout_toRightOf="@id/thumb"
@@ -121,8 +121,6 @@
         android:marqueeRepeatLimit="marquee_forever"
         android:maxLines="1"
         android:scrollHorizontally="true"
-        android:singleLine="true"
-        android:textSize="12sp"
         android:textStyle="bold"/>
 
       <TextView
@@ -130,13 +128,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/repo_name"
-        android:layout_marginLeft="6dp"
-        android:layout_marginStart="6dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
         android:layout_toEndOf="@id/thumb"
         android:layout_toLeftOf="@id/button_menu"
         android:layout_toRightOf="@id/thumb"
-        android:layout_toStartOf="@id/button_menu"
-        android:textSize="12sp"/>
+        android:layout_toStartOf="@id/button_menu"/>
+
     </RelativeLayout>
 
     <eu.fiskur.chipcloud.ChipCloud
@@ -145,10 +143,9 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:visibility="gone"
-      android:layout_marginTop="3dp"
+      android:layout_marginTop="4dp"
       android:layout_marginBottom="0dp"
       chipcloud:selectMode="none"/>
-
 
   </LinearLayout>
 

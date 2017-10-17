@@ -97,7 +97,6 @@ public class LoginDialogFragment extends DialogFragment implements TextWatcher {
   @Override
   public Dialog onCreateDialog(Bundle savedInstanceState) {
     Dialog dialog = new Dialog(getActivity());
-    dialog.setTitle(R.string.dialog_login);
     View v = getActivity().getLayoutInflater().inflate(R.layout.dialog_login, null);
     dialog.setContentView(v);
 
