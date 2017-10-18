@@ -69,7 +69,7 @@ public class WatchedRepositoriesActivity extends ActivityBase implements LoginDi
     imageLoader = ImageLoader.getInstance(getApplicationContext());
     watchedRepositoriesService = new WatchedRepositoriesService(getBaseContext());
 
-    initNavigationDrawer(NAV_DRAWER_ITEM_WATCHED_REPOS);
+    initNavigationDrawer(R.id.nav_watched);
 
     // initialization of main content
     repositoriesListView = (ListView) findViewById(R.id.list);

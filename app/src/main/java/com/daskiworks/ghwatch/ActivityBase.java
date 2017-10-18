@@ -15,35 +15,26 @@
  */
 package com.daskiworks.ghwatch;
 
-import java.lang.reflect.Field;
-
-import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewConfiguration;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.daskiworks.ghwatch.backend.AuthenticationManager;
@@ -55,9 +46,8 @@ import com.daskiworks.ghwatch.model.GHUserInfo;
  * Abstract base for activities in this app.
  * <p>
  * Contains navigation drawer support over, you can init drawer using {@link #initNavigationDrawer(int)} in your {@link #onCreate(Bundle)} implementation.
- * 
+ *
  * @author Vlastimil Elias <vlastimil.elias@worldonline.cz>
- * 
  */
 public abstract class ActivityBase extends AppCompatActivity {
 
@@ -67,33 +57,23 @@ public abstract class ActivityBase extends AppCompatActivity {
 
   protected static final int COLOR_BACKGROUND_DRAWER = 0xFFEEEEEE;
 
-  protected static final int NAV_DRAWER_ITEM_UNREAD_NOTIF = 0;
-  protected static final int NAV_DRAWER_ITEM_WATCHED_REPOS = 1;
-  protected static final int NAV_DRAWER_ITEM_SETTINGS = 2;
-  protected static final int NAV_DRAWER_ITEM_SUPPORT_DEV = 3;
-  protected static final int NAV_DRAWER_ITEM_ABOUT = 4;
-
   protected View mDrawerView;
   protected DrawerLayout mDrawerLayout;
-  protected ActionBarDrawerToggle mDrawerToggle;
-  protected ListView mDrawerMenuList;
-  protected NavigationDrawerAdapter mDrawerAdapter;
-  protected String[] mDrawerMenuTitles;
+  ActionBarDrawerToggle mDrawerToggle;
+  protected NavigationView mDrawerNavigationView;
 
-  private CharSequence mDrawerTitle;
-  private CharSequence mTitle;
-  private int navDrawerMenuSelectedItem = -1;
+  private int navDrawerMenuSelectedItem;
 
   /**
    * Swipe layout support. A {@link #initSwipeLayout(OnRefreshListener)} must be called in {@link #onCreate(Bundle)} of activity.
    */
   protected SwipeRefreshLayout swipeLayout;
   protected SwipeRefreshLayout swipeLayout2;
-  protected ProgressBar initialProgressBar;
+  protected View initialProgressBar;
 
   /**
    * Init SwipeRefreshLayout in the activity. A {@link #swipeLayout} is filled with object.
-   * 
+   *
    * @param listener called on refresh swipe
    */
   protected void initSwipeLayout(OnRefreshListener listener) {
@@ -109,7 +89,7 @@ public abstract class ActivityBase extends AppCompatActivity {
       swipeLayout2.setColorSchemeResources(android.R.color.holo_red_light, R.color.apptheme_colorPrimary, android.R.color.holo_orange_light, R.color.apptheme_colorPrimary);
     }
 
-    initialProgressBar = (ProgressBar) findViewById(R.id.initial_progress);
+    initialProgressBar = (View) findViewById(R.id.initial_progress);
   }
 
   protected void hideInitialProgressBar() {
@@ -119,45 +99,53 @@ public abstract class ActivityBase extends AppCompatActivity {
 
   /**
    * Init navigation drawer for activity. Layout xml file must be appropriate!
-   * 
+   *
    * @param selectedItem in drawer main menu which represents this activity, see <code>NAV_DRAWER_ITEM_xx</code> constants.
-   * 
-   * @see #navigationDrawerClose()
    */
-  protected void initNavigationDrawer(int selectedItem) {
+  protected void initNavigationDrawer(final int selectedItem) {
+    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    setSupportActionBar(toolbar);
+
     // initialization of navigation drawer
     mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
     if (mDrawerLayout != null) {
-      navDrawerMenuSelectedItem = selectedItem;
-      mTitle = getTitle();
-      mDrawerTitle = getResources().getString(R.string.app_name);
-      mDrawerView = findViewById(R.id.drawer_view);
-      // set drawer background color not to be transparent, we can't do it in layout due reuse for other layouts
-      mDrawerView.setBackgroundColor(COLOR_BACKGROUND_DRAWER);
-      mDrawerView.invalidate();
 
-      mDrawerMenuTitles = getResources().getStringArray(R.array.action_list);
-      mDrawerMenuList = (ListView) findViewById(R.id.drawer_menu);
-      mDrawerAdapter = new NavigationDrawerAdapter(this, R.layout.drawer_list_item, mDrawerMenuTitles);
-      mDrawerMenuList.setAdapter(mDrawerAdapter);
-      mDrawerMenuList.setOnItemClickListener(new DrawerItemClickListener());
+      mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+              R.string.drawer_open, R.string.drawer_close) {
 
-      mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_launcher, R.string.drawer_open, R.string.drawer_close) {
-
+        /** Called when a drawer has settled in a completely closed state. */
         public void onDrawerClosed(View view) {
           super.onDrawerClosed(view);
-          getSupportActionBar().setTitle(mTitle);
+          invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
         }
 
+        /** Called when a drawer has settled in a completely open state. */
         public void onDrawerOpened(View drawerView) {
           super.onDrawerOpened(drawerView);
-          getSupportActionBar().setTitle(mDrawerTitle);
+          invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
         }
-
       };
-      mDrawerLayout.setDrawerListener(mDrawerToggle);
-      getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-      getSupportActionBar().setHomeButtonEnabled(true);
+
+      // Set the drawer toggle as the DrawerListener
+      mDrawerLayout.addDrawerListener(mDrawerToggle);
+      mDrawerToggle.syncState();
+
+
+      mDrawerNavigationView = (NavigationView) findViewById(R.id.navigation_drawer_view);
+      mDrawerNavigationView.setNavigationItemSelectedListener(
+              new NavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(MenuItem item) {
+                  onDrawerMenuItemSelected(item);
+                  navigationDrawerClose();
+                  return true;
+                }
+              });
+      navDrawerMenuSelectedItem = selectedItem;
+      if (getSupportActionBar() != null) {
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+      }
       navigationDrawerShowUserInfo();
     }
   }
@@ -171,53 +159,49 @@ public abstract class ActivityBase extends AppCompatActivity {
     }
   }
 
-  private class DrawerItemClickListener implements ListView.OnItemClickListener {
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-      onDrawerMenuItemSelected(position);
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    // Pass the event to ActionBarDrawerToggle, if it returns
+    // true, then it has handled the app icon touch event
+    if (mDrawerToggle != null && mDrawerToggle.onOptionsItemSelected(item)) {
+      return true;
     }
+    return super.onOptionsItemSelected(item);
   }
 
-  protected void onDrawerMenuItemSelected(int position) {
-    if (navDrawerMenuSelectedItem != position) {
+
+  protected void onDrawerMenuItemSelected(MenuItem menuItem) {
+    if (navDrawerMenuSelectedItem != menuItem.getItemId()) {
       Intent intent = null;
-      switch (position) {
-        case NAV_DRAWER_ITEM_UNREAD_NOTIF:
+      switch (menuItem.getItemId()) {
+        case R.id.nav_unread:
           intent = new Intent(this, MainActivity.class);
           intent.setAction(MainActivity.INTENT_ACTION_RESET_FILTER);
           break;
-        case NAV_DRAWER_ITEM_WATCHED_REPOS:
+        case R.id.nav_watched:
           intent = new Intent(this, WatchedRepositoriesActivity.class);
           break;
-        case NAV_DRAWER_ITEM_SETTINGS:
+        case R.id.nav_settings:
           intent = new Intent(this, SettingsActivity.class);
           break;
-        case NAV_DRAWER_ITEM_SUPPORT_DEV:
+        case R.id.nav_support:
           showSupportAppDevelopmentDialog();
           break;
-        case NAV_DRAWER_ITEM_ABOUT:
+        case R.id.nav_about:
           AboutDialogFragment ldf = new AboutDialogFragment();
           ldf.show(this.getFragmentManager(), FRAGMENT_DIALOG);
           break;
       }
       if (intent != null) {
-        Log.d(TAG, "Intent frow drawer navigation : " + intent + " with action " + intent.getAction());
-        navigationDrawerClose();
+        Log.d(TAG, "Intent fro drawer navigation : " + intent + " with action " + intent.getAction());
+
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         this.startActivity(intent);
       }
     }
-    navigationDrawerClose();
+
   }
 
-  /**
-   * Close navigation drawer if opened. Used when some item in drawer is used.
-   */
-  protected void navigationDrawerClose() {
-    if (mDrawerLayout != null) {
-      mDrawerLayout.closeDrawer(mDrawerView);
-    }
-  }
 
   @Override
   protected void onPostCreate(Bundle savedInstanceState) {
@@ -236,19 +220,6 @@ public abstract class ActivityBase extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
-    // hack to show menu overlay button in Action Bar even for phone with hardware menu buttons.
-    try {
-      ViewConfiguration config = ViewConfiguration.get(this);
-      Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
-      if (menuKeyField != null) {
-        menuKeyField.setAccessible(true);
-        menuKeyField.setBoolean(config, false);
-      }
-    } catch (Exception ex) {
-      // Ignore
-    }
-
   }
 
   protected boolean checkUserLoggedIn() {
@@ -268,23 +239,18 @@ public abstract class ActivityBase extends AppCompatActivity {
     navigationDrawerClose();
   }
 
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    // Pass the event to ActionBarDrawerToggle, if it returns true, then it has handled the app icon touch event
-    if (mDrawerToggle != null && mDrawerToggle.onOptionsItemSelected(item)) {
-      return true;
-    }
 
-    switch (item.getItemId()) {
-      //we do not have any common item in the action bar currently
-    default:
-      return false;
-    }
+  protected void navigationDrawerClose() {
+    if (mDrawerLayout != null)
+      mDrawerLayout.closeDrawers();
+    if (mDrawerNavigationView != null)
+      mDrawerNavigationView.setCheckedItem(navDrawerMenuSelectedItem);
   }
+
 
   /**
    * Show dialog. Dialog is shown only if no other dialog is shown currently.
-   * 
+   *
    * @param dialog to show
    * @return true if shown, false if not.
    */
@@ -312,25 +278,6 @@ public abstract class ActivityBase extends AppCompatActivity {
     }
   }
 
-  /**
-   * Item adapter for navigation drawer. Makes selected items bold.
-   */
-  public class NavigationDrawerAdapter extends ArrayAdapter<String> {
-    public NavigationDrawerAdapter(Context context, int resource, String[] objects) {
-      super(context, resource, objects);
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-      TextView view = (TextView) super.getView(position, convertView, parent);
-      if (position == navDrawerMenuSelectedItem) {
-        view.setTypeface(Typeface.DEFAULT_BOLD);
-      } else {
-        view.setTypeface(Typeface.DEFAULT);
-      }
-      return view;
-    }
-  }
 
   private final class ShowUserInfoTask extends AsyncTask<Object, String, GHUserInfo> {
 
@@ -348,17 +295,17 @@ public abstract class ActivityBase extends AppCompatActivity {
       if (isCancelled() || result == null) {
         return;
       }
-      TextView userName = (TextView) findViewById(R.id.user_name);
+      TextView userName = (TextView) ActivityBase.this.findViewById(R.id.user_name);
       if (userName != null)
         userName.setText(result.getName());
-      TextView userUserName = (TextView) findViewById(R.id.user_username);
+      TextView userUserName = (TextView) ActivityBase.this.findViewById(R.id.user_username);
       if (userUserName != null)
         userUserName.setText(result.getUsername());
-      if (result.getAvatarUrl() != null)
-        ImageLoader.getInstance(getApplicationContext()).displayImage(result.getAvatarUrl(), (ImageView) findViewById(R.id.drawer_user_thumb));
-
+//TODO MATERIAL      if (result.getAvatarUrl() != null)
+      //ImageLoader.getInstance(getApplicationContext()).displayImage(result.getAvatarUrl(), (ImageView) findViewById(R.id.drawer_user_thumb));
+/*
       if (result.getHtmlUrl() != null) {
-        RelativeLayout hv = (RelativeLayout) findViewById(R.id.drawer_user_header);
+        View hv = (View) ActivityBase.this.findViewById(R.id.nav_view);
         hv.setClickable(true);
         hv.setOnClickListener(new OnClickListener() {
 
@@ -372,7 +319,7 @@ public abstract class ActivityBase extends AppCompatActivity {
         });
 
       }
-
+*/
     }
   }
 

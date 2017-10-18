@@ -109,12 +109,15 @@
     <orderEntry type="library" exported="" name="play-services-tagmanager-v4-impl-11.0.4" level="project" />
     <orderEntry type="library" exported="" name="play-services-wallet-11.0.4" level="project" />
     <orderEntry type="library" exported="" name="play-services-analytics-11.0.4" level="project" />
+    <orderEntry type="library" exported="" name="transition-25.3.1" level="project" />
     <orderEntry type="library" exported="" name="ChipCloud-2.2.3" level="project" />
+    <orderEntry type="library" exported="" name="design-25.3.1" level="project" />
     <orderEntry type="library" exported="" name="support-core-ui-25.3.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-analytics-impl-11.0.4" level="project" />
     <orderEntry type="library" exported="" name="ShortcutBadger-1.1.17" level="project" />
     <orderEntry type="library" exported="" name="support-v4-25.3.1" level="project" />
     <orderEntry type="library" exported="" name="support-media-compat-25.3.1" level="project" />
+    <orderEntry type="library" exported="" name="recyclerview-v7-25.3.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-basement-11.0.4" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-25.3.1" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-25.3.1" level="project" />

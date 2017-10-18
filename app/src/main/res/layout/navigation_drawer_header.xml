@@ -13,55 +13,47 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  -->
- <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/drawer_user_header"
-    android:layout_width="match_parent"
-    android:layout_height="60dp"
-    android:background="@drawable/drawer_header_background" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:id="@+id/drawer_user_header"
+              android:layout_width="match_parent"
+              android:layout_height="@dimen/drawer_header_height"
+              android:gravity="bottom"
+              android:background="@drawable/drawer_header_background"
+              android:orientation="vertical"
+              android:padding="16dp"
+              android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
 
     <ImageView
         android:id="@+id/drawer_user_thumb"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_centerInParent="true"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:scaleType="centerCrop"
         android:contentDescription="@string/app_name"
         android:visibility="invisible" />
 
     <TextView
         android:id="@+id/user_name"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_toEndOf="@id/drawer_user_thumb"
-        android:layout_toRightOf="@id/drawer_user_thumb"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textStyle="bold"
         android:ellipsize="marquee"
         android:marqueeRepeatLimit="marquee_forever"
         android:maxLines="1"
         android:scrollHorizontally="true"
-        android:singleLine="true"
-
-        android:textStyle="bold" />
+        />
 
     <TextView
         android:id="@+id/user_username"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/user_name"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_toEndOf="@id/drawer_user_thumb"
-        android:layout_toRightOf="@id/drawer_user_thumb"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:ellipsize="marquee"
         android:marqueeRepeatLimit="marquee_forever"
         android:maxLines="1"
-        android:scrollHorizontally="true"
-        android:singleLine="true"
-         />
+        android:scrollHorizontally="true" />
 
-</RelativeLayout>
+</LinearLayout>

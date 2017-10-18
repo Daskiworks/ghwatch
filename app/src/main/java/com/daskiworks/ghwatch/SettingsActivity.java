@@ -63,7 +63,7 @@ public class SettingsActivity extends ActivityBase implements OnSharedPreference
     getFragmentManager().beginTransaction().replace(android.R.id.content, sf).commit();
 
     android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-    actionBar.setDisplayHomeAsUpEnabled(true);
+    //TODO MATERIAL actionBar.setDisplayHomeAsUpEnabled(true);
     authenticationManager = AuthenticationManager.getInstance();
   }
 

@@ -15,52 +15,54 @@
    limitations under the License.
 -->
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
+                                        xmlns:tools="http://schemas.android.com/tools"
+                                        android:id="@+id/drawer_layout"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:fitsSystemWindows="true"
+                                        tools:context=".MainActivity">
+
+  <!-- The main content view -->
+
+  <LinearLayout
+    android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity" >
-
-    <!-- The main content view -->
+    android:orientation="horizontal">
 
     <LinearLayout
-        android:id="@+id/main_content"
+      android:layout_width="260dp"
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
+
+      <TextView
+        android:id="@+id/drawer_repo_filter_title"
+        style="?android:listSeparatorTextViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/drawer_repo_filter_title"/>
+
+      <ListView
+        android:id="@+id/repositories_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal" >
-
-        <LinearLayout
-            android:layout_width="260dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/drawer_repo_filter_title"
-                style="?android:listSeparatorTextViewStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="@string/drawer_repo_filter_title" />
-
-            <ListView
-                android:id="@+id/repositories_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
-                android:choiceMode="singleChoice" />
-        </LinearLayout>
-
-        <View
-            android:id="@+id/btnDivider"
-            android:layout_width="1dip"
-            android:layout_height="fill_parent"
-            android:background="?android:attr/dividerVertical" />
-
-        <include layout="@layout/activity_main_main" />
+        android:layout_gravity="start"
+        android:choiceMode="singleChoice"/>
     </LinearLayout>
 
-    <!-- The navigation drawer -->
+    <View
+      android:id="@+id/btnDivider"
+      android:layout_width="1dip"
+      android:layout_height="fill_parent"
+      android:background="?android:attr/dividerVertical"/>
 
-    <include layout="@layout/navigation_drawer_simple" />
+    <include layout="@layout/activity_main_main"/>
+  </LinearLayout>
+
+  <!-- The navigation drawer -->
+  <include
+    android:id="@+id/navigation_drawer_view"
+    layout="@layout/navigation_drawer_view"/>
 
 </android.support.v4.widget.DrawerLayout>

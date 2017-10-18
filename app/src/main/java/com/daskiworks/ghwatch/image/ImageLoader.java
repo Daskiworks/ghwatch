@@ -44,9 +44,8 @@ import com.daskiworks.ghwatch.Utils;
 
 /**
  * Asynchronous internet images loader with caching (in memory and on filesystem).
- * 
+ *
  * @author Vlastimil Elias <vlastimil.elias@worldonline.cz>
- * 
  */
 public class ImageLoader {
 
@@ -68,7 +67,7 @@ public class ImageLoader {
 
   /**
    * Get instance for use.
-   * 
+   *
    * @param context to be used in loader
    * @return image loader instance for use
    */
@@ -86,8 +85,8 @@ public class ImageLoader {
 
   /**
    * Display image from given URL - cached.
-   * 
-   * @param url to get image from
+   *
+   * @param url       to get image from
    * @param imageView to display image into
    */
   public void displayImage(String url, ImageView imageView) {
@@ -105,7 +104,7 @@ public class ImageLoader {
 
   /**
    * Load image for given URL. All caches are used as in {@link #displayImage(String, ImageView)}.
-   * 
+   *
    * @param url to get image from
    * @return image bitmap or null if not available
    */
@@ -119,7 +118,7 @@ public class ImageLoader {
   }
 
   private void setProgressBarVisibility(ImageView imageView, boolean visible) {
-    ProgressBar pb = (ProgressBar) ((View) imageView.getParent()).findViewById(android.R.id.progress);
+    View pb = (View) ((View) imageView.getParent()).findViewById(android.R.id.progress);
     if (visible) {
       if (pb != null) {
         pb.setVisibility(View.VISIBLE);
@@ -301,8 +300,9 @@ public class ImageLoader {
       if (isAtLeastOneImageViewValid(imageToLoad)) {
         BitmapDisplayerTask bd = new BitmapDisplayerTask(bmp, imageToLoad);
         Activity a = getActivity(imageToLoad.imageViewList);
-        if (a != null)
+        if (a != null) {
           a.runOnUiThread(bd);
+        }
       }
     }
   }
@@ -311,8 +311,12 @@ public class ImageLoader {
     for (WeakReference<ImageView> wr : s) {
       if (wr != null) {
         ImageView iv = wr.get();
-        if (iv != null)
-          return (Activity) iv.getContext();
+        if (iv != null) {
+          Context c = iv.getContext();
+          if (c instanceof Activity)
+            return (Activity) c;
+          //TODO MATERIAL how to refresh image in UI if context is not an Activity?
+        }
       }
     }
     return null;

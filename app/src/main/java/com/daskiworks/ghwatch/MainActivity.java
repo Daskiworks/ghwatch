@@ -99,10 +99,11 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
     imageLoader = ImageLoader.getInstance(getApplicationContext());
     unreadNotificationsService = new UnreadNotificationsService(getBaseContext());
 
-    initNavigationDrawer(NAV_DRAWER_ITEM_UNREAD_NOTIF);
+    initNavigationDrawer(R.id.nav_unread);
 
     repositoriesListView = (ListView) findViewById(R.id.repositories_list);
-    repositoriesListView.setOnItemClickListener(new RepositoriesListItemClickListener());
+    if (repositoriesListView != null)
+      repositoriesListView.setOnItemClickListener(new RepositoriesListItemClickListener());
 
     // initialization of main content
     notificationsListView = (ListView) findViewById(R.id.list);
@@ -252,8 +253,8 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
       (dataLoader = new DataLoaderTask(reloadStrateg, supressErrorMessages)).execute();
   }
 
-  protected void onDrawerMenuItemSelected(int position) {
-    if (position == NAV_DRAWER_ITEM_UNREAD_NOTIF) {
+  protected void onDrawerMenuItemSelected(MenuItem position) {
+    if (position.getItemId() == R.id.nav_unread) {
       resetNotificationsFilter();
     }
     super.onDrawerMenuItemSelected(position);
@@ -299,27 +300,27 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
       if (notification != null) {
         String mrow = PreferencesUtils.getMarkReadOnShow(MainActivity.this);
         if (PreferencesUtils.PREF_MARK_READ_ON_SHOW_YES.equals(mrow)) {
-          showNotification(notification, position,true);
+          showNotification(notification, position, true);
         } else if (PreferencesUtils.PREF_MARK_READ_ON_SHOW_ASK.equals(mrow)) {
           AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
           builder.setMessage(R.string.dialog_mnar_text)
                   .setCancelable(true)
                   .setPositiveButton(R.string.dialog_mnar_btn_yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                      if(rememberCheckbox != null && rememberCheckbox.isChecked()){
+                      if (rememberCheckbox != null && rememberCheckbox.isChecked()) {
                         PreferencesUtils.setMarkReadOnShow(MainActivity.this, PreferencesUtils.PREF_MARK_READ_ON_SHOW_YES);
                       }
                       ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_mark_read_on_show_dialog_yes", null, 0L);
-                      showNotification(notification,position, true);
+                      showNotification(notification, position, true);
                     }
                   })
                   .setNegativeButton(R.string.dialog_mnar_btn_no, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                      if(rememberCheckbox != null && rememberCheckbox.isChecked()){
+                      if (rememberCheckbox != null && rememberCheckbox.isChecked()) {
                         PreferencesUtils.setMarkReadOnShow(MainActivity.this, PreferencesUtils.PREF_MARK_READ_ON_SHOW_NO);
                       }
                       ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_mark_read_on_show_dialog_no", null, 0L);
-                      showNotification(notification,position,false);
+                      showNotification(notification, position, false);
                     }
                   });
 
@@ -332,13 +333,13 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
           ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_mark_read_on_show_dialog_show", null, 0L);
           alert.show();
         } else {
-          showNotification(notification,position,false);
+          showNotification(notification, position, false);
         }
       }
     }
   }
 
-  protected void showNotification(Notification notification,int position, boolean markAsReadOnShow) {
+  protected void showNotification(Notification notification, int position, boolean markAsReadOnShow) {
     showNotificationTask = new ShowNotificationTask(notification, markAsReadOnShow, position);
     showNotificationTask.execute();
     ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_show", "", 0L);
@@ -438,16 +439,18 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
             notificationsListView.setOnItemClickListener(new NotificationsListItemClickListener());
           }
 
-          if (repositoriesListAdapter != null) {
-            repositoriesListAdapter.setNotificationStream(viewData.notificationStream);
-            repositoriesListAdapter.notifyDataSetChanged();
-          } else {
-            repositoriesListAdapter = new NotificationRepositoriesListAdapter(MainActivity.this, viewData.notificationStream);
-            repositoriesListView.setAdapter(repositoriesListAdapter);
-          }
-          if (!repositoriesListAdapter.setSelectionForFilter(repositoriesListView, filterByRepository)) {
-            // repo no more in data so reset filter
-            filterByRepository = null;
+          if (repositoriesListView != null) {
+            if (repositoriesListAdapter != null) {
+              repositoriesListAdapter.setNotificationStream(viewData.notificationStream);
+              repositoriesListAdapter.notifyDataSetChanged();
+            } else {
+              repositoriesListAdapter = new NotificationRepositoriesListAdapter(MainActivity.this, viewData.notificationStream);
+              repositoriesListView.setAdapter(repositoriesListAdapter);
+            }
+            if (!repositoriesListAdapter.setSelectionForFilter(repositoriesListView, filterByRepository)) {
+              // repo no more in data so reset filter
+              filterByRepository = null;
+            }
           }
           if (notificationsListAdapter != null) {
             notificationsListAdapter.setFilterByRepository(filterByRepository);
@@ -477,7 +480,7 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
     int position;
     Notification notification;
 
-    public ShowNotificationTask(Notification notification, boolean markAsReadOnShow, int position){
+    public ShowNotificationTask(Notification notification, boolean markAsReadOnShow, int position) {
       this.markAsReadOnShow = markAsReadOnShow;
       this.position = position;
       this.notification = notification;
@@ -512,7 +515,7 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
           Utils.dismissDialogSafe(progress);
           showServerCommunicationErrorAllertDialog(result.loadingStatus, false);
         } else if (result.data != null) {
-          if(markAsReadOnShow){
+          if (markAsReadOnShow) {
             markNotificationAsReadOnShow(position, notification);
           }
           Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(result.data));
