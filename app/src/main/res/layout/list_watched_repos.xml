@@ -13,89 +13,94 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  -->
- <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?android:attr/selectableItemBackground"
-    android:padding="8dp" android:paddingLeft="16dp" android:paddingStart="16dp" >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:padding="8dp"
+                android:paddingLeft="16dp"
+                android:paddingStart="16dp">
 
-    <ImageView
-        android:id="@+id/thumb"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_centerInParent="true"
-        android:contentDescription="@string/app_name" />
+  <de.hdodenhof.circleimageview.CircleImageView
+    android:id="@+id/thumb"
+    android:layout_width="56dp"
+    android:layout_height="56dp"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:layout_centerInParent="true"
+    android:contentDescription="@string/repo_thumb_img_descrition"
+    app:civ_border_color="#f1f1f1"
+    app:civ_border_width="2dp"/>
 
-    <ProgressBar
-        android:id="@android:id/progress"
-        style="?android:attr/progressBarStyleSmall"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_centerInParent="true"
-        android:layout_margin="5dp"
-        android:visibility="invisible" />
+  <ProgressBar
+    android:id="@android:id/progress"
+    style="?android:attr/progressBarStyleSmall"
+    android:layout_width="30dp"
+    android:layout_height="30dp"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:layout_centerInParent="true"
+    android:layout_margin="5dp"
+    android:visibility="invisible"/>
 
-    <ImageButton
-        android:id="@+id/button_menu"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_centerInParent="true"
-        android:padding="4dp"
-        android:adjustViewBounds="true"
-        android:background="?android:attr/selectableItemBackground"
-        android:contentDescription="@string/context_menu"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:scaleType="fitCenter"
-        android:src="@drawable/ic_more_vert_grey600_36dp" />
+  <ImageButton
+    android:id="@+id/button_menu"
+    android:layout_width="36dp"
+    android:layout_height="36dp"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentRight="true"
+    android:layout_centerInParent="true"
+    android:adjustViewBounds="true"
+    android:background="?attr/selectableItemBackgroundBorderless"
+    android:contentDescription="@string/context_menu"
+    android:focusable="false"
+    android:focusableInTouchMode="false"
+    android:padding="4dp"
+    android:scaleType="fitCenter"
+    android:src="@drawable/ic_more_vert_grey600_36dp"/>
 
-    <TextView
-        android:id="@+id/repo_name"
-        android:layout_width="0dp"
-        android:layout_height="fill_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_toLeftOf="@id/button_menu"
-        android:layout_toStartOf="@id/button_menu"
-        android:layout_toRightOf="@id/thumb"
-        android:layout_toEndOf="@id/thumb"
-        android:textStyle="bold"
-        android:maxLines="1"
-        android:scrollHorizontally="true"
-        android:ellipsize="marquee"
-        android:marqueeRepeatLimit ="marquee_forever"  />
+  <TextView
+    android:id="@+id/repo_name"
+    android:layout_width="0dp"
+    android:layout_height="fill_parent"
+    android:layout_marginLeft="16dp"
+    android:layout_marginStart="16dp"
+    android:layout_toEndOf="@id/thumb"
+    android:layout_toLeftOf="@id/button_menu"
+    android:layout_toRightOf="@id/thumb"
+    android:layout_toStartOf="@id/button_menu"
+    android:ellipsize="marquee"
+    android:marqueeRepeatLimit="marquee_forever"
+    android:maxLines="1"
+    android:scrollHorizontally="true"
+    android:textStyle="bold"/>
 
-   <TextView
-     android:id="@+id/repo_visibility"
-     android:layout_width="0dp"
-     android:layout_height="fill_parent"
-     android:layout_below="@id/repo_name"
-     android:layout_marginLeft="16dp"
-     android:layout_marginStart="16dp"
-     android:layout_toLeftOf="@id/button_menu"
-     android:layout_toStartOf="@id/button_menu"
-     android:layout_toRightOf="@id/thumb"
-     android:layout_toEndOf="@id/thumb"
-     android:scrollHorizontally="true"
-     android:ellipsize="marquee"
-     android:marqueeRepeatLimit ="marquee_forever"  />
+  <TextView
+    android:id="@+id/repo_visibility"
+    android:layout_width="0dp"
+    android:layout_height="fill_parent"
+    android:layout_below="@id/repo_name"
+    android:layout_marginLeft="16dp"
+    android:layout_marginStart="16dp"
+    android:layout_toEndOf="@id/thumb"
+    android:layout_toLeftOf="@id/button_menu"
+    android:layout_toRightOf="@id/thumb"
+    android:layout_toStartOf="@id/button_menu"
+    android:ellipsize="marquee"
+    android:marqueeRepeatLimit="marquee_forever"
+    android:scrollHorizontally="true"/>
 
-    <TextView
-        android:id="@+id/notif_filter"
-        android:layout_width="0dp"
-        android:layout_height="fill_parent"
-        android:layout_below="@id/repo_visibility"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_toLeftOf="@id/button_menu"
-        android:layout_toStartOf="@id/button_menu"
-        android:layout_toRightOf="@id/thumb"
-        android:layout_toEndOf="@id/thumb"/>
+  <TextView
+    android:id="@+id/notif_filter"
+    android:layout_width="0dp"
+    android:layout_height="fill_parent"
+    android:layout_below="@id/repo_visibility"
+    android:layout_marginLeft="16dp"
+    android:layout_marginStart="16dp"
+    android:layout_toEndOf="@id/thumb"
+    android:layout_toLeftOf="@id/button_menu"
+    android:layout_toRightOf="@id/thumb"
+    android:layout_toStartOf="@id/button_menu"/>
 
 </RelativeLayout>

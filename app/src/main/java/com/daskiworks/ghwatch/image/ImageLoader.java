@@ -87,9 +87,21 @@ public class ImageLoader {
    * Display image from given URL - cached.
    *
    * @param url       to get image from
-   * @param imageView to display image into
+   * @param imageView to display image into - Activity is taken from it.
+   * @see #displayImage(String, ImageView, Activity)
    */
   public void displayImage(String url, ImageView imageView) {
+    displayImage(url, imageView, null);
+  }
+
+  /**
+   * Display image from given URL - cached.
+   *
+   * @param url       to get image from
+   * @param imageView to display image into
+   * @param activity  to show image in
+   */
+  public void displayImage(String url, ImageView imageView, Activity activity) {
     if (url == null || url.isEmpty())
       imageView.setVisibility(View.INVISIBLE);
     imageViews.put(imageView, url);
@@ -97,13 +109,13 @@ public class ImageLoader {
     if (bitmap != null) {
       showImageInView(imageView, bitmap, false);
     } else {
-      queueImageLoad(url, imageView);
+      queueImageLoad(url, imageView, activity);
       setProgressBarVisibility(imageView, true);
     }
   }
 
   /**
-   * Load image for given URL. All caches are used as in {@link #displayImage(String, ImageView)}.
+   * Load image for given URL. All caches are used as in {@link #displayImage(String, ImageView, Activity)}.
    *
    * @param url to get image from
    * @return image bitmap or null if not available
@@ -132,11 +144,11 @@ public class ImageLoader {
     }
   }
 
-  private void queueImageLoad(String url, ImageView imageView) {
+  private void queueImageLoad(String url, ImageView imageView, Activity activity) {
     synchronized (imageToLoadTasksMap) {
       ImageToLoad p = imageToLoadTasksMap.get(url);
       if (p == null) {
-        p = new ImageToLoad(url, imageView);
+        p = new ImageToLoad(url, imageView, activity);
         imageToLoadTasksMap.put(url, p);
         executorService.submit(new ImageLoaderTask(p));
       } else {
@@ -255,9 +267,11 @@ public class ImageLoader {
     public String url;
     public boolean isShownAlready = false;
     Set<WeakReference<ImageView>> imageViewList = new HashSet<WeakReference<ImageView>>();
+    Activity activity;
 
-    public ImageToLoad(String u, ImageView i) {
+    public ImageToLoad(String u, ImageView i, Activity a) {
       url = u;
+      activity = a;
       imageViewList.add(new WeakReference<ImageView>(i));
     }
 
@@ -299,7 +313,7 @@ public class ImageLoader {
         imageToLoadTasksMap.remove(imageToLoad.url);
       if (isAtLeastOneImageViewValid(imageToLoad)) {
         BitmapDisplayerTask bd = new BitmapDisplayerTask(bmp, imageToLoad);
-        Activity a = getActivity(imageToLoad.imageViewList);
+        Activity a = getActivity(imageToLoad);
         if (a != null) {
           a.runOnUiThread(bd);
         }
@@ -307,15 +321,17 @@ public class ImageLoader {
     }
   }
 
-  private Activity getActivity(Set<WeakReference<ImageView>> s) {
-    for (WeakReference<ImageView> wr : s) {
+  private Activity getActivity(ImageToLoad imageToLoad) {
+    if (imageToLoad.activity != null)
+      return imageToLoad.activity;
+    for (WeakReference<ImageView> wr : imageToLoad.imageViewList) {
       if (wr != null) {
         ImageView iv = wr.get();
         if (iv != null) {
           Context c = iv.getContext();
-          if (c instanceof Activity)
+          if (c instanceof Activity) {
             return (Activity) c;
-          //TODO MATERIAL how to refresh image in UI if context is not an Activity?
+          }
         }
       }
     }

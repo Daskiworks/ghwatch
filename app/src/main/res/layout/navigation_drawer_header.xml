@@ -18,42 +18,44 @@
               android:id="@+id/drawer_user_header"
               android:layout_width="match_parent"
               android:layout_height="@dimen/drawer_header_height"
-              android:gravity="bottom"
               android:background="@drawable/drawer_header_background"
+              android:gravity="bottom"
               android:orientation="vertical"
               android:padding="16dp"
               android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
 
-    <ImageView
-        android:id="@+id/drawer_user_thumb"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginBottom="8dp"
-        android:scaleType="centerCrop"
-        android:contentDescription="@string/app_name"
-        android:visibility="invisible" />
+  <de.hdodenhof.circleimageview.CircleImageView
+    android:id="@+id/drawer_user_thumb"
+    android:layout_width="64dp"
+    android:layout_height="64dp"
+    android:layout_marginBottom="24dp"
+    android:contentDescription="@string/user_thumb_img_descrition"
+    android:scaleType="centerCrop"
+    android:visibility="invisible"
+    app:civ_border_color="#00000000"
+    app:civ_border_width="0dp"/>
 
-    <TextView
-        android:id="@+id/user_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textStyle="bold"
-        android:ellipsize="marquee"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:maxLines="1"
-        android:scrollHorizontally="true"
-        />
+  <TextView
+    android:id="@+id/user_name"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:ellipsize="marquee"
+    android:marqueeRepeatLimit="marquee_forever"
+    android:maxLines="1"
+    android:scrollHorizontally="true"
+    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+    android:textStyle="bold"
+    />
 
-    <TextView
-        android:id="@+id/user_username"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:ellipsize="marquee"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:maxLines="1"
-        android:scrollHorizontally="true" />
+  <TextView
+    android:id="@+id/user_username"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:ellipsize="marquee"
+    android:marqueeRepeatLimit="marquee_forever"
+    android:maxLines="1"
+    android:scrollHorizontally="true"
+    android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
 
 </LinearLayout>

@@ -1,41 +1,42 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
-    useLibrary 'org.apache.http.legacy'
+  compileSdkVersion 25
+  buildToolsVersion "25.0.2"
+  useLibrary 'org.apache.http.legacy'
 
-    defaultConfig {
-        applicationId "com.daskiworks.ghwatch"
-        minSdkVersion 16
-        targetSdkVersion 25
+  defaultConfig {
+    applicationId "com.daskiworks.ghwatch"
+    minSdkVersion 16
+    targetSdkVersion 25
 
-        testApplicationId "com.daskiworks.ghwatch.test"
-        testInstrumentationRunner "android.test.InstrumentationTestRunner"
+    testApplicationId "com.daskiworks.ghwatch.test"
+    testInstrumentationRunner "android.test.InstrumentationTestRunner"
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
     }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-        }
-    }
+  }
 }
 
 repositories {
-    maven {
-        url "https://jitpack.io"
-    }
+  maven {
+    url "https://jitpack.io"
+  }
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:25.3.1'
-    compile 'com.google.android.gms:play-services-wallet:11.0.4'
-    compile 'com.google.android.gms:play-services-analytics:11.0.4'
-    compile 'me.leolin:ShortcutBadger:1.1.17@aar'
-    compile 'com.github.fiskurgit:ChipCloud:2.2.3'
-    androidTestCompile 'com.android.support:support-v4:25.3.1'
-    compile 'com.android.support:animated-vector-drawable:25.3.1'
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
+  compile 'com.android.support:support-v4:25.3.1'
+  compile 'com.google.android.gms:play-services-wallet:11.0.4'
+  compile 'com.google.android.gms:play-services-analytics:11.0.4'
+  compile 'me.leolin:ShortcutBadger:1.1.17@aar'
+  compile 'com.github.fiskurgit:ChipCloud:2.2.3'
+  androidTestCompile 'com.android.support:support-v4:25.3.1'
+  compile 'com.android.support:animated-vector-drawable:25.3.1'
+  compile 'com.android.support:appcompat-v7:25.3.1'
+  compile 'com.android.support:design:25.3.1'
+  compile 'de.hdodenhof:circleimageview:2.2.0'
 }

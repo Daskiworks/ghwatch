@@ -32,9 +32,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.daskiworks.ghwatch.backend.AuthenticationManager;
@@ -59,10 +57,14 @@ public abstract class ActivityBase extends AppCompatActivity {
 
   protected View mDrawerView;
   protected DrawerLayout mDrawerLayout;
-  ActionBarDrawerToggle mDrawerToggle;
+  protected ActionBarDrawerToggle mDrawerToggle;
   protected NavigationView mDrawerNavigationView;
-
   private int navDrawerMenuSelectedItem;
+
+  protected View mDrawerHeaderView;
+  protected TextView mDrawerHeaderUserName;
+  protected TextView mDrawerHeaderUserUserame;
+
 
   /**
    * Swipe layout support. A {@link #initSwipeLayout(OnRefreshListener)} must be called in {@link #onCreate(Bundle)} of activity.
@@ -155,6 +157,9 @@ public abstract class ActivityBase extends AppCompatActivity {
    */
   protected void navigationDrawerShowUserInfo() {
     if (mDrawerLayout != null) {
+      mDrawerHeaderView = mDrawerNavigationView.getHeaderView(0);
+      mDrawerHeaderUserName = (TextView) mDrawerHeaderView.findViewById(R.id.user_name);
+      mDrawerHeaderUserUserame = (TextView) mDrawerHeaderView.findViewById(R.id.user_username);
       (new ShowUserInfoTask()).execute();
     }
   }
@@ -295,19 +300,15 @@ public abstract class ActivityBase extends AppCompatActivity {
       if (isCancelled() || result == null) {
         return;
       }
-      TextView userName = (TextView) ActivityBase.this.findViewById(R.id.user_name);
-      if (userName != null)
-        userName.setText(result.getName());
-      TextView userUserName = (TextView) ActivityBase.this.findViewById(R.id.user_username);
-      if (userUserName != null)
-        userUserName.setText(result.getUsername());
-//TODO MATERIAL      if (result.getAvatarUrl() != null)
-      //ImageLoader.getInstance(getApplicationContext()).displayImage(result.getAvatarUrl(), (ImageView) findViewById(R.id.drawer_user_thumb));
-/*
+      mDrawerHeaderUserName.setText(result.getName());
+      mDrawerHeaderUserUserame.setText(result.getUsername());
+
+      if (result.getAvatarUrl() != null)
+        ImageLoader.getInstance(getApplicationContext()).displayImage(result.getAvatarUrl(), (ImageView) mDrawerHeaderView.findViewById(R.id.drawer_user_thumb), ActivityBase.this);
+
       if (result.getHtmlUrl() != null) {
-        View hv = (View) ActivityBase.this.findViewById(R.id.nav_view);
-        hv.setClickable(true);
-        hv.setOnClickListener(new OnClickListener() {
+        mDrawerHeaderView.setClickable(true);
+        mDrawerHeaderView.setOnClickListener(new View.OnClickListener() {
 
           @Override
           public void onClick(View v) {
@@ -319,7 +320,7 @@ public abstract class ActivityBase extends AppCompatActivity {
         });
 
       }
-*/
+
     }
   }
 

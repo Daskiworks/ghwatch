@@ -38,6 +38,8 @@
   <string name="drawer_close">Close navigation drawer</string>
   <string name="widget_title_unread">Github notifications unread count</string>
   <string name="empty"></string>
+  <string name="repo_thumb_img_descrition">Repository thumbnail image</string>
+  <string name="user_thumb_img_descrition">User profile photo</string>
 
   <string name="drawer_repo_filter_title">Filter by repository</string>
 

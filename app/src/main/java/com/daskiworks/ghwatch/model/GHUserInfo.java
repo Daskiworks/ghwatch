@@ -20,6 +20,7 @@ import java.io.Serializable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.daskiworks.ghwatch.Utils;
 import com.daskiworks.ghwatch.backend.AuthenticationManager;
 
 /**
@@ -43,10 +44,10 @@ public class GHUserInfo implements Serializable {
 
   public GHUserInfo(JSONObject data) throws JSONException {
     super();
-    this.username = data.getString("login");
-    this.name = data.getString("name");
-    this.avatarUrl = data.getString("avatar_url");
-    this.htmlUrl = data.getString("html_url");
+    this.username = Utils.trimToNull(data.getString("login"));
+    this.name = Utils.trimToNull(data.getString("name"));
+    this.avatarUrl = Utils.trimToNull(data.getString("avatar_url"));
+    this.htmlUrl = Utils.trimToNull(data.getString("html_url"));
     this.updateTimestamp = System.currentTimeMillis();
   }
 
