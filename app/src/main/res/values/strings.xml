@@ -213,7 +213,7 @@
   </string-array>
 
   <!-- Support App Development dialog -->
-  <string name="dialog_sad_title">Support Development</string>
+  <string name="dialog_sad_title">Support us</string>
   <string name="dialog_sad_button_close">Close</string>
   <string name="dialog_sad_intro_text">Do you like this app? Support its development please. You get a small gift for your donation in form of few extra features. For now it is showing of Status and Labels related to the notified Issue or Pull Request.</string>
   <string name="dialog_sad_title_social">Spread the word</string>
@@ -233,7 +233,7 @@
   <string name="dialog_sad_title_participate">Participate in Development</string>
   <string name="dialog_sad_button_bug">Bug Report or Feature Request</string>
   <string name="dialog_sad_button_src">Contribute to the source code</string>
-  <string name="message_donation_only">This feature is a gift for Donators. Visit "Support Development" item of main menu please.</string>
+  <string name="message_donation_only">This feature is a gift for Donators. Visit "Support us" item in navigation drawer please.</string>
 
 
   <!-- New Version dialog -->

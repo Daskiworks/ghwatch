@@ -35,7 +35,7 @@
   <PreferenceCategory
     android:key="pref_cat_notificationSettings"
     android:title="@string/pref_notificationSettings_title">
-    <CheckBoxPreference
+    <SwitchPreference
       android:defaultValue="true"
       android:key="pref_notify"
       android:summary="@string/pref_notify_summ"
@@ -58,7 +58,7 @@
       android:title="@string/pref_notifySound">
     </RingtonePreference>
 
-    <CheckBoxPreference
+    <SwitchPreference
       android:defaultValue="true"
       android:dependency="pref_notify"
       android:key="pref_notifyVibrate"
@@ -76,17 +76,17 @@
       android:key="pref_serverCheckPeriod"
       android:title="@string/pref_serverCheckPeriod"/>
 
-    <CheckBoxPreference
+    <SwitchPreference
       android:defaultValue="false"
       android:key="pref_serverCheckFull"
       android:summary="@string/pref_serverCheckFull_summ"
       android:title="@string/pref_serverCheckFull"/>
-    <com.daskiworks.ghwatch.view.preference.CheckBoxDonatedPreference
+    <com.daskiworks.ghwatch.view.preference.SwitchDonatedPreference
       android:defaultValue="false"
       android:key="pref_serverDetailLoading"
       android:summary="@string/pref_serverDetailLoading_summ"
       android:title="@string/pref_serverDetailLoading"/>
-    <com.daskiworks.ghwatch.view.preference.CheckBoxDonatedPreference
+    <com.daskiworks.ghwatch.view.preference.SwitchDonatedPreference
       android:defaultValue="false"
       android:dependency="pref_serverDetailLoading"
       android:key="pref_serverLabelsLoading"
