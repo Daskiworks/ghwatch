@@ -48,6 +48,7 @@ import com.daskiworks.ghwatch.model.NotifCount;
 import com.daskiworks.ghwatch.model.Notification;
 import com.daskiworks.ghwatch.model.NotificationStreamViewData;
 import com.daskiworks.ghwatch.model.StringViewData;
+import com.daskiworks.ghwatch.view.SwipeDismissListViewTouchListener;
 
 import me.leolin.shortcutbadger.ShortcutBadger;
 
@@ -250,7 +251,7 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
 
   public void refreshList(ViewDataReloadStrategy reloadStrateg, boolean supressErrorMessages) {
     if (dataLoader == null)
-      (dataLoader = new DataLoaderTask(reloadStrateg, supressErrorMessages)).execute();
+      (dataLoader = new DataLoaderTask(reloadStrateg, supressErrorMessages)).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
   }
 
   protected void onDrawerMenuItemSelected(MenuItem position) {
@@ -281,7 +282,7 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
       for (int position : reverseSortedPositions) {
         Notification tr = (Notification) notificationsListAdapter.getItem(position);
         if (tr != null) {
-          new MarkNotificationAsReadTask().execute(tr.getId());
+          new MarkNotificationAsReadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,tr.getId());
           ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_mark_read_swipe", "", 0L);
           notificationsListAdapter.removeNotificationByPosition(position);
         }
@@ -341,12 +342,12 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
 
   protected void showNotification(Notification notification, int position, boolean markAsReadOnShow) {
     showNotificationTask = new ShowNotificationTask(notification, markAsReadOnShow, position);
-    showNotificationTask.execute();
+    showNotificationTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_show", "", 0L);
   }
 
   protected void markNotificationAsReadOnShow(int position, Notification notification) {
-    new MarkNotificationAsReadTask().execute(notification.getId());
+    new MarkNotificationAsReadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,notification.getId());
     ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_mark_read_on_show", "", 0L);
     notificationsListAdapter.removeNotificationByPosition(position);
     notifyDataSetChanged();
@@ -357,13 +358,13 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
     public boolean onMenuItemClick(Notification notification, MenuItem item) {
       switch (item.getItemId()) {
         case R.id.action_mark_read:
-          new MarkNotificationAsReadTask().execute(notification.getId());
+          new MarkNotificationAsReadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,notification.getId());
           notificationsListAdapter.removeNotificationById(notification.getId());
           ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_mark_read_menu", "", 0L);
           notifyDataSetChanged();
           return true;
         case R.id.action_mute_thread:
-          new MuteNotificationThreadTask().execute(notification.getId());
+          new MuteNotificationThreadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,notification.getId());
           notificationsListAdapter.removeNotificationById(notification.getId());
           ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_mute_thread", "", 0L);
           notifyDataSetChanged();
@@ -634,7 +635,7 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
       @Override
       public void onClick(DialogInterface dialog, int id) {
         ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notifications_mark_read_all", "", 0L);
-        new MarkAllNotificationsAsReadTask().execute();
+        new MarkAllNotificationsAsReadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
       }
     });
     builder.setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {

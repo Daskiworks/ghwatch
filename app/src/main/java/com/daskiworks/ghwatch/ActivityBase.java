@@ -60,11 +60,7 @@ public abstract class ActivityBase extends AppCompatActivity {
   protected ActionBarDrawerToggle mDrawerToggle;
   protected NavigationView mDrawerNavigationView;
   private int navDrawerMenuSelectedItem;
-
   protected View mDrawerHeaderView;
-  protected TextView mDrawerHeaderUserName;
-  protected TextView mDrawerHeaderUserUserame;
-
 
   /**
    * Swipe layout support. A {@link #initSwipeLayout(OnRefreshListener)} must be called in {@link #onCreate(Bundle)} of activity.
@@ -158,9 +154,7 @@ public abstract class ActivityBase extends AppCompatActivity {
   protected void navigationDrawerShowUserInfo() {
     if (mDrawerLayout != null) {
       mDrawerHeaderView = mDrawerNavigationView.getHeaderView(0);
-      mDrawerHeaderUserName = (TextView) mDrawerHeaderView.findViewById(R.id.user_name);
-      mDrawerHeaderUserUserame = (TextView) mDrawerHeaderView.findViewById(R.id.user_username);
-      (new ShowUserInfoTask()).execute();
+      (new ShowUserInfoTask()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
   }
 
@@ -300,6 +294,10 @@ public abstract class ActivityBase extends AppCompatActivity {
       if (isCancelled() || result == null) {
         return;
       }
+
+      TextView mDrawerHeaderUserName = (TextView) mDrawerHeaderView.findViewById(R.id.user_name);
+      TextView mDrawerHeaderUserUserame = (TextView) mDrawerHeaderView.findViewById(R.id.user_username);
+
       mDrawerHeaderUserName.setText(result.getName());
       mDrawerHeaderUserUserame.setText(result.getUsername());
 

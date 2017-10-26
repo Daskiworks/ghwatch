@@ -52,11 +52,11 @@ public class GHUserInfo implements Serializable {
   }
 
   public String getUsername() {
-    return username;
+    return Utils.trimToNull(username);
   }
 
   public String getName() {
-    return name;
+    return Utils.trimToNull(name);
   }
 
   public long getUpdateTimestamp() {
@@ -64,11 +64,11 @@ public class GHUserInfo implements Serializable {
   }
 
   public String getAvatarUrl() {
-    return avatarUrl;
+    return Utils.trimToNull(avatarUrl);
   }
 
   public String getHtmlUrl() {
-    return htmlUrl;
+    return Utils.trimToNull(htmlUrl);
   }
 
 }

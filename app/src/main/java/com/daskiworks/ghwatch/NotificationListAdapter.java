@@ -179,7 +179,7 @@ public class NotificationListAdapter extends BaseAdapter {
       } else {
         DetailedDataLoaderTask loader = detailLoadersByNotification.get(notification);
         if (loader == null) {
-          new DetailedDataLoaderTask(listItem, notification).execute();
+          new DetailedDataLoaderTask(listItem, notification).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } else {
           loader.setView(listItem);
         }

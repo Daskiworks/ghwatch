@@ -124,7 +124,7 @@ public class WatchedRepositoriesActivity extends ActivityBase implements LoginDi
 
   public void refreshList(ViewDataReloadStrategy reloadStrateg, boolean supressErrorMessages) {
     if (dataLoader == null)
-      (dataLoader = new DataLoaderTask(reloadStrateg, supressErrorMessages)).execute();
+      (dataLoader = new DataLoaderTask(reloadStrateg, supressErrorMessages)).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
   }
 
   private final class RepositoriesListItemMenuClickListener implements WatchedRepositoryListAdapter.OnItemMenuClickedListener {
@@ -285,7 +285,7 @@ public class WatchedRepositoriesActivity extends ActivityBase implements LoginDi
     builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
       @Override
       public void onClick(DialogInterface dialog, int id) {
-        new UnwatchRepositoryTask().execute(repository.getId());
+        new UnwatchRepositoryTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,repository.getId());
         repositoriesListAdapter.removeRepositoryById(repository.getId());
         ActivityTracker.sendEvent(WatchedRepositoriesActivity.this, ActivityTracker.CAT_UI, "repository_unwatch", "", 0L);
         notifyDataSetChanged();

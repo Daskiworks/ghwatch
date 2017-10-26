@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <style name="Theme.MyTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+    <!-- navigation drawer to top of screen, over system status bar -->
+    <item name="android:windowTranslucentStatus">true</item>
+    <!-- colorPrimary is used for the default action bar background -->
+    <item name="colorPrimary">@color/apptheme_colorPrimary</item>
+    <!-- colorPrimaryDark is used for the status bar -->
+    <item name="colorPrimaryDark">@color/apptheme_colorPrimaryDark</item>
+    <!-- colorAccent is used as the default value for colorControlActivated,
+         which is used to tint widgets -->
+    <item name="colorAccent">@color/apptheme_colorAccent</item>
+  </style>
+
+
+</resources>
