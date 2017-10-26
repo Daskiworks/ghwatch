@@ -75,8 +75,8 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
   private ListView notificationsListView;
   private NotificationListAdapter notificationsListAdapter;
 
-  private ListView repositoriesListView;
-  private NotificationRepositoriesListAdapter repositoriesListAdapter;
+  private ListView repositoriesListViewTablet;
+  private NotificationRepositoriesListAdapter repositoriesListAdapterTablet;
 
   // backend services
   private ImageLoader imageLoader;
@@ -84,6 +84,11 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
 
   // filters
   private String filterByRepository = null;
+  private NotificationStreamViewData viewDataCurrent;
+
+  public NotificationStreamViewData getViewData() {
+    return viewDataCurrent;
+  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -102,9 +107,9 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
 
     initNavigationDrawer(R.id.nav_unread);
 
-    repositoriesListView = (ListView) findViewById(R.id.repositories_list);
-    if (repositoriesListView != null)
-      repositoriesListView.setOnItemClickListener(new RepositoriesListItemClickListener());
+    repositoriesListViewTablet = (ListView) findViewById(R.id.repositories_list);
+    if (repositoriesListViewTablet != null)
+      repositoriesListViewTablet.setOnItemClickListener(new RepositoriesListItemClickListener());
 
     // initialization of main content
     notificationsListView = (ListView) findViewById(R.id.list);
@@ -165,7 +170,8 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
         showSupportAppDevelopmentDialog();
       }
     }
-    intent.setAction(null);
+    if (intent != null)
+      intent.setAction(null);
     refreshList(refreshOnNextResume ? ViewDataReloadStrategy.ALWAYS : ViewDataReloadStrategy.IF_TIMED_OUT, false);
     refreshOnNextResume = false;
     unreadNotificationsService.markAndroidWidgetsAsRead();
@@ -179,6 +185,9 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
     inflater.inflate(R.menu.main_activity_actions, menu);
     setDebugMenuItemVisibility(menu, R.id.action_notifCheck);
     setDebugMenuItemVisibility(menu, R.id.action_donationTogle);
+    if (repositoriesListViewTablet != null) {
+      menu.findItem(R.id.action_open_filter_dialog).setVisible(false);
+    }
     return super.onCreateOptionsMenu(menu);
   }
 
@@ -218,6 +227,11 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
     }
 
     switch (item.getItemId()) {
+      case R.id.action_open_filter_dialog:
+        if (viewDataCurrent != null) {
+          showRepositoryFilterDialog();
+        }
+        return true;
       case R.id.action_all_read:
         showMarkAllNotificationsAsReadDialog();
         return true;
@@ -263,8 +277,8 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
 
   protected void resetNotificationsFilter() {
     filterByRepository = null;
-    if (repositoriesListAdapter != null) {
-      repositoriesListAdapter.setSelectionForFilter(repositoriesListView, filterByRepository);
+    if (repositoriesListAdapterTablet != null) {
+      repositoriesListAdapterTablet.setSelectionForFilter(repositoriesListViewTablet, filterByRepository);
     }
     if (notificationsListAdapter != null) {
       notificationsListAdapter.setFilterByRepository(filterByRepository);
@@ -282,7 +296,7 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
       for (int position : reverseSortedPositions) {
         Notification tr = (Notification) notificationsListAdapter.getItem(position);
         if (tr != null) {
-          new MarkNotificationAsReadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,tr.getId());
+          new MarkNotificationAsReadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, tr.getId());
           ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_mark_read_swipe", "", 0L);
           notificationsListAdapter.removeNotificationByPosition(position);
         }
@@ -347,7 +361,7 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
   }
 
   protected void markNotificationAsReadOnShow(int position, Notification notification) {
-    new MarkNotificationAsReadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,notification.getId());
+    new MarkNotificationAsReadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, notification.getId());
     ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_mark_read_on_show", "", 0L);
     notificationsListAdapter.removeNotificationByPosition(position);
     notifyDataSetChanged();
@@ -358,13 +372,13 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
     public boolean onMenuItemClick(Notification notification, MenuItem item) {
       switch (item.getItemId()) {
         case R.id.action_mark_read:
-          new MarkNotificationAsReadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,notification.getId());
+          new MarkNotificationAsReadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, notification.getId());
           notificationsListAdapter.removeNotificationById(notification.getId());
           ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_mark_read_menu", "", 0L);
           notifyDataSetChanged();
           return true;
         case R.id.action_mute_thread:
-          new MuteNotificationThreadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,notification.getId());
+          new MuteNotificationThreadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, notification.getId());
           notificationsListAdapter.removeNotificationById(notification.getId());
           ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_mute_thread", "", 0L);
           notifyDataSetChanged();
@@ -378,25 +392,45 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
   private final class RepositoriesListItemClickListener implements ListView.OnItemClickListener {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-      if (repositoriesListView != null) {
-        NotifCount nc = (NotifCount) repositoriesListAdapter.getItem(position);
+      if (repositoriesListViewTablet != null) {
+        NotifCount nc = (NotifCount) repositoriesListAdapterTablet.getItem(position);
         if (nc != null) {
-          if (filterByRepository != null && filterByRepository.equals(nc.title)) {
-            filterByRepository = null;
-            repositoriesListView.setItemChecked(position, false);
-          } else {
-            filterByRepository = nc.title;
+          if(!setFilterByRepository(nc.title)){
+            repositoriesListViewTablet.setItemChecked(position, false);
           }
-          if (notificationsListAdapter != null) {
-            notificationsListAdapter.setFilterByRepository(filterByRepository);
-          }
-          ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_filter_by_repository", filterByRepository != null ? "SET"
-                  : "RESET", 0L);
         }
       }
-      navigationDrawerClose();
-
     }
+  }
+
+  /**
+   * Set filer by repository to the activity. If called for existing filter it is reset.
+   *
+   * @param repositoryName name of the repository to set
+   * @return true if filter ser, false if reset by this call.
+   */
+  public boolean setFilterByRepository(String repositoryName){
+    boolean ret = true;
+    if (filterByRepository != null && filterByRepository.equals(repositoryName)) {
+      filterByRepository = null;
+      ret = false;
+    } else {
+      filterByRepository = repositoryName;
+    }
+    if (notificationsListAdapter != null) {
+      notificationsListAdapter.setFilterByRepository(filterByRepository);
+    }
+    ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_filter_by_repository", filterByRepository != null ? "SET"
+            : "RESET", 0L);
+    return ret;
+  }
+
+  /**
+   * Get current filter by repository.
+   * @return name of repo we currently filter over
+   */
+  public String getFilterByRepository() {
+    return filterByRepository;
   }
 
   private final class DataLoaderTask extends AsyncTask<String, String, NotificationStreamViewData> {
@@ -430,6 +464,8 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
         }
         if (viewData.notificationStream != null) {
 
+          viewDataCurrent = viewData;
+
           if (notificationsListAdapter != null) {
             notificationsListAdapter.setNotificationStream(viewData.notificationStream);
             notificationsListAdapter.notifyDataSetChanged();
@@ -440,15 +476,15 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
             notificationsListView.setOnItemClickListener(new NotificationsListItemClickListener());
           }
 
-          if (repositoriesListView != null) {
-            if (repositoriesListAdapter != null) {
-              repositoriesListAdapter.setNotificationStream(viewData.notificationStream);
-              repositoriesListAdapter.notifyDataSetChanged();
+          if (repositoriesListViewTablet != null) {
+            if (repositoriesListAdapterTablet != null) {
+              repositoriesListAdapterTablet.setNotificationStream(viewData.notificationStream);
+              repositoriesListAdapterTablet.notifyDataSetChanged();
             } else {
-              repositoriesListAdapter = new NotificationRepositoriesListAdapter(MainActivity.this, viewData.notificationStream);
-              repositoriesListView.setAdapter(repositoriesListAdapter);
+              repositoriesListAdapterTablet = new NotificationRepositoriesListAdapter(MainActivity.this, viewData.notificationStream);
+              repositoriesListViewTablet.setAdapter(repositoriesListAdapterTablet);
             }
-            if (!repositoriesListAdapter.setSelectionForFilter(repositoriesListView, filterByRepository)) {
+            if (!repositoriesListAdapterTablet.setSelectionForFilter(repositoriesListViewTablet, filterByRepository)) {
               // repo no more in data so reset filter
               filterByRepository = null;
             }
@@ -622,6 +658,11 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
     builder.create().show();
   }
 
+  private void showRepositoryFilterDialog() {
+    ListOfNotificationsByRepositoriesFilterDialog bottomSheetDialogFragment = new ListOfNotificationsByRepositoriesFilterDialog();
+    bottomSheetDialogFragment.show(getSupportFragmentManager(), "Bottom Sheet Dialog Fragment");
+  }
+
   private void showMarkAllNotificationsAsReadDialog() {
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setTitle(R.string.message_confirm_notifications_all_mark_read_title);
@@ -654,8 +695,8 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
   protected void notifyDataSetChanged() {
     if (notificationsListAdapter != null)
       notificationsListAdapter.notifyDataSetChanged();
-    if (repositoriesListAdapter != null) {
-      repositoriesListAdapter.notifyDataSetChanged();
+    if (repositoriesListAdapterTablet != null) {
+      repositoriesListAdapterTablet.notifyDataSetChanged();
     }
     if (notificationsListView != null) {
       notificationsListView.measure(0, 0);

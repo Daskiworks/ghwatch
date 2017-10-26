@@ -25,6 +25,7 @@
   <string name="action_notifCheck">Notification check (debug)</string>
   <string name="action_donationTogle">Donation togle (debug)</string>
   <string name="action_all_read">Mark Everything as Read</string>
+  <string name="action_filter_by_repo">Filter by repository</string>
   <string name="action_mark_read">Mark as Read</string>
   <string name="action_view">View</string>
   <string name="action_view_on_github">View on Github</string>
