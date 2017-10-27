@@ -317,9 +317,11 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
         String mrow = PreferencesUtils.getMarkReadOnShow(MainActivity.this);
         if (PreferencesUtils.PREF_MARK_READ_ON_SHOW_YES.equals(mrow)) {
           showNotification(notification, position, true);
-        } else if (PreferencesUtils.PREF_MARK_READ_ON_SHOW_ASK.equals(mrow)) {
+        } else if (PreferencesUtils.PREF_MARK_READ_ON_SHOW_NO.equals(mrow)) {
+          showNotification(notification, position, false);
+        } else {
           AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-          builder.setMessage(R.string.dialog_mnar_text)
+          builder.setTitle(R.string.dialog_mnar_text)
                   .setCancelable(true)
                   .setPositiveButton(R.string.dialog_mnar_btn_yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -348,8 +350,6 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
           AlertDialog alert = builder.create();
           ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_mark_read_on_show_dialog_show", null, 0L);
           alert.show();
-        } else {
-          showNotification(notification, position, false);
         }
       }
     }

@@ -25,7 +25,7 @@
       android:key="pref_repoVisibility"
       android:title="@string/pref_repoVisibility"/>
     <ListPreference
-      android:defaultValue="@string/pref_markReadOnShow"
+      android:defaultValue="@string/pref_markReadOnShow_default"
       android:dialogTitle="@string/pref_markReadOnShow"
       android:entries="@array/pref_markReadOnShow_entries"
       android:entryValues="@array/pref_markReadOnShow_values"

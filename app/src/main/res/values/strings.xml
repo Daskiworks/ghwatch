@@ -258,7 +258,7 @@
 
   <!-- "Mark notification as read?" dialog shown on notification show -->
   <string name="dialog_mnar_text">Mark notification as read on show?</string>
-  <string name="dialog_mnar_remember">Remember my choice (you can change it later in Preferences).</string>
+  <string name="dialog_mnar_remember">Remember my choice (you can change it later in Settings).</string>
   <string name="dialog_mnar_btn_yes">Yes</string>
   <string name="dialog_mnar_btn_no">No</string>
 
