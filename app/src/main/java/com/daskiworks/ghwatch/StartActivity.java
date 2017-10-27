@@ -21,6 +21,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -35,7 +37,7 @@ import com.daskiworks.ghwatch.backend.AuthenticationManager;
  * @author Vlastimil Elias <vlastimil.elias@worldonline.cz>
  * 
  */
-public class StartActivity extends Activity implements LoginDialogListener {
+public class StartActivity extends AppCompatActivity implements LoginDialogListener {
 
   private static final String TAG = StartActivity.class.getSimpleName();
 

@@ -61,7 +61,7 @@
   <!-- Start activity -->
   <string name="start_activity_text">Stay in touch with what is happening around GitHub project of your interest.</string>
   <string name="start_activity_text2">Follow GitHub notifications directly from your smart phone or tablet.</string>
-  <string name="start_activity_text3">You can lighten your email box thanks to this application. Simply go to the GitHub.com > \'Account settings\' > \'Notification center\' and disable emails for notifications there because you are notified directly by this app.</string>
+  <string name="start_activity_text3">You can lighten your email box thanks to this application. Simply go to the GitHub.com > \'Settings\' > \'Notifications\' and disable Emails for notifications there because you are notified directly by this app.</string>
   <string name="button_login_github">Login GitHub</string>
 
   <!-- Login dialog -->

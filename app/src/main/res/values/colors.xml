@@ -17,5 +17,5 @@
     <color name="apptheme_colorPrimary">#6d4c41</color>
     <color name="apptheme_colorPrimaryDark">#5d4037</color>
     <color name="apptheme_colorAccent">#fb8c00</color>
-    <color name="start_page_text_color">#AF3B3E</color>
+    <color name="start_page_text_color">#5d4037</color>
 </resources>
