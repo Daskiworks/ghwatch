@@ -200,6 +200,7 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
 
   @Override
   public boolean onPrepareOptionsMenu(Menu menu) {
+    menu.findItem(R.id.action_open_filter_dialog).setVisible(notificationsListAdapter != null && !notificationsListAdapter.isEmpty());
     menu.findItem(R.id.action_all_read).setVisible(notificationsListAdapter != null && !notificationsListAdapter.isEmpty());
     return super.onPrepareOptionsMenu(menu);
   }

@@ -32,6 +32,8 @@ import com.daskiworks.ghwatch.model.NotificationStreamViewData;
  */
 public class ListOfNotificationsByRepositoriesFilterDialog extends BottomSheetDialogFragment {
 
+  private static final String TAG = ListOfNotificationsByRepositoriesFilterDialog.class.getSimpleName();
+
   private ListView repositoriesListViewTablet;
   private NotificationRepositoriesListAdapter repositoriesListAdapterTablet;
 
@@ -87,6 +89,7 @@ public class ListOfNotificationsByRepositoriesFilterDialog extends BottomSheetDi
         getMainActivity().setFilterByRepository(null);
       }
     }
+    ActivityTracker.sendView(getActivity(), TAG);
   }
 
   protected MainActivity getMainActivity() {

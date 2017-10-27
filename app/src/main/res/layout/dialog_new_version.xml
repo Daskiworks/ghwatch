@@ -16,21 +16,22 @@
    
    -->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="24dp"
+            android:paddingBottom="16dp">
+
+  <LinearLayout
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp" >
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
+    <TextView
+      android:id="@+id/intro_text"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/dialog_nv_intro_text"/>
 
-        <TextView
-            android:id="@+id/intro_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/dialog_nv_intro_text" />
-        
-    </LinearLayout>
+  </LinearLayout>
 
 </ScrollView>
