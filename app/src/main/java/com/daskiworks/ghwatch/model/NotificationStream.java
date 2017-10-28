@@ -17,6 +17,8 @@ package com.daskiworks.ghwatch.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -232,6 +234,13 @@ public class NotificationStream implements Serializable, Iterable<Notification> 
           nc.count++;
         }
       }
+      //order in a way as on github pages, most notified repo first
+      Collections.sort(repoInfo,new Comparator<NotifCount>() {
+        @Override
+        public int compare(NotifCount o1, NotifCount o2) {
+          return (o1.count > o2.count) ? -1 : ((o1.count == o2.count) ? 0 : 1);
+        }
+      });
     }
     return repoInfo;
   }

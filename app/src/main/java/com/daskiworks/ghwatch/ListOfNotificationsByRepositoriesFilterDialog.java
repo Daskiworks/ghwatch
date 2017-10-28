@@ -38,8 +38,8 @@ public class ListOfNotificationsByRepositoriesFilterDialog extends BottomSheetDi
 
   private static final String TAG = ListOfNotificationsByRepositoriesFilterDialog.class.getSimpleName();
 
-  private ListView repositoriesListViewTablet;
-  private NotificationRepositoriesListAdapter repositoriesListAdapterTablet;
+  private ListView repositoriesListView;
+  private NotificationRepositoriesListAdapter repositoriesListAdapter;
 
 
   //Bottom Sheet Callback
@@ -94,11 +94,11 @@ public class ListOfNotificationsByRepositoriesFilterDialog extends BottomSheetDi
     NotificationStreamViewData vd = getMainActivity().getViewData();
     if (vd != null) {
       //fill in list of repositories
-      repositoriesListViewTablet = (ListView) contentView.findViewById(R.id.repositories_list);
-      repositoriesListViewTablet.setOnItemClickListener(new RepositoriesListItemClickListener());
-      repositoriesListAdapterTablet = new NotificationRepositoriesListAdapter(getActivity(), (getMainActivity()).getViewData().notificationStream);
-      repositoriesListViewTablet.setAdapter(repositoriesListAdapterTablet);
-      if (!repositoriesListAdapterTablet.setSelectionForFilter(repositoriesListViewTablet, currentFilter)) {
+      repositoriesListView = (ListView) contentView.findViewById(R.id.repositories_list);
+      repositoriesListView.setOnItemClickListener(new RepositoriesListItemClickListener());
+      repositoriesListAdapter = new NotificationRepositoriesListAdapter(getActivity(), (getMainActivity()).getViewData().notificationStream);
+      repositoriesListView.setAdapter(repositoriesListAdapter);
+      if (!repositoriesListAdapter.setSelectionForFilter(repositoriesListView, currentFilter)) {
         // repo no more in data so reset filter
         getMainActivity().setFilterByRepository(null);
         currentFilter = null;
@@ -138,8 +138,8 @@ public class ListOfNotificationsByRepositoriesFilterDialog extends BottomSheetDi
   private class RepositoriesListItemClickListener implements ListView.OnItemClickListener {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-      if (repositoriesListViewTablet != null) {
-        NotifCount nc = (NotifCount) repositoriesListAdapterTablet.getItem(position);
+      if (repositoriesListView != null) {
+        NotifCount nc = (NotifCount) repositoriesListAdapter.getItem(position);
         if (nc != null) {
           if (!getMainActivity().setFilterByRepository(nc.title)) ;
         }
