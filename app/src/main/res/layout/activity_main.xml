@@ -23,9 +23,20 @@
                                         tools:context=".MainActivity">
 
   <!-- The main content view -->
-  <include
-    android:id="@+id/main_content"
-    layout="@layout/activity_main_main"/>
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="top"
+                android:orientation="vertical">
+
+    <include
+      android:id="@+id/main_appbar"
+      layout="@layout/activity_appbar"/>
+
+    <include
+      android:id="@+id/main_content"
+      layout="@layout/activity_main_main"/>
+  </LinearLayout>
 
   <!-- The navigation drawer -->
   <include

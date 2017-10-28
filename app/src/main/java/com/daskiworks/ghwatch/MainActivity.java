@@ -200,7 +200,7 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
 
   @Override
   public boolean onPrepareOptionsMenu(Menu menu) {
-    menu.findItem(R.id.action_open_filter_dialog).setVisible(notificationsListAdapter != null && !notificationsListAdapter.isEmpty());
+    menu.findItem(R.id.action_open_filter_dialog).setVisible(repositoriesListViewTablet == null && notificationsListAdapter != null && !notificationsListAdapter.isEmpty());
     menu.findItem(R.id.action_all_read).setVisible(notificationsListAdapter != null && !notificationsListAdapter.isEmpty());
     return super.onPrepareOptionsMenu(menu);
   }
@@ -396,7 +396,7 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
       if (repositoriesListViewTablet != null) {
         NotifCount nc = (NotifCount) repositoriesListAdapterTablet.getItem(position);
         if (nc != null) {
-          if(!setFilterByRepository(nc.title)){
+          if (!setFilterByRepository(nc.title)) {
             repositoriesListViewTablet.setItemChecked(position, false);
           }
         }
@@ -410,7 +410,7 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
    * @param repositoryName name of the repository to set
    * @return true if filter ser, false if reset by this call.
    */
-  public boolean setFilterByRepository(String repositoryName){
+  public boolean setFilterByRepository(String repositoryName) {
     boolean ret = true;
     if (filterByRepository != null && filterByRepository.equals(repositoryName)) {
       filterByRepository = null;
@@ -428,6 +428,7 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
 
   /**
    * Get current filter by repository.
+   *
    * @return name of repo we currently filter over
    */
   public String getFilterByRepository() {

@@ -23,44 +23,53 @@
                                         tools:context=".MainActivity">
 
   <!-- The main content view -->
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="top"
+                android:orientation="vertical">
 
-  <LinearLayout
-    android:id="@+id/main_content"
-    android:fitsSystemWindows="true"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal">
+    <include
+      android:id="@+id/main_appbar"
+      layout="@layout/activity_appbar"/>
 
     <LinearLayout
-      android:layout_width="260dp"
-      android:layout_height="wrap_content"
-      android:orientation="vertical">
+      android:id="@+id/main_content"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:fitsSystemWindows="true"
+      android:orientation="horizontal">
 
-      <TextView
-        android:id="@+id/drawer_repo_filter_title"
-        style="?android:listSeparatorTextViewStyle"
-        android:layout_width="match_parent"
+      <LinearLayout
+        android:layout_width="260dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="@string/drawer_repo_filter_title"/>
+        android:orientation="vertical">
 
-      <ListView
-        android:id="@+id/repositories_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:choiceMode="singleChoice"/>
+        <TextView
+          android:id="@+id/drawer_repo_filter_title"
+          android:textAppearance="@style/TextAppearance.AppCompat.Title"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:padding="16dp"
+          android:text="@string/drawer_repo_filter_title"/>
+
+        <ListView
+          android:id="@+id/repositories_list"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_gravity="start"
+          android:choiceMode="singleChoice"/>
+      </LinearLayout>
+
+      <View
+        android:id="@+id/btnDivider"
+        android:layout_width="4dp"
+        android:layout_height="fill_parent"
+        android:background="?android:attr/dividerVertical"/>
+
+      <include layout="@layout/activity_main_main"/>
     </LinearLayout>
-
-    <View
-      android:id="@+id/btnDivider"
-      android:layout_width="1dip"
-      android:layout_height="fill_parent"
-      android:background="?android:attr/dividerVertical"/>
-
-    <include layout="@layout/activity_main_main"/>
   </LinearLayout>
-
   <!-- The navigation drawer -->
   <include
     android:id="@+id/navigation_drawer_view"
