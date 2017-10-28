@@ -16,6 +16,7 @@
 package com.daskiworks.ghwatch;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -52,18 +53,24 @@ public class NewVersionInfoDialogFragment extends DialogFragment {
    */
   public static boolean isShowScheduled(MainActivity activity) {
     String lastShowedVersion = PreferencesUtils.getString(activity, NewVersionInfoDialogFragment.PREF_LAST_VERSION_INFO_SHOW_TAG, null);
-    return lastShowedVersion == null || !VERSION_VALUE.equals(lastShowedVersion);
+    if(lastShowedVersion == null){
+      //do not show for first version user has, but make sure it is shown for next version
+     storeShowOccurence(activity);
+     return false;
+    } else {
+      return !VERSION_VALUE.equals(lastShowedVersion);
+    }
   }
 
   @Override
   public void onDismiss(DialogInterface dialog) {
-    storeShowOccurence();
+    storeShowOccurence(getActivity());
     super.onDismiss(dialog);
   }
 
   @Override
   public void onCancel(DialogInterface dialog) {
-    storeShowOccurence();
+    storeShowOccurence(getActivity());
     super.onCancel(dialog);
   }
 
@@ -79,7 +86,7 @@ public class NewVersionInfoDialogFragment extends DialogFragment {
     builder.setPositiveButton(R.string.button_close, new DialogInterface.OnClickListener() {
       @Override
       public void onClick(DialogInterface dialog, int id) {
-        storeShowOccurence();
+        storeShowOccurence(getActivity());
       }
     });
     builder.setNegativeButton(R.string.dialog_sad_title, new DialogInterface.OnClickListener() {
@@ -100,10 +107,10 @@ public class NewVersionInfoDialogFragment extends DialogFragment {
     startActivity(browserIntent);
   }
 
-  protected void storeShowOccurence() {
-    if (getActivity() != null) {
-      PreferencesUtils.storeString(getActivity(), PREF_LAST_VERSION_INFO_SHOW_TAG, VERSION_VALUE);
-      (new BackupManager(getActivity())).dataChanged();
+  protected static void storeShowOccurence(Activity activity) {
+    if (activity != null) {
+      PreferencesUtils.storeString(activity, PREF_LAST_VERSION_INFO_SHOW_TAG, VERSION_VALUE);
+      (new BackupManager(activity)).dataChanged();
     }
   }
 

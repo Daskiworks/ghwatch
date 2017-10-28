@@ -20,12 +20,34 @@
               android:orientation="vertical"
               android:paddingBottom="16dp"
   >
-  <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:textAppearance="@style/TextAppearance.AppCompat.Title"
-    android:padding="16dp"
-    android:text="@string/action_filter_by_repo" />
+
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="0dp">
+    <TextView
+      android:layout_width="0dip"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:padding="16dp"
+      android:text="@string/action_filter_by_repo"
+      android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
+    <ImageButton
+      android:id="@+id/action_reset_filter"
+      android:layout_width="24dp"
+      android:layout_height="24dp"
+      android:layout_marginEnd="16dp"
+      android:layout_marginRight="16dp"
+      android:layout_gravity="center_vertical"
+      android:gravity="end|center_vertical"
+      android:background="?attr/selectableItemBackgroundBorderless"
+      android:contentDescription="@string/action_reset_filter"
+      android:scaleType="fitCenter"
+      android:src="@drawable/ic_clear_grey600_24dp"
+      />
+  </LinearLayout>
+
   <ListView
     android:id="@+id/repositories_list"
     android:layout_width="match_parent"

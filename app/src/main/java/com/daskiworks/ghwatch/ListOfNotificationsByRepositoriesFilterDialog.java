@@ -18,17 +18,21 @@ package com.daskiworks.ghwatch;
 import android.app.Dialog;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.design.widget.CoordinatorLayout;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.daskiworks.ghwatch.model.NotifCount;
 import com.daskiworks.ghwatch.model.NotificationStreamViewData;
 
 /**
- * Bottom Sheet Dialog Fragment used to filer notifications by repository.
+ * Bottom Sheet Dialog Fragment used to filer notifications by repository in {@link MainActivity}.
  */
 public class ListOfNotificationsByRepositoriesFilterDialog extends BottomSheetDialogFragment {
 
@@ -46,7 +50,6 @@ public class ListOfNotificationsByRepositoriesFilterDialog extends BottomSheetDi
       if (newState == BottomSheetBehavior.STATE_HIDDEN) {
         dismiss();
       }
-
     }
 
     @Override
@@ -55,7 +58,7 @@ public class ListOfNotificationsByRepositoriesFilterDialog extends BottomSheetDi
   };
 
   @Override
-  public void onPause(){
+  public void onPause() {
     super.onPause();
     //hide dialog on screen rotation as list of repositories is missing in main activity after rotation so dialog is empty
     this.dismissAllowingStateLoss();
@@ -68,15 +71,26 @@ public class ListOfNotificationsByRepositoriesFilterDialog extends BottomSheetDi
     View contentView = View.inflate(getContext(), R.layout.dialog_list_repositories_for_notifications_content, null);
     dialog.setContentView(contentView);
 
-    //Set the coordinator layout behavior
-    CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) ((View) contentView.getParent()).getLayoutParams();
-    CoordinatorLayout.Behavior behavior = params.getBehavior();
-
-    //Set callback
-    if (behavior != null && behavior instanceof BottomSheetBehavior) {
-      ((BottomSheetBehavior) behavior).setBottomSheetCallback(mBottomSheetBehaviorCallback);
+    //Setup the coordinator layout behavior
+    BottomSheetBehavior behavior = BottomSheetBehavior.from((View) contentView.getParent());
+    if (behavior != null) {
+      behavior.setBottomSheetCallback(mBottomSheetBehaviorCallback);
     }
 
+    //Workaround to open bottom sheet at full height even in landscape mode
+    contentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+      @Override
+      public void onGlobalLayout() {
+        BottomSheetDialog dialog = (BottomSheetDialog) getDialog();
+        FrameLayout bottomSheet = (FrameLayout) dialog.findViewById(android.support.design.R.id.design_bottom_sheet);
+        BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
+        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        behavior.setPeekHeight(0);
+      }
+    });
+
+    //Show list of repositories we have notifications for
+    String currentFilter = getMainActivity().getFilterByRepository();
     NotificationStreamViewData vd = getMainActivity().getViewData();
     if (vd != null) {
       //fill in list of repositories
@@ -84,11 +98,36 @@ public class ListOfNotificationsByRepositoriesFilterDialog extends BottomSheetDi
       repositoriesListViewTablet.setOnItemClickListener(new RepositoriesListItemClickListener());
       repositoriesListAdapterTablet = new NotificationRepositoriesListAdapter(getActivity(), (getMainActivity()).getViewData().notificationStream);
       repositoriesListViewTablet.setAdapter(repositoriesListAdapterTablet);
-      if (!repositoriesListAdapterTablet.setSelectionForFilter(repositoriesListViewTablet, getMainActivity().getFilterByRepository())) {
+      if (!repositoriesListAdapterTablet.setSelectionForFilter(repositoriesListViewTablet, currentFilter)) {
         // repo no more in data so reset filter
         getMainActivity().setFilterByRepository(null);
+        currentFilter = null;
       }
     }
+
+    //Setup reset filter button
+    ImageButton resetButton = (ImageButton) contentView.findViewById(R.id.action_reset_filter);
+    if (currentFilter == null) {
+      resetButton.setVisibility(View.GONE);
+    } else {
+      resetButton.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          getMainActivity().setFilterByRepository(null);
+          dismiss();
+        }
+      });
+      //long press tooltip!
+      resetButton.setOnLongClickListener(new View.OnLongClickListener() {
+
+        @Override
+        public boolean onLongClick(View view) {
+          Toast.makeText(getContext(), view.getContentDescription(), Toast.LENGTH_SHORT).show();
+          return true;
+        }
+      });
+    }
+
     ActivityTracker.sendView(getActivity(), TAG);
   }
 
@@ -102,7 +141,7 @@ public class ListOfNotificationsByRepositoriesFilterDialog extends BottomSheetDi
       if (repositoriesListViewTablet != null) {
         NotifCount nc = (NotifCount) repositoriesListAdapterTablet.getItem(position);
         if (nc != null) {
-          if(!getMainActivity().setFilterByRepository(nc.title));
+          if (!getMainActivity().setFilterByRepository(nc.title)) ;
         }
       }
       dismissAllowingStateLoss();
