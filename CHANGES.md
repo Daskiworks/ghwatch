@@ -1,6 +1,10 @@
 GH::watch changelog
 ===================
 
+## v1.21 (ToDo)
+- \#46 update to the Material design
+- \#65 sorting of "Filter by repository" list similar as on github (most notified repos first) 
+
 ## v1.20 (Jul 11th, 2017)
 - \#88 added option to mark notification as read when clicked to be shown
 - \#85 added support to load all notifications (more than 50 returned by one REST API call) 
