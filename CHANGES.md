@@ -1,6 +1,9 @@
 GH::watch changelog
 ===================
 
+## v1.22 (ToDo)
+- \#92 added longer period options (6h, 12h, 24h) to "New notifications check period" 
+
 ## v1.21 (Oct 28th, 2017)
 - \#46 update to the Material design
 - \#65 sorting of "Filter by repository" list similar as on github (most notified repos first) 
