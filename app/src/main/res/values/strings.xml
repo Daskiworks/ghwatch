@@ -62,7 +62,8 @@
   <!-- Start activity -->
   <string name="start_activity_text">Stay in touch with what is happening around GitHub project of your interest.</string>
   <string name="start_activity_text2">Follow GitHub notifications directly from your smart phone or tablet.</string>
-  <string name="start_activity_text3">You can lighten your email box thanks to this application. Simply go to the GitHub.com > \'Settings\' > \'Notifications\' and disable Emails for notifications there because you are notified directly by this app.</string>
+  <string name="start_activity_text4">GH::watch checks GitHub server for new notifications every hour by default. You can change polling period in application Settings.</string>
+  <string name="start_activity_text3">Tip: You can lighten your email box thanks to this application. Simply go to the GitHub.com > \'Settings\' > \'Notifications\' and disable Emails for notifications there because you are notified directly by this app.</string>
   <string name="button_login_github">Login GitHub</string>
 
   <!-- Login dialog -->
@@ -176,7 +177,7 @@
   <string name="pref_serverSettings_title">GitHub server settings</string>
   <string name="pref_serverAccount">GitHub user account</string>
   <string name="pref_serverCheckPeriod">New notifications check period</string>
-  <string name="pref_serverCheckPeriod_default">5</string>
+  <string name="pref_serverCheckPeriod_default">60</string>
   <string name="pref_serverCheckFull">Better read detection</string>
   <string name="pref_serverCheckFull_summ">Better detection of notifications read on another device, a bit higher resource consumption.</string>
   <string name="pref_serverDetailLoading">Load notification details</string>

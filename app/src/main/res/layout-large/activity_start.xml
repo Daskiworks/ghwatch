@@ -64,12 +64,27 @@
       android:textStyle="bold"/>
 
     <TextView
-      android:id="@+id/start_activity_text3"
+      android:id="@+id/start_activity_text4"
       android:layout_width="480dp"
       android:layout_height="wrap_content"
       android:layout_alignParentLeft="true"
       android:layout_alignParentStart="true"
       android:layout_below="@id/start_activity_text2"
+      android:layout_marginLeft="32dp"
+      android:layout_marginStart="32dp"
+      android:layout_marginTop="32dp"
+      android:text="@string/start_activity_text4"
+      android:textColor="@color/start_page_text_color"
+      android:textSize="20sp"
+      android:textStyle="bold"/>
+
+    <TextView
+      android:id="@+id/start_activity_text3"
+      android:layout_width="480dp"
+      android:layout_height="wrap_content"
+      android:layout_alignParentRight="true"
+      android:layout_alignParentEnd="true"
+      android:layout_below="@id/start_activity_text4"
       android:layout_marginLeft="32dp"
       android:layout_marginStart="32dp"
       android:layout_marginTop="32dp"
