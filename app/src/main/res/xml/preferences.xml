@@ -75,7 +75,11 @@
       android:entryValues="@array/pref_serverCheckPeriod_values"
       android:key="pref_serverCheckPeriod"
       android:title="@string/pref_serverCheckPeriod"/>
-
+    <SwitchPreference
+      android:defaultValue="false"
+      android:key="pref_serverCheckWifiOnly"
+      android:summary="@string/pref_serverCheckWifiOnly_summ"
+      android:title="@string/pref_serverCheckWifiOnly"/>
     <SwitchPreference
       android:defaultValue="false"
       android:key="pref_serverCheckFull"

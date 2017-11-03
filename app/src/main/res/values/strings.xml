@@ -174,10 +174,12 @@
   <string name="notificationSoundDisabled">None</string>
   <string name="pref_notifyVibrate">Vibrate</string>
   <string name="pref_notifyVibrate_summ">Vibrate when new GitHub notification is available</string>
-  <string name="pref_serverSettings_title">GitHub server settings</string>
+  <string name="pref_serverSettings_title">GitHub server call settings</string>
   <string name="pref_serverAccount">GitHub user account</string>
   <string name="pref_serverCheckPeriod">New notifications check period</string>
   <string name="pref_serverCheckPeriod_default">60</string>
+  <string name="pref_serverCheckWifiOnly">Check over Wifi only</string>
+  <string name="pref_serverCheckWifiOnly_summ">Allow background check of new notifications over WiFi only to save your mobile data.</string>
   <string name="pref_serverCheckFull">Better read detection</string>
   <string name="pref_serverCheckFull_summ">Better detection of notifications read on another device, a bit higher resource consumption.</string>
   <string name="pref_serverDetailLoading">Load notification details</string>

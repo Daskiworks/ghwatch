@@ -40,9 +40,8 @@ import android.util.Log;
 
 /**
  * Utilities.
- * 
+ *
  * @author Vlastimil Elias <vlastimil.elias@worldonline.cz>
- * 
  */
 public class Utils {
 
@@ -53,7 +52,7 @@ public class Utils {
 
   /**
    * Get Vibrator if available in system.
-   * 
+   *
    * @param context to use for get
    * @return {@link Vibrator} instance or null if not available in system.
    */
@@ -66,7 +65,7 @@ public class Utils {
 
   /**
    * Get {@link ConnectivityManager} from context.
-   * 
+   *
    * @param context
    * @return manager
    */
@@ -76,7 +75,7 @@ public class Utils {
 
   /**
    * Check if Internet connections available.
-   * 
+   *
    * @param conMgr to be used
    * @return true if active connection is available
    */
@@ -87,18 +86,18 @@ public class Utils {
 
   /**
    * Check if WiFi Internet connection is available.
-   * 
+   *
    * @param conMgr to be used
    * @return true if active connection is available
    */
   public static boolean isInternetConnectionAvailableWifi(ConnectivityManager conMgr) {
     NetworkInfo ni = conMgr.getActiveNetworkInfo();
-    return ni != null && ni.isConnected() && ni.isAvailable() && ni.getType() == ConnectivityManager.TYPE_WIFI;
+    return ni != null && ni.isConnected() && ni.isAvailable() && (ni.getType() == ConnectivityManager.TYPE_WIFI || ni.getType() == ConnectivityManager.TYPE_ETHERNET);
   }
 
   /**
    * Check if Internet connections available.
-   * 
+   *
    * @param context to be used for checking
    * @return true if active connection is available
    */
@@ -109,7 +108,7 @@ public class Utils {
 
   /**
    * Get {@link AlarmManager} from context.
-   * 
+   *
    * @param context
    * @return manager
    */
@@ -119,7 +118,7 @@ public class Utils {
 
   /**
    * Get {@link NotificationManager} from context.
-   * 
+   *
    * @param context
    * @return manager
    */
@@ -129,9 +128,9 @@ public class Utils {
 
   /**
    * Delete file from persistent store.
-   * 
+   *
    * @param context
-   * @param file to delete
+   * @param file    to delete
    * @return true if really deleted
    */
   public static boolean deleteFromStore(Context context, File file) {
@@ -140,11 +139,11 @@ public class Utils {
 
   /**
    * Write notification to the persistent store.
-   * 
-   * @param TAG for logging
+   *
+   * @param TAG     for logging
    * @param context
-   * @param file to write into
-   * @param data to persist
+   * @param file    to write into
+   * @param data    to persist
    * @return true if persisting is OK, false if failed.
    */
   public static boolean writeToStore(String TAG, Context context, File file, Serializable data) {
@@ -166,9 +165,9 @@ public class Utils {
   }
 
   /**
-   * @param TAG for logging
+   * @param TAG     for logging
    * @param context
-   * @param file to read from
+   * @param file    to read from
    * @return stream from store. <code>null</code> if not in store or load failed.
    */
   @SuppressWarnings("unchecked")
@@ -196,7 +195,7 @@ public class Utils {
 
   /**
    * Copy two streams.
-   * 
+   *
    * @param is input stream to copy from.
    * @param os stream to copy to.
    */
@@ -204,7 +203,7 @@ public class Utils {
     final int buffer_size = 1024;
     try {
       byte[] bytes = new byte[buffer_size];
-      for (;;) {
+      for (; ; ) {
         int count = is.read(bytes, 0, buffer_size);
         if (count == -1)
           break;
@@ -216,7 +215,7 @@ public class Utils {
 
   /**
    * null and exception safe stream close.
-   * 
+   *
    * @param stream to close
    */
   public static void closeStream(Closeable stream) {
@@ -240,7 +239,7 @@ public class Utils {
 
   /**
    * Format date interval of provided date from now for very short visualization.
-   * 
+   *
    * @param context
    * @param date
    * @return formatted date interval
@@ -269,7 +268,7 @@ public class Utils {
 
   /**
    * Format notification type text for view.
-   * 
+   *
    * @param subjectType to get view text for
    * @return view text
    */
@@ -290,7 +289,7 @@ public class Utils {
 
   /**
    * Method to safe dismiss Dialog without exception - workaround for bug #68
-   * 
+   *
    * @param dialog
    */
   public static void dismissDialogSafe(Dialog dialog) {

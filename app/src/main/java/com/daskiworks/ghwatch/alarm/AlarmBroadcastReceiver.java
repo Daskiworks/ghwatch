@@ -20,6 +20,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.util.Log;
 
 import com.daskiworks.ghwatch.R;
@@ -30,7 +31,7 @@ import com.daskiworks.ghwatch.backend.UnreadNotificationsService;
 
 /**
  * Broadcast receiver used to start alarm and process alarm wakeups.
- * 
+ *
  * @author Vlastimil Elias <vlastimil.elias@worldonline.cz>
  */
 public class AlarmBroadcastReceiver extends BroadcastReceiver {
@@ -43,8 +44,9 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
       startServerPoolingIfEnabled(context);
     } else {
       // fail early if internet is not available or user is not logged in to save battery
-      if (Utils.isInternetConnectionAvailable(Utils.getConnectivityManager(context))
-          && AuthenticationManager.getInstance().getGhApiCredentials(context) != null) {
+      ConnectivityManager cm = Utils.getConnectivityManager(context);
+      if (Utils.isInternetConnectionAvailable(cm)
+              && AuthenticationManager.getInstance().getGhApiCredentials(context) != null && (!PreferencesUtils.getServerCheckWifiOnly(context) || Utils.isInternetConnectionAvailableWifi(cm))) {
         UnreadNotificationsService s = new UnreadNotificationsService(context);
         s.newNotificationCheck();
       }
@@ -54,7 +56,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
   /**
    * Start alarm used to periodically check new notifications on server and fire Android notifications if it is enabled in preferences. Period taken from
    * default preferences also.
-   * 
+   *
    * @param context
    */
   public static void startServerPoolingIfEnabled(Context context) {
@@ -73,7 +75,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
   public static void startServerPooling(Context context, int periodInMinutes) {
     Log.i(TAG, "starting alarm to check new notifications every " + periodInMinutes + " minutes");
     Utils.getAlarmManager(context).setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, Utils.MILLIS_MINUTE, periodInMinutes * Utils.MILLIS_MINUTE,
-        prepareAlarmIntent(context));
+            prepareAlarmIntent(context));
   }
 
   public static void stopServerPoolingIfDisabled(Context context) {

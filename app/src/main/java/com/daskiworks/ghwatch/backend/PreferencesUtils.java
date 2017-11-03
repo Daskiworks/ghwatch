@@ -38,6 +38,7 @@ public class PreferencesUtils {
    * Names of user edited preferences.
    */
   public static final String PREF_SERVER_CHECK_PERIOD = "pref_serverCheckPeriod";
+  public static final String PREF_SERVER_CHECK_WIFI_ONLY = "pref_serverCheckWifiOnly";
   public static final String PREF_SERVER_CHECK_FULL = "pref_serverCheckFull";
   public static final String PREF_SERVER_DETAIL_LOADING = "pref_serverDetailLoading";
   public static final String PREF_SERVER_LABELS_LOADING = "pref_serverLabelsLoading";
@@ -99,6 +100,16 @@ public class PreferencesUtils {
     editor.remove(PREF_WIDGET_UNREAD_HIGHLIGHT);
     editor.remove(PREF_SERVER_ACCOUNT);
     editor.commit();
+  }
+
+  /**
+   * Read new notifications server backend check over wifi only setting {@link #PREF_SERVER_CHECK_WIFI_ONLY}
+   *
+   * @param context to read preference over
+   * @return true if check should be performed over wifi only
+   */
+  public static Boolean getServerCheckWifiOnly(Context context) {
+    return getBoolean(context, PREF_SERVER_CHECK_WIFI_ONLY, false);
   }
 
   /**

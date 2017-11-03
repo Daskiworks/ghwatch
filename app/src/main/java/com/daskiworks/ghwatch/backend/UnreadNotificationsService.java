@@ -317,8 +317,8 @@ public class UnreadNotificationsService {
    */
   private static final boolean USE_OPTIMIZED_POOLING = true;
 
-  private static final long BACKGROUND_FORCE_FULL_RELOAD_AFTER = Utils.MILLIS_HOUR * 6L;
-  private static final long BACKGROUND_FORCE_FULL_RELOAD_AFTER_WIFI = Utils.MILLIS_HOUR * 1L;
+  private static final long BACKGROUND_FORCE_FULL_RELOAD_AFTER = Utils.MILLIS_HOUR * 12L;
+  private static final long BACKGROUND_FORCE_FULL_RELOAD_AFTER_WIFI = Utils.MILLIS_HOUR * 6L;
 
   /**
    * Prepare "Last-Modified" content which is used to do optimized calls to GitHub rest API by incremental updates. It decides based on
