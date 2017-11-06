@@ -86,9 +86,9 @@ public class UnreadNotificationsService {
   private static final String persistFileName = "NotificationsUnread.td";
 
   /**
-   * Reload from server is forced automatically if data in persistent store are older than this timeout [millis]
+   * Reload from server is forced automatically for {@link ViewDataReloadStrategy#IF_TIMED_OUT} mode if data in persistent store are older than this timeout [millis]
    */
-  private static final long FORCE_VIEW_RELOAD_AFTER = 5 * Utils.MILLIS_MINUTE;
+  private static final long FORCE_VIEW_RELOAD_AFTER = 30 * Utils.MILLIS_MINUTE;
 
   /**
    * Id of android notification so we can update it.
@@ -317,8 +317,8 @@ public class UnreadNotificationsService {
    */
   private static final boolean USE_OPTIMIZED_POOLING = true;
 
-  private static final long BACKGROUND_FORCE_FULL_RELOAD_AFTER = Utils.MILLIS_HOUR * 12L;
-  private static final long BACKGROUND_FORCE_FULL_RELOAD_AFTER_WIFI = Utils.MILLIS_HOUR * 6L;
+  private static final long BACKGROUND_FORCE_FULL_RELOAD_AFTER = Utils.MILLIS_HOUR * 6L;
+  private static final long BACKGROUND_FORCE_FULL_RELOAD_AFTER_WIFI = Utils.MILLIS_HOUR * 1L;
 
   /**
    * Prepare "Last-Modified" content which is used to do optimized calls to GitHub rest API by incremental updates. It decides based on

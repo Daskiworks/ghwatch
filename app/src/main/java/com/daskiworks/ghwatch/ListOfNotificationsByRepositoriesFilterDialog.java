@@ -20,8 +20,10 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -95,8 +97,34 @@ public class ListOfNotificationsByRepositoriesFilterDialog extends BottomSheetDi
     if (vd != null) {
       //fill in list of repositories
       repositoriesListView = (ListView) contentView.findViewById(R.id.repositories_list);
+
+      //#96 hack to allow repository scrolling back to the top
+      repositoriesListView.setOnTouchListener(new ListView.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+          ListView lv = (ListView) v;
+          //allow bottomsheet dismiss by swiping down if list is at the begin (which also covers when it is fully rendered)
+          if (lv.getFirstVisiblePosition() == 0 ) {
+            return false;
+          }
+          //let ListView to handle scrolling in both directions
+          int action = event.getAction();
+          switch (action) {
+            case MotionEvent.ACTION_DOWN: // Disallow NestedScrollView to intercept touch events.
+              v.getParent().requestDisallowInterceptTouchEvent(true);
+              break;
+            case MotionEvent.ACTION_UP: // Allow NestedScrollView to intercept touch events.
+              v.getParent().requestDisallowInterceptTouchEvent(false);
+              break;
+          }
+          // Handle ListView touch events.
+          v.onTouchEvent(event);
+          return true;
+        }
+      });
+
       repositoriesListView.setOnItemClickListener(new RepositoriesListItemClickListener());
-      repositoriesListAdapter = new NotificationRepositoriesListAdapter(getActivity(), (getMainActivity()).getViewData().notificationStream);
+      repositoriesListAdapter = new NotificationRepositoriesListAdapter(getActivity(), getMainActivity().getViewData().notificationStream);
       repositoriesListView.setAdapter(repositoriesListAdapter);
       if (!repositoriesListAdapter.setSelectionForFilter(repositoriesListView, currentFilter)) {
         // repo no more in data so reset filter
