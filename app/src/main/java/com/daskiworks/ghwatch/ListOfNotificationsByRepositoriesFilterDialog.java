@@ -47,7 +47,7 @@ public class ListOfNotificationsByRepositoriesFilterDialog extends BottomSheetDi
 
     @Override
     public void onStateChanged(@NonNull View bottomSheet, int newState) {
-      if (newState == BottomSheetBehavior.STATE_HIDDEN) {
+      if (newState == BottomSheetBehavior.STATE_HIDDEN || newState == BottomSheetBehavior.STATE_COLLAPSED) {
         dismiss();
       }
     }
