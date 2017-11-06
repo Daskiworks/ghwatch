@@ -25,8 +25,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.NoRouteToHostException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.zip.GZIPInputStream;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -63,6 +65,7 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.daskiworks.ghwatch.Utils;
@@ -171,7 +174,7 @@ public class RemoteSystemClient {
 
     HttpGet httpGet = new HttpGet(uri);
 
-    setHeaders(httpGet, headers);
+    setHeaders(httpGet, requestGzipCompression(headers));
 
     // create response object here to measure request duration
     Response<String> ret = new Response<String>();
@@ -197,12 +200,32 @@ public class RemoteSystemClient {
 
   }
 
+  /**
+   * Request Gzip compression by the server by adding relevant header.
+   *
+   * @param headers map to add into, can be null
+   * @return header map, never null
+   */
+  @NonNull
+  private static Map<String, String> requestGzipCompression(Map<String, String> headers) {
+    //request gzip compression
+    if(headers == null)
+      headers = new HashMap<>();
+    headers.put("Accept-Encoding","gzip");
+    return headers;
+  }
+
   protected static String getResponseContentAsString(HttpResponse httpResponse) throws IOException, UnsupportedEncodingException {
     if (httpResponse == null)
       return null;
     HttpEntity httpEntity = httpResponse.getEntity();
     if (httpEntity != null) {
       InputStream is = httpEntity.getContent();
+      //handle gzip compression if used by the server
+      if("gzip".equals(getHeaderValue(httpResponse,"Content-Encoding"))){
+        is = new GZIPInputStream(is);
+      }
+
       try {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"), 50);
         String line = null;
@@ -266,7 +289,7 @@ public class RemoteSystemClient {
 
     HttpPut httpPut = new HttpPut(uri);
 
-    setHeaders(httpPut, headers);
+    setHeaders(httpPut, requestGzipCompression(headers));
 
     if (content != null)
       httpPut.setEntity(new StringEntity(content, "UTF-8"));
@@ -298,7 +321,7 @@ public class RemoteSystemClient {
 
     HttpDelete httpPut = new HttpDelete(uri);
 
-    setHeaders(httpPut, headers);
+    setHeaders(httpPut, requestGzipCompression(headers));
 
     // create response object here to measure request duration
     Response<String> ret = new Response<String>();

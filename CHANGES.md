@@ -2,6 +2,7 @@ GH::watch changelog
 ===================
 
 ## v1.22 (ToDo)
+- \#97 added gzip compression for GitHub REST API communication to save network bandwidth
 - \#94 added app setting option to enable background notification check over WiFi only to save mobile data
 - \#92 added longer period options (6h, 12h, 24h) to "New notifications check period" 
 - \#93 changed default value of "New notifications check period" preference from 5 minutes to 1 hour to lover network bandwidth
