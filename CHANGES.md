@@ -1,12 +1,13 @@
 GH::watch changelog
 ===================
 
-## v1.22 (ToDo)
+## v1.22 (Nov 11th, 2017)
 - \#97 added gzip compression for GitHub REST API communication to save network bandwidth
 - \#94 added app setting option to enable background notification check over WiFi only to save mobile data
 - \#92 added longer period options (6h, 12h, 24h) to "New notifications check period" 
 - \#93 changed default value of "New notifications check period" preference from 5 minutes to 1 hour to lover network bandwidth
 - \#96 patched UI bug in "filter by repository" - list of repos scroll back to the top possible, correct dismiss of dialog when swiped down  
+- \#98 homescreen widget design is now vertical for widget width 1 cell to better show content
 
 ## v1.21 (Oct 28th, 2017)
 - \#46 update to the Material design

@@ -35,12 +35,13 @@ Main features
 * Info about logged in user in navigation drawer
 
 ### New GitHub notification detection
-* Configurable pooling interval
+* Configurable pooling interval - **improved in 1.22**
 * GitHub API limit saving pooling method used (with full check once a six hours on mobile 
   and one hour on WiFi to prevent problems and allow widget decrease count/android notification remove when 
   notification is read on another device)
 * Preference to configure full update for all background checks to better detect notification reads 
-  on another device/web. Use may lead to a bit higher consumption of resources (network, battery, GitHub API limit)
+  on another device/web. Use may lead to higher consumption of resources (network, battery, GitHub API limit)!
+* GitHub background pooling may be restricted to WiFi connection only to save mobile data - **new in 1.22**  
 
 ### Android notification
 * Android notification is fired when new unread GithHub notification is detected
@@ -53,20 +54,20 @@ Main features
 * Inbox style Big view when more GitHub notifications available
 * Action to directly mark GitHub notification as read
 * Launcher icon badges with number of new notifications for launchers which support badges 
-  (using https://github.com/leolin310148/ShortcutBadger) - **new in 1.19**
+  (using https://github.com/leolin310148/ShortcutBadger)
   
 ### Homescreen and Lockscreen widget
 * Shows number of unread Github notifications
 * Number is highlighted if there are some new unread notifications from your last view of app. So you can use 
   widget as less obtrusive way instead of Android notifications.
-* Resizeable  
+* Resizeable - **improved in 1.22** 
   
 ### Unread notifications list view
 * Shows list of unread GitHub notifications from repositories enabled in this app (all by default)
 * Shows notification type (Issue, Pull Request, ...) 
 * Shows reason why you received notification (subscribed, author, comment, ...)
-* Shows current status of Issue or Pull Request the notification is for by color bar on left side (open - green, closed - red, merged - purple) - this is a gift for users who support app development by small donation - **new in 1.18**
-* Shows Labels of Issue or Pull Request the notification is for (if enabled in Preferences) - this is a gift for users who support app development by small donation - **new in 1.19**
+* Shows current status of Issue or Pull Request the notification is for by color bar on left side (open - green, closed - red, merged - purple) - this is a gift for users who support app development by small donation
+* Shows Labels of Issue or Pull Request the notification is for (if enabled in Preferences) - this is a gift for users who support app development by small donation
 * Swipe down to refresh list
 * Swipe right to mark notification as read
 * Click notification to view details - Detail informations are shown by 
@@ -95,7 +96,7 @@ Main features
   all repos in main Preferences and only selectively show ones you want)
     
 ### GitHub API request info
-* Available from Preferences
+* Available from Settings
 * Shows info about GitHub API limit (limit, remaining, reset timestamp)
 * Shows info about last GitHub API call 
 

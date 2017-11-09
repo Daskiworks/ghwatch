@@ -41,7 +41,7 @@ public class NewVersionInfoDialogFragment extends DialogFragment {
 
   private static final String TAG = NewVersionInfoDialogFragment.class.getSimpleName();
 
-  private static final String VERSION_VALUE = "1.21";
+  private static final String VERSION_VALUE = "1.22";
 
   protected View view;
 
