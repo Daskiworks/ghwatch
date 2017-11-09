@@ -21,6 +21,8 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.daskiworks.ghwatch.alarm.AlarmBroadcastReceiver;
@@ -32,10 +34,12 @@ import com.daskiworks.ghwatch.model.NotificationStreamViewData;
 
 /**
  * Number of unread notifications widget.
- * 
+ *
  * @author Vlastimil Elias <vlastimil.elias@worldonline.cz>
  */
 public class UnreadAppWidgetProvider extends AppWidgetProvider {
+
+  private static final String TAG = "UnreadAppWidgetProvider";
 
   @Override
   public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -101,7 +105,7 @@ public class UnreadAppWidgetProvider extends AppWidgetProvider {
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_unread);
+        RemoteViews views = getRemoteViews(context, appWidgetManager, wid);
         views.setTextViewText(R.id.count, val);
         if (highlight && valInt > 0)
           views.setTextColor(R.id.count, 0xffF57D22);
@@ -115,4 +119,54 @@ public class UnreadAppWidgetProvider extends AppWidgetProvider {
     }
   }
 
+  @Override
+  public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
+    Log.d(TAG, "Changed widget dimensions");
+
+    appWidgetManager.updateAppWidget(appWidgetId,
+            getRemoteViews(context, appWidgetManager, appWidgetId));
+
+    super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId,
+            newOptions);
+    new DataLoaderTask(context, appWidgetManager, new int[]{appWidgetId}).execute();
+  }
+
+
+  /**
+   * Determine appropriate widget view based on size.
+   */
+  private RemoteViews getRemoteViews(Context context,AppWidgetManager appWidgetManager, int appWidgetId) {
+    // See the dimensions and
+    Bundle options = appWidgetManager.getAppWidgetOptions(appWidgetId);
+
+    // Get min width and height.
+    int minWidth = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
+    int minHeight = options
+            .getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT);
+    // First find out rows and columns based on width provided.
+    int rows = getCellsForSize(minHeight);
+    int columns = getCellsForSize(minWidth);
+
+    if (columns == 1) {
+      return new RemoteViews(context.getPackageName(),
+              R.layout.widget_unread_1);
+    } else {
+      return new RemoteViews(context.getPackageName(),
+              R.layout.widget_unread);
+    }
+  }
+
+  /**
+   * Returns number of cells needed for given size of the widget.
+   *
+   * @param size Widget size in dp.
+   * @return Size in number of cells.
+   */
+  private static int getCellsForSize(int size) {
+    int n = 2;
+    while (70 * n - 30 < size) {
+      ++n;
+    }
+    return n - 1;
+  }
 }
