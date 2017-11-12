@@ -44,12 +44,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.RejectedExecutionException;
 
 import eu.fiskur.chipcloud.ChipCloud;
 
 /**
  * {@link ListView} adapter used to show list of notifications from {@link NotificationStream}.
- * 
+ *
  * @author Vlastimil Elias <vlastimil.elias@worldonline.cz>
  */
 public class NotificationListAdapter extends BaseAdapter {
@@ -70,7 +71,7 @@ public class NotificationListAdapter extends BaseAdapter {
   private Map<Notification, DetailedDataLoaderTask> detailLoadersByNotification = new HashMap<Notification, DetailedDataLoaderTask>();
 
   public NotificationListAdapter(Context activity, final NotificationStream notificationStream, ImageLoader imageLoader,
-      UnreadNotificationsService unreadNotificationsService) {
+                                 UnreadNotificationsService unreadNotificationsService) {
     this.context = activity;
     layoutInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     this.notificationStream = notificationStream;
@@ -100,7 +101,7 @@ public class NotificationListAdapter extends BaseAdapter {
   public void removeNotificationByPosition(int position) {
     try {
       notificationStream.removeNotificationById(getFilteredNotifications().get(position).getId());
-    } catch (IndexOutOfBoundsException e){
+    } catch (IndexOutOfBoundsException e) {
       //patch sporadic bug #99
       Log.w(TAG, e.getMessage());
     }
@@ -142,7 +143,7 @@ public class NotificationListAdapter extends BaseAdapter {
 
     ChipCloud tagGroup = (ChipCloud) listItem.findViewById(R.id.chip_cloud);
     List<Label> ll = notification.getSubjectLabels();
-    if(PreferencesUtils.getBoolean(listItem.getContext(), PreferencesUtils.PREF_SERVER_LABELS_LOADING) && ll!=null && !ll.isEmpty()){
+    if (PreferencesUtils.getBoolean(listItem.getContext(), PreferencesUtils.PREF_SERVER_LABELS_LOADING) && ll != null && !ll.isEmpty()) {
       tagGroup.setVisibility(View.VISIBLE);
       tagGroup.removeAllViews();
       for (Label l : ll) {
@@ -160,9 +161,16 @@ public class NotificationListAdapter extends BaseAdapter {
     if (convertView == null) {
       listItem = layoutInflater.inflate(R.layout.list_notifications, parent, false);
     } else {
-       // we can't reuse view due problems with item height (not resized correctly)
-       //listItem = convertView;
-       listItem = layoutInflater.inflate(R.layout.list_notifications, parent, false);
+
+      //#100 patch - try to cancel old loader not to be executed if user quickly scrolls over many notifications
+      DetailedDataLoaderTask olddl = detailLoadersByView.get(convertView);
+      if (olddl != null) {
+        olddl.cancel(true);
+      }
+
+      // we can't reuse view due problems with item height (list item is not resized correctly if data from new notification require another size)
+      //listItem = convertView;
+      listItem = layoutInflater.inflate(R.layout.list_notifications, parent, false);
     }
 
     // Initialize the views in the layout
@@ -186,8 +194,13 @@ public class NotificationListAdapter extends BaseAdapter {
         detailLoadersByView.remove(listItem);
       } else {
         DetailedDataLoaderTask loader = detailLoadersByNotification.get(notification);
-        if (loader == null) {
-          new DetailedDataLoaderTask(listItem, notification).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        if (loader == null || loader.isCancelled()) {
+          try {
+            new DetailedDataLoaderTask(listItem, notification).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+          } catch (RejectedExecutionException e) {
+            //#100 bug patch
+            Log.w(TAG, "Rejected to add new notification detail loader task: " + e.getMessage());
+          }
         } else {
           loader.setView(listItem);
         }
@@ -236,22 +249,27 @@ public class NotificationListAdapter extends BaseAdapter {
     public DetailedDataLoaderTask(View listItem, Notification notification) {
       this.listItem = listItem;
       this.notification = notification;
+      detailLoadersByView.put(listItem, this);
+      detailLoadersByNotification.put(notification, this);
     }
 
     public void setView(View view) {
+      if (listItem != null)
+        detailLoadersByView.remove(listItem);
       listItem = view;
       detailLoadersByView.put(listItem, this);
     }
 
     @Override
     protected void onPreExecute() {
-      detailLoadersByView.put(listItem, this);
-      detailLoadersByNotification.put(notification, this);
     }
 
     @Override
     protected NotificationViewData doInBackground(Object... params) {
-      return unreadNotificationsService.getNotificationDetailForView(notification);
+      if (!isCancelled())
+        return unreadNotificationsService.getNotificationDetailForView(notification);
+      else
+        return null;
     }
 
     @Override
@@ -265,6 +283,13 @@ public class NotificationListAdapter extends BaseAdapter {
       }
     }
 
+    @Override
+    protected void onCancelled(NotificationViewData result) {
+      if (listItem != null)
+        detailLoadersByView.remove(listItem);
+      detailLoadersByNotification.remove(notification);
+      Log.i(TAG, "Cancelled notification detail loading " + (result != null ? "with result already loaded" : "without result loaded"));
+    }
   }
 
   private OnItemMenuClickedListener onItemMenuClickedListener;
@@ -282,7 +307,7 @@ public class NotificationListAdapter extends BaseAdapter {
 
   /**
    * Set filter by repository into this data source. Null menas no filter. {@link #notifyDataSetChanged()} is called inside.
-   * 
+   *
    * @param filterByRepository
    */
   public void setFilterByRepository(String filterByRepository) {
