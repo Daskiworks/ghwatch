@@ -18,6 +18,7 @@ package com.daskiworks.ghwatch;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -52,6 +53,8 @@ import eu.fiskur.chipcloud.ChipCloud;
  * @author Vlastimil Elias <vlastimil.elias@worldonline.cz>
  */
 public class NotificationListAdapter extends BaseAdapter {
+
+  private static final String TAG = NotificationListAdapter.class.getSimpleName();
 
   public ImageLoader imageLoader;
   private UnreadNotificationsService unreadNotificationsService;
@@ -95,7 +98,12 @@ public class NotificationListAdapter extends BaseAdapter {
   }
 
   public void removeNotificationByPosition(int position) {
-    notificationStream.removeNotificationById(getFilteredNotifications().get(position).getId());
+    try {
+      notificationStream.removeNotificationById(getFilteredNotifications().get(position).getId());
+    } catch (IndexOutOfBoundsException e){
+      //patch sporadic bug #99
+      Log.w(TAG, e.getMessage());
+    }
     filteredNotifications = null;
   }
 
