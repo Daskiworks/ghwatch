@@ -15,14 +15,17 @@
  */
 package com.daskiworks.ghwatch.backend;
 
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -54,9 +57,9 @@ import java.io.IOException;
 import java.io.InvalidObjectException;
 import java.net.NoRouteToHostException;
 import java.net.URISyntaxException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -91,9 +94,13 @@ public class UnreadNotificationsService {
   private static final long FORCE_VIEW_RELOAD_AFTER = 30 * Utils.MILLIS_MINUTE;
 
   /**
-   * Id of android notification so we can update it.
+   * Id of android notification so we can update it. In case of bundled notifications we use it for main notification, and generate id for others using {@link #getAndroidBundledNotificationId()}.
    */
-  public static final int ANDROID_NOTIFICATION_ID = 0;
+  public static final int ANDROID_NOTIFICATION_MAIN_ID = 0;
+  /**
+   * Group key for Bundlen Android notification used for Noughat+
+   */
+  private static final String ANDROID_NOTIFICATION_GROUP_KEY = "GHWatch";
 
   // few fields initialized in constructor
   private Context context;
@@ -111,7 +118,7 @@ public class UnreadNotificationsService {
    */
   public UnreadNotificationsService(Context context) {
     this.context = context;
-    persistFile = context.getFileStreamPath(persistFileName);
+    this.persistFile = context.getFileStreamPath(persistFileName);
     this.authenticationManager = AuthenticationManager.getInstance();
   }
 
@@ -448,7 +455,7 @@ public class UnreadNotificationsService {
       ns.setLastFullUpdateTimestamp(System.currentTimeMillis());
 
     //handle paging
-    while(resp.linkNext!=null){
+    while (resp.linkNext != null) {
       resp = RemoteSystemClient.getJSONArrayFromUrl(context, authenticationManager.getGhApiCredentials(context), resp.linkNext, headers);
       NotificationStreamParser.parseNotificationStream(ns, resp.data, rva);
     }
@@ -491,7 +498,7 @@ public class UnreadNotificationsService {
    * Call this when you want to mark android notification as read - remove it
    */
   public void markAndroidNotificationsRead() {
-    Utils.getNotificationManager(context).cancel(ANDROID_NOTIFICATION_ID);
+    Utils.getNotificationManager(context).cancel(ANDROID_NOTIFICATION_MAIN_ID);
   }
 
   /**
@@ -527,96 +534,161 @@ public class UnreadNotificationsService {
     newStream = filterForAndroidNotification(newStream);
     Log.d(TAG, "fireAndroidNotification count after filter " + newStream.size());
     if (newStream.isNewNotification(oldStream)) {
-
-      NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.github_notification)
-              .setContentTitle(context.getString(R.string.an_title_more)).setPriority(NotificationCompat.PRIORITY_DEFAULT);
-      mBuilder.setAutoCancel(true);
-
       ShortcutBadger.applyCount(context, newStream.size());
 
-      if (newStream.size() > 1)
-        mBuilder.setNumber(newStream.size());
-
-
-      boolean allFromOne = newStream.allNotificationsFromSameRepository();
-
-      if (newStream.size() == 1 || allFromOne) {
-        // only one repository
-        Notification n = newStream.get(0);
-        Bitmap b = ImageLoader.getInstance(context).loadImageWithFileLevelCache(n.getRepositoryAvatarUrl());
-        if (b != null) {
-          mBuilder.setLargeIcon(b);
-        } else {
-          mBuilder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.github_notification));
-        }
-        mBuilder.setContentText(n.getRepositoryFullName());
+      if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.N) {
+        fireAndroidNotificationInboxStyle(newStream);
       } else {
-        mBuilder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.github_notification));
+        fireAndroidNotificationBundledStyle(newStream);
       }
-
-      Intent resultIntent = null;
-      if (newStream.size() == 1) {
-        mBuilder.setContentTitle(context.getString(R.string.an_title_one));
-        Notification n = newStream.get(0);
-        mBuilder.setContentText(n.getRepositoryFullName() + ": " + n.getSubjectTitle());
-        NotificationCompat.BigTextStyle btStyle = new NotificationCompat.BigTextStyle();
-        btStyle.bigText(n.getSubjectTitle());
-        btStyle.setSummaryText(n.getRepositoryFullName());
-        mBuilder.setStyle(btStyle);
-        Intent actionIntent = new Intent(context, MarkNotifiationAsReadReceiver.class);
-        actionIntent.putExtra(MarkNotifiationAsReadReceiver.INTENT_EXTRA_KEY_ID, n.getId());
-        mBuilder.addAction(R.drawable.ic_clear_all_white_36dp, context.getString(R.string.action_mark_read),
-                PendingIntent.getBroadcast(context, 0, actionIntent, PendingIntent.FLAG_UPDATE_CURRENT));
-
-        resultIntent = new Intent(context, MainActivity.class);
-      } else {
-        NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-        for (Notification n : newStream) {
-          if (allFromOne) {
-            inboxStyle.addLine(n.getSubjectTitle());
-          } else {
-            inboxStyle.addLine(n.getRepositoryFullName() + ": " + n.getSubjectTitle());
-          }
-        }
-        if (allFromOne)
-          inboxStyle.setSummaryText(newStream.get(0).getRepositoryFullName());
-        else
-          inboxStyle.setSummaryText(" ");
-        mBuilder.setStyle(inboxStyle);
-
-        Intent actionIntent = new Intent(context, MainActivity.class);
-        actionIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        actionIntent.setAction(MainActivity.INTENT_ACTION_DISMISS_ALL);
-        mBuilder
-                .addAction(R.drawable.ic_clear_all_white_36dp, context.getString(R.string.action_all_read), PendingIntent.getActivity(context, 0, actionIntent, 0));
-
-        resultIntent = new Intent(context, MainActivity.class);
-      }
-
-      resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-      resultIntent.setAction(MainActivity.INTENT_ACTION_SHOW);
-      PendingIntent resultPendingIntent = PendingIntent.getActivity(context, 0, resultIntent, 0);
-      mBuilder.setContentIntent(resultPendingIntent);
-
-      String nsound = PreferencesUtils.getString(context, PreferencesUtils.PREF_NOTIFY_SOUND, null);
-      Log.d(TAG, "Notification sound from preference: " + nsound);
-      if (nsound != null) {
-        mBuilder.setSound(Uri.parse(nsound));
-      }
-      if (PreferencesUtils.getBoolean(context, PreferencesUtils.PREF_NOTIFY_VIBRATE, true)) {
-        mBuilder.setVibrate(new long[]{0, 300, 100, 150, 100, 150});
-      }
-
-      mBuilder.setLights(0xffffffff, 100, 4000);
-
-      // mId allows you to update the notification later on.
-      Utils.getNotificationManager(context).notify(ANDROID_NOTIFICATION_ID, mBuilder.build());
       ActivityTracker.sendEvent(context, ActivityTracker.CAT_NOTIF, "new_notif", "notif count: " + newStream.size(), Long.valueOf(newStream.size()));
     } else if (newStream.isEmpty()) {
       // #54 dismiss previous android notification if no any Github notification is available (as it was read on another device)
-      Utils.getNotificationManager(context).cancel(ANDROID_NOTIFICATION_ID);
+      Utils.getNotificationManager(context).cancel(ANDROID_NOTIFICATION_MAIN_ID);
       ShortcutBadger.removeCount(context);
     }
+  }
+
+  protected void fireAndroidNotificationBundledStyle(NotificationStream newStream) {
+    Log.i(TAG, "Going to fire Noughat Bundled style notification");
+    NotificationManager notificationManager = Utils.getNotificationManager(context);
+    android.app.Notification summary = buildAndroidNotificationBundledStyleSummary(newStream.get(0).getUpdatedAt());
+    notificationManager.notify(ANDROID_NOTIFICATION_MAIN_ID, summary);
+    for (Notification n : newStream) {
+      android.app.Notification notification = buildAndroidNotificationBundledStyleDetail(n);
+      notificationManager.notify((int)n.getId(), notification);
+    }
+  }
+
+  private android.app.Notification buildAndroidNotificationBundledStyleSummary(Date timestamp) {
+    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
+            .setContentTitle(context.getString(R.string.app_name))
+            .setContentText(context.getString(R.string.an_title_more))
+            .setSmallIcon(R.drawable.github_notification)
+            .setGroup(ANDROID_NOTIFICATION_GROUP_KEY)
+            .setGroupSummary(true)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+    if (timestamp != null) {
+      mBuilder.setWhen(timestamp.getTime()).setShowWhen(true);
+    }
+    buildNotificationAlerting(mBuilder);
+    return mBuilder.build();
+  }
+
+  private android.app.Notification buildAndroidNotificationBundledStyleDetail(Notification n) {
+    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
+            .setContentTitle(n.getRepositoryFullName())
+            .setContentText(n.getSubjectTitle())
+            .setSmallIcon(R.drawable.github_notification)
+            .setGroup(ANDROID_NOTIFICATION_GROUP_KEY);
+    Bitmap b = ImageLoader.getInstance(context).loadImageWithFileLevelCache(n.getRepositoryAvatarUrl());
+    if (b != null) {
+      mBuilder.setLargeIcon(b);
+    }
+    if (n.getUpdatedAt() != null) {
+      mBuilder.setWhen(n.getUpdatedAt().getTime()).setShowWhen(true);
+    }
+    Intent intent = buildNotificationActionMarkOneAsRead(mBuilder, n);
+    buildNotificationAddFinalIntent(mBuilder,intent);
+    return mBuilder.build();
+  }
+
+  protected void fireAndroidNotificationInboxStyle(NotificationStream newStream) {
+    Log.i(TAG, "Going to fire pre Noughat inbox style notification");
+
+    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.github_notification)
+            .setContentTitle(context.getString(R.string.an_title_more)).setPriority(NotificationCompat.PRIORITY_DEFAULT);
+    mBuilder.setAutoCancel(true);
+
+    if (newStream.size() > 1)
+      mBuilder.setNumber(newStream.size());
+
+    boolean allFromOne = newStream.allNotificationsFromSameRepository();
+
+    if (newStream.size() == 1 || allFromOne) {
+      // only one repository
+      Notification n = newStream.get(0);
+      Bitmap b = ImageLoader.getInstance(context).loadImageWithFileLevelCache(n.getRepositoryAvatarUrl());
+      if (b != null) {
+        mBuilder.setLargeIcon(b);
+      } else {
+        mBuilder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.github_notification));
+      }
+      mBuilder.setContentText(n.getRepositoryFullName());
+    } else {
+      mBuilder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.github_notification));
+    }
+
+    Intent resultIntent = null;
+    if (newStream.size() == 1) {
+      mBuilder.setContentTitle(context.getString(R.string.an_title_one));
+      Notification n = newStream.get(0);
+      mBuilder.setContentText(n.getRepositoryFullName() + ": " + n.getSubjectTitle());
+      NotificationCompat.BigTextStyle btStyle = new NotificationCompat.BigTextStyle();
+      btStyle.bigText(n.getSubjectTitle());
+      btStyle.setSummaryText(n.getRepositoryFullName());
+      mBuilder.setStyle(btStyle);
+      resultIntent = buildNotificationActionMarkOneAsRead(mBuilder, n);
+    } else {
+      NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+      for (Notification n : newStream) {
+        if (allFromOne) {
+          inboxStyle.addLine(n.getSubjectTitle());
+        } else {
+          inboxStyle.addLine(n.getRepositoryFullName() + ": " + n.getSubjectTitle());
+        }
+      }
+      if (allFromOne)
+        inboxStyle.setSummaryText(newStream.get(0).getRepositoryFullName());
+      else
+        inboxStyle.setSummaryText(" ");
+      mBuilder.setStyle(inboxStyle);
+      resultIntent = buildNotificationActionMarkAllAsRead(mBuilder);
+    }
+
+    buildNotificationAddFinalIntent(mBuilder, resultIntent);
+    buildNotificationAlerting(mBuilder);
+    // mId allows you to update the notification later on.
+    Utils.getNotificationManager(context).notify(ANDROID_NOTIFICATION_MAIN_ID, mBuilder.build());
+  }
+
+  @NonNull
+  protected Intent buildNotificationActionMarkOneAsRead(NotificationCompat.Builder mBuilder, Notification n) {
+    Intent actionIntent = new Intent(context, MarkNotifiationAsReadReceiver.class);
+    actionIntent.putExtra(MarkNotifiationAsReadReceiver.INTENT_EXTRA_KEY_ID, n.getId());
+    mBuilder.addAction(R.drawable.ic_clear_all_white_36dp, context.getString(R.string.action_mark_read),
+            PendingIntent.getBroadcast(context, 0, actionIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+    return new Intent(context, MainActivity.class);
+  }
+
+  @NonNull
+  protected Intent buildNotificationActionMarkAllAsRead(NotificationCompat.Builder mBuilder) {
+    Intent actionIntent = new Intent(context, MainActivity.class);
+    actionIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+    actionIntent.setAction(MainActivity.INTENT_ACTION_DISMISS_ALL);
+    mBuilder
+            .addAction(R.drawable.ic_clear_all_white_36dp, context.getString(R.string.action_all_read), PendingIntent.getActivity(context, 0, actionIntent, 0));
+    return new Intent(context, MainActivity.class);
+  }
+
+  private void buildNotificationAddFinalIntent(NotificationCompat.Builder mBuilder, Intent resultIntent) {
+    resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+    resultIntent.setAction(MainActivity.INTENT_ACTION_SHOW);
+    PendingIntent resultPendingIntent = PendingIntent.getActivity(context, 0, resultIntent, 0);
+    mBuilder.setContentIntent(resultPendingIntent);
+  }
+
+  protected void buildNotificationAlerting(NotificationCompat.Builder mBuilder) {
+    String nsound = PreferencesUtils.getString(context, PreferencesUtils.PREF_NOTIFY_SOUND, null);
+    Log.d(TAG, "Notification sound from preference: " + nsound);
+    if (nsound != null) {
+      mBuilder.setSound(Uri.parse(nsound));
+    }
+    if (PreferencesUtils.getBoolean(context, PreferencesUtils.PREF_NOTIFY_VIBRATE, true)) {
+      mBuilder.setVibrate(new long[]{0, 300, 100, 150, 100, 150});
+    }
+
+    mBuilder.setLights(0xffffffff, 100, 4000);
   }
 
   protected void updateWidgetsFromBackgroundCheck(NotificationStream newStream, NotificationStream oldStream) {

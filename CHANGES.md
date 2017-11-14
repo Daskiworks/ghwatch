@@ -1,6 +1,10 @@
 GH::watch changelog
 ===================
 
+## v1.23 (ToDo)
+- \#84 use Bundled notifications style for Noughat+ devices
+- \#99 \#100 rare exceptions bugfix
+
 ## v1.22 (Nov 11th, 2017)
 - \#97 added gzip compression for GitHub REST API communication to save network bandwidth
 - \#94 added app setting option to enable background notification check over WiFi only to save mobile data
