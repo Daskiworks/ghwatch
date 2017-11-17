@@ -21,11 +21,9 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -35,7 +33,7 @@ import com.daskiworks.ghwatch.MainActivity;
 import com.daskiworks.ghwatch.R;
 import com.daskiworks.ghwatch.UnreadAppWidgetProvider;
 import com.daskiworks.ghwatch.Utils;
-import com.daskiworks.ghwatch.alarm.MarkNotifiationAsReadReceiver;
+import com.daskiworks.ghwatch.alarm.AndroidNotifiationActionsReceiver;
 import com.daskiworks.ghwatch.backend.RemoteSystemClient.Response;
 import com.daskiworks.ghwatch.image.ImageLoader;
 import com.daskiworks.ghwatch.model.BaseViewData;
@@ -282,6 +280,18 @@ public class UnreadNotificationsService {
     }
   }
 
+  public StringViewData getNotificationViewUrl(long notificationId) {
+    Notification n = null;
+    NotificationStream oldNs = Utils.readFromStore(TAG, context, persistFile);
+    if (oldNs != null) {
+      n = oldNs.getNotificationById(notificationId);
+    }
+    if (n != null)
+      return getNotificationViewUrl(n);
+    else
+      return null;
+  }
+
   /**
    * Get web view URL for the notification. May be loaded from server in this method, so do not call this from GUI thread!
    *
@@ -495,10 +505,17 @@ public class UnreadNotificationsService {
   }
 
   /**
-   * Call this when you want to mark android notification as read - remove it
+   * Call this when you want to mark android notification issued by this app as read - remove it
    */
   public void markAndroidNotificationsRead() {
     Utils.getNotificationManager(context).cancel(ANDROID_NOTIFICATION_MAIN_ID);
+  }
+
+  /**
+   * Call this when you want to mark android notification issued by this app as read - remove it
+   */
+  public void markAndroidNotificationBundledDetailRead(int androidNotificationIdToCancel) {
+    Utils.getNotificationManager(context).cancel(androidNotificationIdToCancel);
   }
 
   /**
@@ -536,6 +553,13 @@ public class UnreadNotificationsService {
     if (newStream.isNewNotification(oldStream)) {
       ShortcutBadger.applyCount(context, newStream.size());
 
+      //TEST with only one notification
+      if(false) {
+        Notification on = newStream.get(0);
+        newStream = new NotificationStream();
+        newStream.addNotification(on);
+      }
+
       if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.N) {
         fireAndroidNotificationInboxStyle(newStream);
       } else {
@@ -554,9 +578,12 @@ public class UnreadNotificationsService {
     NotificationManager notificationManager = Utils.getNotificationManager(context);
     android.app.Notification summary = buildAndroidNotificationBundledStyleSummary(newStream.get(0).getUpdatedAt());
     notificationManager.notify(ANDROID_NOTIFICATION_MAIN_ID, summary);
+    int i = 0;
     for (Notification n : newStream) {
       android.app.Notification notification = buildAndroidNotificationBundledStyleDetail(n);
-      notificationManager.notify((int)n.getId(), notification);
+      notificationManager.notify((int) n.getId(), notification);
+      if (i++ == 49)
+        break;
     }
   }
 
@@ -567,11 +594,13 @@ public class UnreadNotificationsService {
             .setSmallIcon(R.drawable.notification)
             .setGroup(ANDROID_NOTIFICATION_GROUP_KEY)
             .setGroupSummary(true)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT).setCategory(android.app.Notification.CATEGORY_SOCIAL);
     if (timestamp != null) {
       mBuilder.setWhen(timestamp.getTime()).setShowWhen(true);
     }
     buildNotificationAlerting(mBuilder);
+    //open GH::watch on click
+    buildNotificationAddContentIntentToOpenApp(mBuilder, new Intent(context, MainActivity.class));
     return mBuilder.build();
   }
 
@@ -588,8 +617,9 @@ public class UnreadNotificationsService {
     if (n.getUpdatedAt() != null) {
       mBuilder.setWhen(n.getUpdatedAt().getTime()).setShowWhen(true);
     }
-    Intent intent = buildNotificationActionMarkOneAsRead(mBuilder, n);
-    buildNotificationAddFinalIntent(mBuilder,intent);
+    buildNotificationActionMarkOneAsRead(mBuilder, n, true);
+    buildNotificationActionUnwatchOne(mBuilder, n, true);
+    buildNotificationSetContetnIntentShowDetail(mBuilder, n, true);
     return mBuilder.build();
   }
 
@@ -612,14 +642,13 @@ public class UnreadNotificationsService {
       if (b != null) {
         mBuilder.setLargeIcon(b);
       } else {
-        mBuilder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.notification));
+        mBuilder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher));
       }
       mBuilder.setContentText(n.getRepositoryFullName());
     } else {
-      mBuilder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.notification));
+      mBuilder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher));
     }
 
-    Intent resultIntent = null;
     if (newStream.size() == 1) {
       mBuilder.setContentTitle(context.getString(R.string.an_title_one));
       Notification n = newStream.get(0);
@@ -628,7 +657,8 @@ public class UnreadNotificationsService {
       btStyle.bigText(n.getSubjectTitle());
       btStyle.setSummaryText(n.getRepositoryFullName());
       mBuilder.setStyle(btStyle);
-      resultIntent = buildNotificationActionMarkOneAsRead(mBuilder, n);
+      buildNotificationActionMarkOneAsRead(mBuilder, n, false);
+      buildNotificationSetContetnIntentShowDetail(mBuilder, n, false);
     } else {
       NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
       for (Notification n : newStream) {
@@ -643,38 +673,65 @@ public class UnreadNotificationsService {
       else
         inboxStyle.setSummaryText(" ");
       mBuilder.setStyle(inboxStyle);
-      resultIntent = buildNotificationActionMarkAllAsRead(mBuilder);
+      buildNotificationActionMarkAllAsRead(mBuilder);
+      buildNotificationAddContentIntentToOpenApp(mBuilder, new Intent(context, MainActivity.class));
     }
 
-    buildNotificationAddFinalIntent(mBuilder, resultIntent);
     buildNotificationAlerting(mBuilder);
     // mId allows you to update the notification later on.
     Utils.getNotificationManager(context).notify(ANDROID_NOTIFICATION_MAIN_ID, mBuilder.build());
   }
 
   @NonNull
-  protected Intent buildNotificationActionMarkOneAsRead(NotificationCompat.Builder mBuilder, Notification n) {
-    Intent actionIntent = new Intent(context, MarkNotifiationAsReadReceiver.class);
-    actionIntent.putExtra(MarkNotifiationAsReadReceiver.INTENT_EXTRA_KEY_ID, n.getId());
+  protected void buildNotificationActionMarkOneAsRead(NotificationCompat.Builder mBuilder, Notification n, boolean bundled) {
+    Intent actionIntent = new Intent(context, AndroidNotifiationActionsReceiver.class);
+    actionIntent.putExtra(AndroidNotifiationActionsReceiver.INTENT_EXTRA_KEY_NOTIFICATION_ID, n.getId());
+    actionIntent.putExtra(AndroidNotifiationActionsReceiver.INTENT_EXTRA_KEY_IS_BUNDLED, bundled);
+    actionIntent.putExtra(AndroidNotifiationActionsReceiver.INTENT_EXTRA_KEY_ACTION, AndroidNotifiationActionsReceiver.INTENT_EXTRA_VALUE_ACTION_MARKASREAD);
     mBuilder.addAction(R.drawable.ic_clear_all_white_36dp, context.getString(R.string.action_mark_read),
-            PendingIntent.getBroadcast(context, 0, actionIntent, PendingIntent.FLAG_UPDATE_CURRENT));
-    return new Intent(context, MainActivity.class);
+            PendingIntent.getBroadcast(context, generatePendingIntentRequestCode(), actionIntent, PendingIntent.FLAG_UPDATE_CURRENT));
   }
 
   @NonNull
-  protected Intent buildNotificationActionMarkAllAsRead(NotificationCompat.Builder mBuilder) {
+  protected void buildNotificationActionUnwatchOne(NotificationCompat.Builder mBuilder, Notification n, boolean bundled) {
+    Intent actionIntent = new Intent(context, AndroidNotifiationActionsReceiver.class);
+    actionIntent.putExtra(AndroidNotifiationActionsReceiver.INTENT_EXTRA_KEY_NOTIFICATION_ID, n.getId());
+    actionIntent.putExtra(AndroidNotifiationActionsReceiver.INTENT_EXTRA_KEY_IS_BUNDLED, bundled);
+    actionIntent.putExtra(AndroidNotifiationActionsReceiver.INTENT_EXTRA_KEY_ACTION, AndroidNotifiationActionsReceiver.INTENT_EXTRA_VALUE_ACTION_UNWATCH);
+    mBuilder.addAction(R.drawable.ic_clear_all_white_36dp, context.getString(R.string.action_unwatch),
+            PendingIntent.getBroadcast(context, generatePendingIntentRequestCode(), actionIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+  }
+
+  @NonNull
+  protected void buildNotificationSetContetnIntentShowDetail(NotificationCompat.Builder mBuilder, Notification n, boolean bundled) {
+    Intent actionIntent = new Intent(context, AndroidNotifiationActionsReceiver.class);
+    actionIntent.putExtra(AndroidNotifiationActionsReceiver.INTENT_EXTRA_KEY_NOTIFICATION_ID, n.getId());
+    actionIntent.putExtra(AndroidNotifiationActionsReceiver.INTENT_EXTRA_KEY_IS_BUNDLED, bundled);
+    actionIntent.putExtra(AndroidNotifiationActionsReceiver.INTENT_EXTRA_KEY_ACTION, AndroidNotifiationActionsReceiver.INTENT_EXTRA_VALUE_ACTION_SHOW);
+    mBuilder.setContentIntent(PendingIntent.getBroadcast(context, generatePendingIntentRequestCode(), actionIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+  }
+
+  private static int piid = 1;
+
+  protected int generatePendingIntentRequestCode() {
+    if (piid == Integer.MAX_VALUE)
+      piid = 0;
+    return piid++;
+  }
+
+  @NonNull
+  protected void buildNotificationActionMarkAllAsRead(NotificationCompat.Builder mBuilder) {
     Intent actionIntent = new Intent(context, MainActivity.class);
     actionIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
     actionIntent.setAction(MainActivity.INTENT_ACTION_DISMISS_ALL);
     mBuilder
-            .addAction(R.drawable.ic_clear_all_white_36dp, context.getString(R.string.action_all_read), PendingIntent.getActivity(context, 0, actionIntent, 0));
-    return new Intent(context, MainActivity.class);
+            .addAction(R.drawable.ic_clear_all_white_36dp, context.getString(R.string.action_all_read), PendingIntent.getActivity(context, generatePendingIntentRequestCode(), actionIntent, 0));
   }
 
-  private void buildNotificationAddFinalIntent(NotificationCompat.Builder mBuilder, Intent resultIntent) {
+  private void buildNotificationAddContentIntentToOpenApp(NotificationCompat.Builder mBuilder, Intent resultIntent) {
     resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
     resultIntent.setAction(MainActivity.INTENT_ACTION_SHOW);
-    PendingIntent resultPendingIntent = PendingIntent.getActivity(context, 0, resultIntent, 0);
+    PendingIntent resultPendingIntent = PendingIntent.getActivity(context, generatePendingIntentRequestCode(), resultIntent, 0);
     mBuilder.setContentIntent(resultPendingIntent);
   }
 

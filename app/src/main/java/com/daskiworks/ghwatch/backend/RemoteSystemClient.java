@@ -169,6 +169,8 @@ public class RemoteSystemClient {
     if (!Utils.isInternetConnectionAvailable(context))
       throw new NoRouteToHostException("Network not available");
 
+    Log.d(TAG, "Going to perform GET request to " + url);
+
     URI uri = new URI(url);
     DefaultHttpClient httpClient = prepareHttpClient(uri, apiCredentials);
 
@@ -209,9 +211,9 @@ public class RemoteSystemClient {
   @NonNull
   private static Map<String, String> requestGzipCompression(Map<String, String> headers) {
     //request gzip compression
-    if(headers == null)
+    if (headers == null)
       headers = new HashMap<>();
-    headers.put("Accept-Encoding","gzip");
+    headers.put("Accept-Encoding", "gzip");
     return headers;
   }
 
@@ -222,7 +224,7 @@ public class RemoteSystemClient {
     if (httpEntity != null) {
       InputStream is = httpEntity.getContent();
       //handle gzip compression if used by the server
-      if("gzip".equals(getHeaderValue(httpResponse,"Content-Encoding"))){
+      if ("gzip".equals(getHeaderValue(httpResponse, "Content-Encoding"))) {
         is = new GZIPInputStream(is);
       }
 
@@ -257,7 +259,7 @@ public class RemoteSystemClient {
           URISyntaxException, IOException, ClientProtocolException, AuthenticationException, UnsupportedEncodingException {
     if (!Utils.isInternetConnectionAvailable(context))
       throw new NoRouteToHostException("Network not available");
-
+    Log.d(TAG, "Going to perform POST request to " + url);
     URI uri = new URI(url);
     DefaultHttpClient httpClient = prepareHttpClient(uri, apiCredentials);
 
@@ -283,6 +285,8 @@ public class RemoteSystemClient {
           throws NoRouteToHostException, URISyntaxException, IOException, ClientProtocolException, AuthenticationException {
     if (!Utils.isInternetConnectionAvailable(context))
       throw new NoRouteToHostException("Network not available");
+
+    Log.d(TAG, "Going to perform PUT request to " + url);
 
     URI uri = new URI(url);
     DefaultHttpClient httpClient = prepareHttpClient(uri, apiCredentials);
@@ -346,7 +350,7 @@ public class RemoteSystemClient {
     if (code >= 200 && code <= 299)
       return;
     if (code == HttpStatus.SC_UNAUTHORIZED || code == HttpStatus.SC_FORBIDDEN) {
-      String OTP = getHeaderValue(httpResponse,"X-GitHub-OTP");
+      String OTP = getHeaderValue(httpResponse, "X-GitHub-OTP");
       if (code == HttpStatus.SC_UNAUTHORIZED && OTP != null && OTP.contains("required")) {
         throw new OTPAuthenticationException(Utils.trimToNull(OTP.replace("required;", "")));
       }
@@ -400,10 +404,10 @@ public class RemoteSystemClient {
     }
 
     String linkH = getHeaderValue(httpResponse, "Link");
-    if(linkH != null){
-      for (String linkPart:linkH.split(",")){
-        if(linkPart!=null && linkPart.contains("rel=\"next\"")){
-          ret.linkNext = Utils.trimToNull(linkPart.substring(1,linkPart.indexOf(">;")));
+    if (linkH != null) {
+      for (String linkPart : linkH.split(",")) {
+        if (linkPart != null && linkPart.contains("rel=\"next\"")) {
+          ret.linkNext = Utils.trimToNull(linkPart.substring(1, linkPart.indexOf(">;")));
         }
       }
     }

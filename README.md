@@ -51,7 +51,8 @@ Main features
 * Can be disabled at all
 * Configurable sound
 * Configurable vibration
-* Inbox style Big view when more GitHub notifications available
+* Inbox style Big view when more GitHub notifications available on pre Noughat devices
+* Bundled notifications style for Noughat+ devices with actions for individual notifications - **new in 1.23**
 * Action to directly mark GitHub notification as read
 * Launcher icon badges with number of new notifications for launchers which support badges 
   (using https://github.com/leolin310148/ShortcutBadger)
