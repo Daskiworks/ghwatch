@@ -37,13 +37,14 @@ import com.daskiworks.ghwatch.SupportAppDevelopmentDialogFragment;
 
 /**
  * Service used to process donations.
- * 
+ *
  * @author Vlastimil Elias <vlastimil.elias@worldonline.cz>
  */
 public class DonationService {
 
   public static final String INAPP_CODE_DONATION_1 = "donation_1";
   public static final String INAPP_CODE_DONATION_2 = "donation_2";
+  public static final String INAPP_CODE_DONATION_3 = "donation_3";
 
   private static final int BUY_REQUEST_CODE = 1016;
 
@@ -58,13 +59,17 @@ public class DonationService {
   public static boolean buyItem(Activity context, SupportAppDevelopmentDialogFragment dialog, IInAppBillingService mService, String sku) {
     ActivityTracker.sendEvent(context, ActivityTracker.CAT_UI, "app_support_donate_click", sku, 0L);
     if (mService != null) {
+
+      if(INAPP_CODE_DONATION_3.equals(sku))
+        consumeDisposablePurchases(context, mService);
+
       try {
         Bundle buyIntentBundle = mService.getBuyIntent(3, context.getPackageName(), sku, IabHelper.ITEM_TYPE_INAPP, buyDeveloperPayload);
         int rc = buyIntentBundle.getInt(IabHelper.RESPONSE_CODE);
         if (rc == IabHelper.BILLING_RESPONSE_RESULT_OK) {
           PendingIntent pendingIntent = buyIntentBundle.getParcelable(IabHelper.RESPONSE_BUY_INTENT);
           context.startIntentSenderForResult(pendingIntent.getIntentSender(), BUY_REQUEST_CODE, new Intent(), Integer.valueOf(0), Integer.valueOf(0),
-              Integer.valueOf(0));
+                  Integer.valueOf(0));
           return true;
         } else if (rc == IabHelper.BILLING_RESPONSE_RESULT_ITEM_ALREADY_OWNED) {
           DonationService.storeDonationExists(context);
@@ -103,7 +108,7 @@ public class DonationService {
             String developerPayload = jo.getString("developerPayload");
             if (buyDeveloperPayload.equals(developerPayload)) {
               String sku = jo.getString("productId");
-              if (INAPP_CODE_DONATION_1.equals(sku) || INAPP_CODE_DONATION_2.equals(sku)) {
+              if (INAPP_CODE_DONATION_1.equals(sku) || INAPP_CODE_DONATION_2.equals(sku) || INAPP_CODE_DONATION_3.equals(sku)) {
                 String orderId = jo.getString("orderId");
                 storeDonationExists(context);
                 refreshSupportAppDevelopmentDialogDonated(fragment);
@@ -178,6 +183,24 @@ public class DonationService {
         for (String purchaseData : purchaseDataList) {
           JSONObject jo = new JSONObject(purchaseData);
           mService.consumePurchase(3, activity.getPackageName(), jo.getString("purchaseToken"));
+        }
+      }
+    } catch (Exception e) {
+      ActivityTracker.sendEvent(activity, ActivityTracker.CAT_BE, "message_err_billing_check_error", e.getMessage(), 0L);
+      Log.e(TAG, "InApp billing - exception " + e.getMessage());
+    }
+  }
+
+  public static void consumeDisposablePurchases(Activity activity, IInAppBillingService mService) {
+    try {
+      Bundle ownedItems = mService.getPurchases(3, activity.getPackageName(), IabHelper.ITEM_TYPE_INAPP, null);
+      int response = ownedItems.getInt("RESPONSE_CODE");
+      if (response == 0) {
+        ArrayList<String> purchaseDataList = ownedItems.getStringArrayList("INAPP_PURCHASE_DATA_LIST");
+        for (String purchaseData : purchaseDataList) {
+          JSONObject jo = new JSONObject(purchaseData);
+          if (INAPP_CODE_DONATION_3.equals(jo.getString("productId")))
+            mService.consumePurchase(3, activity.getPackageName(), jo.getString("purchaseToken"));
         }
       }
     } catch (Exception e) {

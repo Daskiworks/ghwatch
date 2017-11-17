@@ -1,12 +1,12 @@
 GH::watch changelog
 ===================
 
-## v1.23 (ToDo)
+## v1.23 (Nov 17th, 2017)
 - \#84 Bundled notifications style for Noughat+ devices with actions for individual notifications
 - \#101 improved quality of the icon used in the app widget and notification 
 - \#99 \#100 rare exceptions bugfix
 
-## v1.22 (Nov 11th, 2017)
+## v1.22 (Nov 9th, 2017)
 - \#97 added gzip compression for GitHub REST API communication to save network bandwidth
 - \#94 added app setting option to enable background notification check over WiFi only to save mobile data
 - \#92 added longer period options (6h, 12h, 24h) to "New notifications check period" 

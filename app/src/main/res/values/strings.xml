@@ -233,9 +233,10 @@
   <string name="dialog_sad_button_rate">Rate in Google Play</string>
   <string name="dialog_sad_button_share">Share App with friends</string>
   <string name="dialog_sad_button_share_title">Share GH::watch app info to..</string>
-  <string name="dialog_sad_text_donated">You donated already, thank you very much.</string>
+  <string name="dialog_sad_text_donated">You donated already, thank you very much. You can buy us a coffee to keep us running.</string>
   <string name="dialog_sad_button_donate_1">Basic donation\n(~1 USD/EUR)</string>
   <string name="dialog_sad_button_donate_2">I\'m feeling rich ;-)\n(~4 USD/EUR)</string>
+  <string name="dialog_sad_button_donate_3">Buy us a coffee\n(~3 USD/EUR)</string>
   <string name="dialog_sad_button_donate_restore">Restore previous donation</string>
   <string name="message_err_billing_unavailable">Sorry, billing service is not available.</string>
   <string name="message_err_billing_error">Sorry, donation failed.</string>
@@ -251,12 +252,10 @@
 
   <!-- New Version dialog -->
   <string name="dialog_nv_title">New version</string>
-  <string name="dialog_nv_intro_text">Version 1.22 focus mainly to reduce network data consumption. Most important changes:
-    \n* GitHub REST API communication uses gzip compression.
-    \n* Longer periods for background new notifications check are available in app Settings.
-    \n* You can also restrict background checks to run over WiFi connection only if you want to save your mobile data.
-    \n* Fine-tuned homescreen widget design for width 1 cell.
-    \n* Patched UI bugs with "Filter by repository" dialog.
+  <string name="dialog_nv_intro_text">Version 1.23 brings new features and minor bugfix. Most important changes:
+    \n* Bundled notifications style for Noughat+ devices with actions for individual notifications.
+    \n* Improved quality of the icon used in the app widget and notification.
+    \n* Patched two rare crashes.
   </string>
 
   <!-- About dialog -->

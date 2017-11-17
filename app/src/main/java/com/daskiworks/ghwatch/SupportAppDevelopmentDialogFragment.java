@@ -218,6 +218,16 @@ public class SupportAppDevelopmentDialogFragment extends DialogFragment {
       view.findViewById(R.id.button_donate_2).setVisibility(View.GONE);
       view.findViewById(R.id.button_donate_restore).setVisibility(View.GONE);
       view.findViewById(R.id.text_donated).setVisibility(View.VISIBLE);
+      view.findViewById(R.id.button_donate_3).setVisibility(View.VISIBLE);
+      view.findViewById(R.id.button_donate_3).setOnClickListener(new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+          if (DonationService.buyItem(getActivity(), SupportAppDevelopmentDialogFragment.this, mService, DonationService.INAPP_CODE_DONATION_3)) {
+            writeActionPerformedTimestamp(getActivity());
+          }
+        }
+      });
     }
   }
 
