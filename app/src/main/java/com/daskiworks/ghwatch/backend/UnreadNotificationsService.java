@@ -622,6 +622,10 @@ public class UnreadNotificationsService {
             .setContentText(n.getSubjectTitle())
             .setSmallIcon(R.drawable.notification)
             .setGroup(ANDROID_NOTIFICATION_GROUP_KEY);
+    NotificationCompat.BigTextStyle btStyle = new NotificationCompat.BigTextStyle();
+    btStyle.bigText(n.getSubjectTitle());
+    btStyle.setSummaryText(n.getRepositoryFullName());
+    mBuilder.setStyle(btStyle);
     Bitmap b = ImageLoader.getInstance(context).loadImageWithFileLevelCache(n.getRepositoryAvatarUrl());
     if (b != null) {
       mBuilder.setLargeIcon(b);
