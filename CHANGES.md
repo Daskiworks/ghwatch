@@ -2,7 +2,7 @@ GH::watch changelog
 ===================
 
 ## v1.23 (Nov 17th, 2017)
-- \#84 Bundled notifications style for Noughat+ devices with actions for individual notifications
+- \#84 Bundled notifications style for Nougat+ devices with actions for individual notifications
 - \#101 improved quality of the icon used in the app widget and notification 
 - \#99 \#100 rare exceptions bugfix
 

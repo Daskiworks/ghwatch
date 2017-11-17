@@ -253,7 +253,7 @@
   <!-- New Version dialog -->
   <string name="dialog_nv_title">New version</string>
   <string name="dialog_nv_intro_text">Version 1.23 brings new features and minor bugfix. Most important changes:
-    \n* Bundled notifications style for Noughat+ devices with actions for individual notifications.
+    \n* Bundled notifications style for Nougat+ devices with actions for individual notifications.
     \n* Improved quality of the icon used in the app widget and notification.
     \n* Patched two rare crashes.
   </string>
