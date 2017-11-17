@@ -3,6 +3,7 @@ GH::watch changelog
 
 ## v1.23 (ToDo)
 - \#84 use Bundled notifications style for Noughat+ devices
+- \#101 improved quality of the icon used in the app widget and notification 
 - \#99 \#100 rare exceptions bugfix
 
 ## v1.22 (Nov 11th, 2017)

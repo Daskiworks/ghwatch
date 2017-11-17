@@ -29,7 +29,7 @@
         android:layout_gravity="center"
         android:layout_marginBottom="6dp"
         android:contentDescription="@string/widget_title_unread"
-        android:src="@drawable/github_notification" />
+        android:src="@drawable/notification" />
 
     <ImageView
         android:id="@+id/separator"

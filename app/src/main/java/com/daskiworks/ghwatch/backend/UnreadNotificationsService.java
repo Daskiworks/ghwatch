@@ -94,7 +94,7 @@ public class UnreadNotificationsService {
   private static final long FORCE_VIEW_RELOAD_AFTER = 30 * Utils.MILLIS_MINUTE;
 
   /**
-   * Id of android notification so we can update it. In case of bundled notifications we use it for main notification, and generate id for others using {@link #getAndroidBundledNotificationId()}.
+   * Id of android notification so we can update it. In case of bundled notifications we use it for main notification.
    */
   public static final int ANDROID_NOTIFICATION_MAIN_ID = 0;
   /**
@@ -564,7 +564,7 @@ public class UnreadNotificationsService {
     NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
             .setContentTitle(context.getString(R.string.app_name))
             .setContentText(context.getString(R.string.an_title_more))
-            .setSmallIcon(R.drawable.github_notification)
+            .setSmallIcon(R.drawable.notification)
             .setGroup(ANDROID_NOTIFICATION_GROUP_KEY)
             .setGroupSummary(true)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT);
@@ -579,7 +579,7 @@ public class UnreadNotificationsService {
     NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
             .setContentTitle(n.getRepositoryFullName())
             .setContentText(n.getSubjectTitle())
-            .setSmallIcon(R.drawable.github_notification)
+            .setSmallIcon(R.drawable.notification)
             .setGroup(ANDROID_NOTIFICATION_GROUP_KEY);
     Bitmap b = ImageLoader.getInstance(context).loadImageWithFileLevelCache(n.getRepositoryAvatarUrl());
     if (b != null) {
@@ -596,7 +596,7 @@ public class UnreadNotificationsService {
   protected void fireAndroidNotificationInboxStyle(NotificationStream newStream) {
     Log.i(TAG, "Going to fire pre Noughat inbox style notification");
 
-    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.github_notification)
+    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.notification)
             .setContentTitle(context.getString(R.string.an_title_more)).setPriority(NotificationCompat.PRIORITY_DEFAULT);
     mBuilder.setAutoCancel(true);
 
@@ -612,11 +612,11 @@ public class UnreadNotificationsService {
       if (b != null) {
         mBuilder.setLargeIcon(b);
       } else {
-        mBuilder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.github_notification));
+        mBuilder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.notification));
       }
       mBuilder.setContentText(n.getRepositoryFullName());
     } else {
-      mBuilder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.github_notification));
+      mBuilder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.notification));
     }
 
     Intent resultIntent = null;

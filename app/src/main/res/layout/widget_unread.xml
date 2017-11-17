@@ -30,7 +30,7 @@
         android:layout_marginRight="6dp"
         android:layout_marginEnd="6dp"
         android:contentDescription="@string/widget_title_unread"
-        android:src="@drawable/github_notification" />
+        android:src="@drawable/notification" />
 
     <ImageView
         android:id="@+id/separator"
