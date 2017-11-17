@@ -46,6 +46,7 @@ public class AndroidNotifiationActionsReceiver extends BroadcastReceiver {
   public static final String INTENT_EXTRA_VALUE_ACTION_MARKASREAD = "MARKASREAD";
   public static final String INTENT_EXTRA_VALUE_ACTION_UNWATCH = "UNWATCH";
   public static final String INTENT_EXTRA_VALUE_ACTION_SHOW = "SHOW";
+  public static final String INTENT_EXTRA_VALUE_ACTION_DELETED = "DELETED";
 
   public static final String INTENT_EXTRA_KEY_NOTIFICATION_ID = "com.daskiworks.ghwatch.NOTIFICATION_ID";
   public static final String INTENT_EXTRA_KEY_IS_BUNDLED = "com.daskiworks.ghwatch.BUNDLED";
@@ -69,6 +70,9 @@ public class AndroidNotifiationActionsReceiver extends BroadcastReceiver {
         case INTENT_EXTRA_VALUE_ACTION_SHOW:
           new ShowNotificationTask(context, unreadNotificationsService).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, id);
           ActivityTracker.sendEvent(context, ActivityTracker.CAT_UI, "notification_show_fromandroidnotification", "", 0L);
+          break;
+        case INTENT_EXTRA_VALUE_ACTION_DELETED:
+          //nothing to do, it is here only to dismiss summary notification in case of bundled notifications
           break;
       }
 

@@ -516,6 +516,12 @@ public class UnreadNotificationsService {
    */
   public void markAndroidNotificationBundledDetailRead(int androidNotificationIdToCancel) {
     Utils.getNotificationManager(context).cancel(androidNotificationIdToCancel);
+    long c = PreferencesUtils.getLong(context, NUM_OF_BUNDLED_ANDROID_NOTIFICATIONS,0);
+    if(c>1){
+      PreferencesUtils.storeLong(context, NUM_OF_BUNDLED_ANDROID_NOTIFICATIONS,--c);
+    } else {
+      markAndroidNotificationsRead();
+    }
   }
 
   /**
@@ -554,10 +560,12 @@ public class UnreadNotificationsService {
       ShortcutBadger.applyCount(context, newStream.size());
 
       //TEST with only one notification
-      if(false) {
+      if(true) {
         Notification on = newStream.get(0);
+        Notification on2 = newStream.get(1);
         newStream = new NotificationStream();
         newStream.addNotification(on);
+        newStream.addNotification(on2);
       }
 
       if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.N) {
@@ -582,10 +590,14 @@ public class UnreadNotificationsService {
     for (Notification n : newStream) {
       android.app.Notification notification = buildAndroidNotificationBundledStyleDetail(n);
       notificationManager.notify((int) n.getId(), notification);
-      if (i++ == 49)
+      if (++i == 49)
         break;
     }
+
+    PreferencesUtils.storeLong(context, NUM_OF_BUNDLED_ANDROID_NOTIFICATIONS,i);
   }
+
+  private static final String NUM_OF_BUNDLED_ANDROID_NOTIFICATIONS = "NUM_OF_BUNDLED_ANDROID_NOTIFICATIONS";
 
   private android.app.Notification buildAndroidNotificationBundledStyleSummary(Date timestamp) {
     NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
@@ -620,6 +632,7 @@ public class UnreadNotificationsService {
     buildNotificationActionMarkOneAsRead(mBuilder, n, true);
     buildNotificationActionUnwatchOne(mBuilder, n, true);
     buildNotificationSetContetnIntentShowDetail(mBuilder, n, true);
+    buildNotificationDeletedIntent(mBuilder,n,true);
     return mBuilder.build();
   }
 
@@ -700,6 +713,15 @@ public class UnreadNotificationsService {
     actionIntent.putExtra(AndroidNotifiationActionsReceiver.INTENT_EXTRA_KEY_ACTION, AndroidNotifiationActionsReceiver.INTENT_EXTRA_VALUE_ACTION_UNWATCH);
     mBuilder.addAction(R.drawable.ic_clear_all_white_36dp, context.getString(R.string.action_unwatch),
             PendingIntent.getBroadcast(context, generatePendingIntentRequestCode(), actionIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+  }
+
+  @NonNull
+  protected void buildNotificationDeletedIntent(NotificationCompat.Builder mBuilder, Notification n, boolean bundled) {
+    Intent actionIntent = new Intent(context, AndroidNotifiationActionsReceiver.class);
+    actionIntent.putExtra(AndroidNotifiationActionsReceiver.INTENT_EXTRA_KEY_NOTIFICATION_ID, n.getId());
+    actionIntent.putExtra(AndroidNotifiationActionsReceiver.INTENT_EXTRA_KEY_IS_BUNDLED, bundled);
+    actionIntent.putExtra(AndroidNotifiationActionsReceiver.INTENT_EXTRA_KEY_ACTION, AndroidNotifiationActionsReceiver.INTENT_EXTRA_VALUE_ACTION_DELETED);
+    mBuilder.setDeleteIntent(PendingIntent.getBroadcast(context, generatePendingIntentRequestCode(), actionIntent, PendingIntent.FLAG_UPDATE_CURRENT));
   }
 
   @NonNull
