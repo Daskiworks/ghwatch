@@ -560,7 +560,7 @@ public class UnreadNotificationsService {
       ShortcutBadger.applyCount(context, newStream.size());
 
       //TEST with only one notification
-      if(true) {
+      if(false) {
         Notification on = newStream.get(0);
         Notification on2 = newStream.get(1);
         newStream = new NotificationStream();
