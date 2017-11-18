@@ -170,7 +170,7 @@ public class WatchedRepositoryListAdapter extends BaseAdapter {
 
       @Override
       public void onClick(View v) {
-        handleMenuItemClicked(repository, R.id.action_view);
+        handleMenuItemClicked(repository, -10);
       }
     };
     listItem.setOnClickListener(cl);
@@ -183,7 +183,7 @@ public class WatchedRepositoryListAdapter extends BaseAdapter {
         PopupMenu popup = new PopupMenu(context, v);
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.list_watched_repos_context, popup.getMenu());
-        popup.getMenu().getItem(3).setEnabled(nfiv);
+        popup.getMenu().getItem(1).setEnabled(nfiv);
         popup.show();
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 

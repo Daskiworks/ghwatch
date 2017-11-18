@@ -23,7 +23,6 @@ import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.daskiworks.ghwatch.ActivityTracker;
-import com.daskiworks.ghwatch.MainActivity;
 import com.daskiworks.ghwatch.R;
 import com.daskiworks.ghwatch.backend.UnreadNotificationsService;
 import com.daskiworks.ghwatch.model.BaseViewData;
@@ -44,7 +43,7 @@ public class AndroidNotifiationActionsReceiver extends BroadcastReceiver {
 
   public static final String INTENT_EXTRA_KEY_ACTION = "com.daskiworks.ghwatch.ACTION";
   public static final String INTENT_EXTRA_VALUE_ACTION_MARKASREAD = "MARKASREAD";
-  public static final String INTENT_EXTRA_VALUE_ACTION_UNWATCH = "UNWATCH";
+  public static final String INTENT_EXTRA_VALUE_ACTION_MUTE = "MUTE";
   public static final String INTENT_EXTRA_VALUE_ACTION_SHOW = "SHOW";
   public static final String INTENT_EXTRA_VALUE_ACTION_DELETED = "DELETED";
 
@@ -63,8 +62,8 @@ public class AndroidNotifiationActionsReceiver extends BroadcastReceiver {
           new MarkNotificationAsReadTask(context, unreadNotificationsService).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, id);
           ActivityTracker.sendEvent(context, ActivityTracker.CAT_UI, "notification_mark_read_fromandroidnotification", "", 0L);
           break;
-        case INTENT_EXTRA_VALUE_ACTION_UNWATCH:
-          new UnwatchNotificationTask(context, unreadNotificationsService).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, id);
+        case INTENT_EXTRA_VALUE_ACTION_MUTE:
+          new MuteNotificationThreadTask(context, unreadNotificationsService).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, id);
           ActivityTracker.sendEvent(context, ActivityTracker.CAT_UI, "notification_mute_thread_fromandroidnotification", "", 0L);
           break;
         case INTENT_EXTRA_VALUE_ACTION_SHOW:
@@ -110,11 +109,11 @@ public class AndroidNotifiationActionsReceiver extends BroadcastReceiver {
     }
   }
 
-  private final class UnwatchNotificationTask extends AsyncTask<Long, String, BaseViewData> {
+  private final class MuteNotificationThreadTask extends AsyncTask<Long, String, BaseViewData> {
     UnreadNotificationsService unreadNotificationsService;
     Context context;
 
-    UnwatchNotificationTask(Context context, UnreadNotificationsService unreadNotificationsService) {
+    MuteNotificationThreadTask(Context context, UnreadNotificationsService unreadNotificationsService) {
       this.unreadNotificationsService = unreadNotificationsService;
       this.context = context;
     }

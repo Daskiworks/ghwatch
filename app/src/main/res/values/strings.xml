@@ -24,14 +24,14 @@
   <string name="action_about">About</string>
   <string name="action_notifCheck">Notification check (debug)</string>
   <string name="action_donationTogle">Donation togle (debug)</string>
-  <string name="action_all_read">Mark Everything as Read</string>
+  <string name="action_all_read">Mark all as read</string>
   <string name="action_filter_by_repo">Filter by repository</string>
   <string name="action_reset_filter">Reset filter</string>
-  <string name="action_mark_read">Mark as Read</string>
+  <string name="action_mark_read">Mark as read</string>
   <string name="action_view">View</string>
   <string name="action_view_on_github">View on Github</string>
-  <string name="action_mute_thread">Unsubscribe</string>
-  <string name="action_unwatch">Unwatch on Github</string>
+  <string name="action_mute_thread">Unsubscribe from this thread</string>
+  <string name="action_unwatch">Unwatch</string>
   <string name="button_cancel">Cancel</string>
   <string name="button_close">Close</string>
   <string name="button_ok">OK</string>
@@ -91,8 +91,8 @@
   <string name="notifications_list_title">Unread Notifications</string>
   <string name="message_no_unread_notifications">No unread notifications available. Pull down to refresh.</string>
   <string name="message_staled_data">Displayed data may be outdated!</string>
-  <string name="message_confirm_notifications_all_mark_read_title">Mark all notifications as read?</string>
-  <string name="message_confirm_notifications_all_mark_read">Do you really want to mark all notifications as read? This can\'t be undone!\n\nYou can mark particular notification as read by swiping it out to the right.</string>
+  <string name="message_confirm_notifications_all_mark_read_title">Mark all notifications as read on GitHub?</string>
+  <string name="message_confirm_notifications_all_mark_read">Do you really want to mark all notifications as read? This can\'t be undone!\n\nYou can mark particular notification as read by swiping it out to the right or using it's context menu.</string>
   <string name="message_confirm_notifications_all_mark_read_repo">Do you really want to mark all notifications from the selected repository as read? This can\'t be undone!\n\nYou can mark particular notification as read by swiping it out to the right.</string>
   <string name="message_notification_marked_read">Notification marked as read.</string>
   <string name="message_notification_thread_muted">Notification thread unsubscribed.</string>
@@ -102,8 +102,8 @@
   <!-- Watched repositories list page -->
   <string name="watched_repos_list_title">Watched Repositories</string>
   <string name="message_no_watched_repos">No watched repositories available. Pull down to refresh.</string>
-  <string name="message_confirm_unwatch_repository_title">Unwatch repository on Github?</string>
-  <string name="message_confirm_unwatch_repository">Do you really want to unwatch the selected repository on Github? This can\'t be undone from this application!</string>
+  <string name="message_confirm_unwatch_repository_title">Unwatch repository on GitHub?</string>
+  <string name="message_confirm_unwatch_repository">Do you really want to Unwatch the selected repository on GitHub? This can\'t be undone from this application!</string>
 
 
   <!-- Preferences related strings -->

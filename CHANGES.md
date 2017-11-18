@@ -2,6 +2,7 @@ GH::watch changelog
 ===================
 
 ## v1.24 (ToDo)
+- minor android notification improvements (color, priority, category) 
 
 ## v1.23 (Nov 17th, 2017)
 - \#84 Bundled notifications style for Nougat+ devices with actions for individual notifications

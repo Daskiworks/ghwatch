@@ -642,7 +642,7 @@ public class UnreadNotificationsService {
       mBuilder.setWhen(n.getUpdatedAt().getTime()).setShowWhen(true);
     }
     buildNotificationActionMarkOneAsRead(mBuilder, n, true);
-    buildNotificationActionUnwatchOne(mBuilder, n, true);
+    buildNotificationActionMuteThreadOne(mBuilder, n, true);
     buildNotificationSetContetnIntentShowDetail(mBuilder, n, true);
     buildNotificationDeletedIntent(mBuilder,n,true);
     return mBuilder.build();
@@ -716,17 +716,17 @@ public class UnreadNotificationsService {
     actionIntent.putExtra(AndroidNotifiationActionsReceiver.INTENT_EXTRA_KEY_NOTIFICATION_ID, n.getId());
     actionIntent.putExtra(AndroidNotifiationActionsReceiver.INTENT_EXTRA_KEY_IS_BUNDLED, bundled);
     actionIntent.putExtra(AndroidNotifiationActionsReceiver.INTENT_EXTRA_KEY_ACTION, AndroidNotifiationActionsReceiver.INTENT_EXTRA_VALUE_ACTION_MARKASREAD);
-    mBuilder.addAction(R.drawable.ic_clear_all_white_36dp, context.getString(R.string.action_mark_read),
+    mBuilder.addAction(R.drawable.ic_done_white_36dp, context.getString(R.string.action_mark_read),
             PendingIntent.getBroadcast(context, generatePendingIntentRequestCode(), actionIntent, PendingIntent.FLAG_UPDATE_CURRENT));
   }
 
   @NonNull
-  protected void buildNotificationActionUnwatchOne(NotificationCompat.Builder mBuilder, Notification n, boolean bundled) {
+  protected void buildNotificationActionMuteThreadOne(NotificationCompat.Builder mBuilder, Notification n, boolean bundled) {
     Intent actionIntent = new Intent(context, AndroidNotifiationActionsReceiver.class);
     actionIntent.putExtra(AndroidNotifiationActionsReceiver.INTENT_EXTRA_KEY_NOTIFICATION_ID, n.getId());
     actionIntent.putExtra(AndroidNotifiationActionsReceiver.INTENT_EXTRA_KEY_IS_BUNDLED, bundled);
-    actionIntent.putExtra(AndroidNotifiationActionsReceiver.INTENT_EXTRA_KEY_ACTION, AndroidNotifiationActionsReceiver.INTENT_EXTRA_VALUE_ACTION_UNWATCH);
-    mBuilder.addAction(R.drawable.ic_clear_all_white_36dp, context.getString(R.string.action_unwatch),
+    actionIntent.putExtra(AndroidNotifiationActionsReceiver.INTENT_EXTRA_KEY_ACTION, AndroidNotifiationActionsReceiver.INTENT_EXTRA_VALUE_ACTION_MUTE);
+    mBuilder.addAction(R.drawable.ic_clear_white_36dp, context.getString(R.string.action_mute_thread),
             PendingIntent.getBroadcast(context, generatePendingIntentRequestCode(), actionIntent, PendingIntent.FLAG_UPDATE_CURRENT));
   }
 

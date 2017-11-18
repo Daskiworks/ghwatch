@@ -15,15 +15,12 @@
  -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
   <item
-    android:id="@+id/action_view"
-    android:title="@string/action_view_on_github"/>
-  <item
-    android:id="@+id/action_unwatch"
-    android:title="@string/action_unwatch"/>
-  <item
     android:id="@+id/action_pref_repoVisibility"
     android:title="@string/pref_repoVisibility_context"/>
   <item
     android:id="@+id/action_pref_notifyFilter"
     android:title="@string/pref_notifyFilter"/>
+  <item
+    android:id="@+id/action_unwatch"
+    android:title="@string/action_unwatch"/>
 </menu>

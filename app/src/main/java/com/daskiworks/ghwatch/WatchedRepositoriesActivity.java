@@ -131,7 +131,7 @@ public class WatchedRepositoriesActivity extends ActivityBase implements LoginDi
     @Override
     public boolean onMenuItemClick(Repository repository, int menuItemId) {
       switch (menuItemId) {
-      case R.id.action_view:
+      case -10:
         if (repository != null) {
           if (repository.getHtmlUrl() != null) {
             ActivityTracker.sendEvent(WatchedRepositoriesActivity.this, ActivityTracker.CAT_UI, "watched_repository_show", "", 0L);
