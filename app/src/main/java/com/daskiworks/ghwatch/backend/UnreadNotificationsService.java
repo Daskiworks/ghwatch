@@ -108,6 +108,7 @@ public class UnreadNotificationsService {
   // few data loaders - initialized lazily when necessary only
   private NotificationDetailLoader notificationDetailLoader;
   private NotificationViewUrlLoader notificationViewUrlLoader;
+  private int notificationColor;
 
   /**
    * Create service.
@@ -118,6 +119,7 @@ public class UnreadNotificationsService {
     this.context = context;
     this.persistFile = context.getFileStreamPath(persistFileName);
     this.authenticationManager = AuthenticationManager.getInstance();
+    this.notificationColor = context.getResources().getColor(R.color.apptheme_colorPrimary);
   }
 
   /**
@@ -606,6 +608,9 @@ public class UnreadNotificationsService {
             .setSmallIcon(R.drawable.notification)
             .setGroup(ANDROID_NOTIFICATION_GROUP_KEY)
             .setGroupSummary(true)
+            .setCategory(android.app.Notification.CATEGORY_SOCIAL)
+            .setPriority(android.app.Notification.PRIORITY_DEFAULT)
+            .setColor(notificationColor)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT).setCategory(android.app.Notification.CATEGORY_SOCIAL);
     if (timestamp != null) {
       mBuilder.setWhen(timestamp.getTime()).setShowWhen(true);
@@ -621,6 +626,9 @@ public class UnreadNotificationsService {
             .setContentTitle(n.getRepositoryFullName())
             .setContentText(n.getSubjectTitle())
             .setSmallIcon(R.drawable.notification)
+            .setCategory(android.app.Notification.CATEGORY_SOCIAL)
+            .setPriority(android.app.Notification.PRIORITY_DEFAULT)
+            .setColor(notificationColor)
             .setGroup(ANDROID_NOTIFICATION_GROUP_KEY);
     NotificationCompat.BigTextStyle btStyle = new NotificationCompat.BigTextStyle();
     btStyle.bigText(n.getSubjectTitle());
@@ -695,6 +703,9 @@ public class UnreadNotificationsService {
     }
 
     buildNotificationAlerting(mBuilder);
+    mBuilder.setColor(notificationColor);
+    mBuilder.setCategory(android.app.Notification.CATEGORY_SOCIAL);
+    mBuilder.setPriority(android.app.Notification.PRIORITY_DEFAULT);
     // mId allows you to update the notification later on.
     Utils.getNotificationManager(context).notify(ANDROID_NOTIFICATION_MAIN_ID, mBuilder.build());
   }
