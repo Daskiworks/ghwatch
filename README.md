@@ -115,31 +115,36 @@ Main features
   
 Changelog
 ---------
-
 See [CHANGES.md](CHANGES.md) file content.
+
+Third party libraries
+---------------------
+GH::watch uses these third party libraries, thanks to their developers:
+* [ShortcutBadger](https://github.com/leolin310148/ShortcutBadger)
+* [ChipCloud](https://github.com/fiskurgit/ChipCloud)
+* [CircleImageView](https://github.com/hdodenhof/CircleImageView)
 
 Notes for the app developers
 ----------------------------
-
 See [DEVEL_NOTES.md](DEVEL_NOTES.md) file content.
 
 License for source code
 -----------------------
-
-   Copyright 2014-2015 contributors as indicated by the @authors tag.
-
+````
+   Copyright 2014-2017 contributors as indicated by the @authors tag.
+   
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
+   
+   http://www.apache.org/licenses/LICENSE-2.0
+   
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-
+````
 
 For details see [LICENSE.txt](LICENSE.txt) file content.
    
