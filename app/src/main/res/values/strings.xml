@@ -30,7 +30,7 @@
   <string name="action_mark_read">Mark as read</string>
   <string name="action_view">View</string>
   <string name="action_view_on_github">View on Github</string>
-  <string name="action_mute_thread">Unsubscribe from this thread</string>
+  <string name="action_mute_thread">Unsubscribe</string>
   <string name="action_unwatch">Unwatch</string>
   <string name="button_cancel">Cancel</string>
   <string name="button_close">Close</string>
