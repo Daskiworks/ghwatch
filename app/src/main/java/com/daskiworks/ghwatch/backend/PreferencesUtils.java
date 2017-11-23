@@ -273,6 +273,32 @@ public class PreferencesUtils {
   }
 
   /**
+   * Get int preference.
+   *
+   * @param context
+   * @param key
+   * @param defaultValue
+   * @return
+   */
+  public static int getInt(Context context, String key, int defaultValue) {
+    return PreferenceManager.getDefaultSharedPreferences(context).getInt(key, defaultValue);
+  }
+
+  /**
+   * Store int preference.
+   *
+   * @param context
+   * @param key
+   * @param value
+   */
+  public static void storeInt(Context context, String key, int value) {
+    SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(context);
+    SharedPreferences.Editor editor = wmbPreference.edit();
+    editor.putInt(key, value);
+    editor.commit();
+  }
+
+  /**
    * Store boolean preference.
    *
    * @param context

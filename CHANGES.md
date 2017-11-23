@@ -5,6 +5,8 @@ GH::watch changelog
 - \#103 notification and watched repository action titles updated to match GitHub
 - minor android notification improvements (color, priority, category) 
 - widget preview image updated
+- \#105 fixed update of number in Launcher icon badge when bundled Android notification action is used 
+- \#107 rare exceptions bugfix
 
 ## v1.23 (Nov 17th, 2017)
 - \#84 Bundled notifications style for Nougat+ devices with actions for individual notifications

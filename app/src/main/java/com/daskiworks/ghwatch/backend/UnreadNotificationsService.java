@@ -520,10 +520,19 @@ public class UnreadNotificationsService {
     Utils.getNotificationManager(context).cancel(androidNotificationIdToCancel);
     long c = PreferencesUtils.getLong(context, NUM_OF_BUNDLED_ANDROID_NOTIFICATIONS,0);
     if(c>1){
-      PreferencesUtils.storeLong(context, NUM_OF_BUNDLED_ANDROID_NOTIFICATIONS,--c);
+      PreferencesUtils.storeLong(context, NUM_OF_BUNDLED_ANDROID_NOTIFICATIONS, --c);
     } else {
       markAndroidNotificationsRead();
     }
+
+    int bc = PreferencesUtils.getInt(context, NUM_OF_BADGED_ANDROID_NOTIFICATIONS,0);
+    if(bc>1){
+      PreferencesUtils.storeInt(context, NUM_OF_BADGED_ANDROID_NOTIFICATIONS, --bc);
+      ShortcutBadger.applyCount(context, bc);
+    } else {
+      ShortcutBadger.removeCount(context);
+    }
+
   }
 
   /**
@@ -560,6 +569,7 @@ public class UnreadNotificationsService {
     Log.d(TAG, "fireAndroidNotification count after filter " + newStream.size());
     if (newStream.isNewNotification(oldStream)) {
       ShortcutBadger.applyCount(context, newStream.size());
+      PreferencesUtils.storeInt(context, NUM_OF_BADGED_ANDROID_NOTIFICATIONS, newStream.size());
 
       //TEST with only one notification
       if(false) {
@@ -600,6 +610,7 @@ public class UnreadNotificationsService {
   }
 
   private static final String NUM_OF_BUNDLED_ANDROID_NOTIFICATIONS = "NUM_OF_BUNDLED_ANDROID_NOTIFICATIONS";
+  private static final String NUM_OF_BADGED_ANDROID_NOTIFICATIONS = "NUM_OF_BADGED_ANDROID_NOTIFICATIONS";
 
   private android.app.Notification buildAndroidNotificationBundledStyleSummary(Date timestamp) {
     NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
