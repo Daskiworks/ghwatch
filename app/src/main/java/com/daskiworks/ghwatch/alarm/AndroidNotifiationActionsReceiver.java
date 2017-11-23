@@ -29,6 +29,8 @@ import com.daskiworks.ghwatch.model.BaseViewData;
 import com.daskiworks.ghwatch.model.LoadingStatus;
 import com.daskiworks.ghwatch.model.StringViewData;
 
+import java.util.concurrent.RejectedExecutionException;
+
 /**
  * Broadcast receiver called from Android notification to perform background actions like:
  * <ul>
@@ -52,36 +54,40 @@ public class AndroidNotifiationActionsReceiver extends BroadcastReceiver {
 
   @Override
   public void onReceive(Context context, Intent intent) {
-    context = context.getApplicationContext();
-    UnreadNotificationsService unreadNotificationsService = new UnreadNotificationsService(context);
+    try {
+      context = context.getApplicationContext();
+      UnreadNotificationsService unreadNotificationsService = new UnreadNotificationsService(context);
 
-    long id = intent.getLongExtra(INTENT_EXTRA_KEY_NOTIFICATION_ID, -1);
-    if (id > -1) {
-      switch (intent.getStringExtra(INTENT_EXTRA_KEY_ACTION)) {
-        case INTENT_EXTRA_VALUE_ACTION_MARKASREAD:
-          new MarkNotificationAsReadTask(context, unreadNotificationsService).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, id);
-          ActivityTracker.sendEvent(context, ActivityTracker.CAT_UI, "notification_mark_read_fromandroidnotification", "", 0L);
-          break;
-        case INTENT_EXTRA_VALUE_ACTION_MUTE:
-          new MuteNotificationThreadTask(context, unreadNotificationsService).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, id);
-          ActivityTracker.sendEvent(context, ActivityTracker.CAT_UI, "notification_mute_thread_fromandroidnotification", "", 0L);
-          break;
-        case INTENT_EXTRA_VALUE_ACTION_SHOW:
-          new ShowNotificationTask(context, unreadNotificationsService).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, id);
-          ActivityTracker.sendEvent(context, ActivityTracker.CAT_UI, "notification_show_fromandroidnotification", "", 0L);
-          break;
-        case INTENT_EXTRA_VALUE_ACTION_DELETED:
-          //nothing to do, it is here only to dismiss summary notification in case of bundled notifications
-          break;
-      }
+      long id = intent.getLongExtra(INTENT_EXTRA_KEY_NOTIFICATION_ID, -1);
+      if (id > -1) {
+        switch (intent.getStringExtra(INTENT_EXTRA_KEY_ACTION)) {
+          case INTENT_EXTRA_VALUE_ACTION_MARKASREAD:
+            new MarkNotificationAsReadTask(context, unreadNotificationsService).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, id);
+            ActivityTracker.sendEvent(context, ActivityTracker.CAT_UI, "notification_mark_read_fromandroidnotification", "", 0L);
+            break;
+          case INTENT_EXTRA_VALUE_ACTION_MUTE:
+            new MuteNotificationThreadTask(context, unreadNotificationsService).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, id);
+            ActivityTracker.sendEvent(context, ActivityTracker.CAT_UI, "notification_mute_thread_fromandroidnotification", "", 0L);
+            break;
+          case INTENT_EXTRA_VALUE_ACTION_SHOW:
+            new ShowNotificationTask(context, unreadNotificationsService).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, id);
+            ActivityTracker.sendEvent(context, ActivityTracker.CAT_UI, "notification_show_fromandroidnotification", "", 0L);
+            break;
+          case INTENT_EXTRA_VALUE_ACTION_DELETED:
+            //nothing to do, it is here only to dismiss summary notification in case of bundled notifications
+            break;
+        }
 
-      if (intent.getBooleanExtra(INTENT_EXTRA_KEY_IS_BUNDLED, false)) {
-        unreadNotificationsService.markAndroidNotificationBundledDetailRead((int) id);
+        if (intent.getBooleanExtra(INTENT_EXTRA_KEY_IS_BUNDLED, false)) {
+          unreadNotificationsService.markAndroidNotificationBundledDetailRead((int) id);
+        } else {
+          unreadNotificationsService.markAndroidNotificationsRead();
+        }
       } else {
         unreadNotificationsService.markAndroidNotificationsRead();
       }
-    } else {
-      unreadNotificationsService.markAndroidNotificationsRead();
+    } catch (RejectedExecutionException e) {
+      //nothing to do
     }
   }
 

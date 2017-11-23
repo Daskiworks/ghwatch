@@ -42,6 +42,7 @@
   <string name="empty"></string>
   <string name="repo_thumb_img_descrition">Repository thumbnail image</string>
   <string name="user_thumb_img_descrition">User profile photo</string>
+  <string name="message_err_action_no_thread_available">Action failed due to too much background activity running now. Try later please.</string>
 
   <string name="drawer_repo_filter_title">Filter by repository</string>
 

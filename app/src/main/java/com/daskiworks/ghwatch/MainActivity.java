@@ -50,6 +50,8 @@ import com.daskiworks.ghwatch.model.NotificationStreamViewData;
 import com.daskiworks.ghwatch.model.StringViewData;
 import com.daskiworks.ghwatch.view.SwipeDismissListViewTouchListener;
 
+import java.util.concurrent.RejectedExecutionException;
+
 import me.leolin.shortcutbadger.ShortcutBadger;
 
 /**
@@ -265,8 +267,12 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
   }
 
   public void refreshList(ViewDataReloadStrategy reloadStrateg, boolean supressErrorMessages) {
-    if (dataLoader == null)
-      (dataLoader = new DataLoaderTask(reloadStrateg, supressErrorMessages)).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    try {
+      if (dataLoader == null)
+        (dataLoader = new DataLoaderTask(reloadStrateg, supressErrorMessages)).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    } catch (RejectedExecutionException e) {
+      Toast.makeText(MainActivity.this, R.string.message_err_action_no_thread_available, Toast.LENGTH_SHORT).show();
+    }
   }
 
   protected void onDrawerMenuItemSelected(MenuItem position) {
@@ -294,13 +300,17 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
 
     @Override
     public void onDismiss(ListView listView, int[] reverseSortedPositions) {
-      for (int position : reverseSortedPositions) {
-        Notification tr = (Notification) notificationsListAdapter.getItem(position);
-        if (tr != null) {
-          new MarkNotificationAsReadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, tr.getId());
-          ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_mark_read_swipe", "", 0L);
-          notificationsListAdapter.removeNotificationByPosition(position);
+      try {
+        for (int position : reverseSortedPositions) {
+          Notification tr = (Notification) notificationsListAdapter.getItem(position);
+          if (tr != null) {
+            new MarkNotificationAsReadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, tr.getId());
+            ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_mark_read_swipe", "", 0L);
+            notificationsListAdapter.removeNotificationByPosition(position);
+          }
         }
+      } catch (RejectedExecutionException e) {
+        Toast.makeText(MainActivity.this, R.string.message_err_action_no_thread_available, Toast.LENGTH_SHORT).show();
       }
       notifyDataSetChanged();
     }
@@ -356,36 +366,50 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
   }
 
   protected void showNotification(Notification notification, int position, boolean markAsReadOnShow) {
-    showNotificationTask = new ShowNotificationTask(notification, markAsReadOnShow, position);
-    showNotificationTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_show", "", 0L);
+    try {
+      showNotificationTask = new ShowNotificationTask(notification, markAsReadOnShow, position);
+      showNotificationTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+      ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_show", "", 0L);
+    } catch (RejectedExecutionException e) {
+      showNotificationTask = null;
+      Toast.makeText(MainActivity.this, R.string.message_err_action_no_thread_available, Toast.LENGTH_SHORT).show();
+    }
   }
 
   protected void markNotificationAsReadOnShow(int position, Notification notification) {
-    new MarkNotificationAsReadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, notification.getId());
-    ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_mark_read_on_show", "", 0L);
-    notificationsListAdapter.removeNotificationByPosition(position);
-    notifyDataSetChanged();
+    try {
+      new MarkNotificationAsReadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, notification.getId());
+      ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_mark_read_on_show", "", 0L);
+      notificationsListAdapter.removeNotificationByPosition(position);
+      notifyDataSetChanged();
+    } catch (RejectedExecutionException e) {
+      //nothing to do
+    }
   }
 
   private final class NotificationsListItemMenuClickListener implements NotificationListAdapter.OnItemMenuClickedListener {
     @Override
     public boolean onMenuItemClick(Notification notification, MenuItem item) {
-      switch (item.getItemId()) {
-        case R.id.action_mark_read:
-          new MarkNotificationAsReadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, notification.getId());
-          notificationsListAdapter.removeNotificationById(notification.getId());
-          ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_mark_read_menu", "", 0L);
-          notifyDataSetChanged();
-          return true;
-        case R.id.action_mute_thread:
-          new MuteNotificationThreadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, notification.getId());
-          notificationsListAdapter.removeNotificationById(notification.getId());
-          ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_mute_thread", "", 0L);
-          notifyDataSetChanged();
-          return true;
-        default:
-          return false;
+      try {
+        switch (item.getItemId()) {
+          case R.id.action_mark_read:
+            new MarkNotificationAsReadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, notification.getId());
+            notificationsListAdapter.removeNotificationById(notification.getId());
+            ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_mark_read_menu", "", 0L);
+            notifyDataSetChanged();
+            return true;
+          case R.id.action_mute_thread:
+            new MuteNotificationThreadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, notification.getId());
+            notificationsListAdapter.removeNotificationById(notification.getId());
+            ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notification_mute_thread", "", 0L);
+            notifyDataSetChanged();
+            return true;
+          default:
+            return false;
+        }
+      } catch (RejectedExecutionException e) {
+        Toast.makeText(MainActivity.this, R.string.message_err_action_no_thread_available, Toast.LENGTH_SHORT).show();
+        return true;
       }
     }
   }
@@ -677,8 +701,12 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
     builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
       @Override
       public void onClick(DialogInterface dialog, int id) {
-        ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notifications_mark_read_all", "", 0L);
-        new MarkAllNotificationsAsReadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        try {
+          new MarkAllNotificationsAsReadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+          ActivityTracker.sendEvent(MainActivity.this, ActivityTracker.CAT_UI, "notifications_mark_read_all", "", 0L);
+        } catch (RejectedExecutionException e) {
+          Toast.makeText(MainActivity.this, R.string.message_err_action_no_thread_available, Toast.LENGTH_SHORT).show();
+        }
       }
     });
     builder.setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {

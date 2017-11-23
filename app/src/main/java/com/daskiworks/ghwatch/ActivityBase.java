@@ -40,6 +40,8 @@ import com.daskiworks.ghwatch.backend.DonationService;
 import com.daskiworks.ghwatch.image.ImageLoader;
 import com.daskiworks.ghwatch.model.GHUserInfo;
 
+import java.util.concurrent.RejectedExecutionException;
+
 /**
  * Abstract base for activities in this app.
  * <p>
@@ -154,7 +156,11 @@ public abstract class ActivityBase extends AppCompatActivity {
   protected void navigationDrawerShowUserInfo() {
     if (mDrawerLayout != null) {
       mDrawerHeaderView = mDrawerNavigationView.getHeaderView(0);
-      (new ShowUserInfoTask()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+      try {
+        (new ShowUserInfoTask()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+      } catch (RejectedExecutionException e){
+        //nothing to do
+      }
     }
   }
 

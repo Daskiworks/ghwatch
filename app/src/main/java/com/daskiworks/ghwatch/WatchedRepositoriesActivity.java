@@ -28,6 +28,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.daskiworks.ghwatch.LoginDialogFragment.LoginDialogListener;
 import com.daskiworks.ghwatch.backend.PreferencesUtils;
@@ -39,11 +40,12 @@ import com.daskiworks.ghwatch.model.LoadingStatus;
 import com.daskiworks.ghwatch.model.Repository;
 import com.daskiworks.ghwatch.model.WatchedRepositoriesViewData;
 
+import java.util.concurrent.RejectedExecutionException;
+
 /**
  * Activity used to show list of watched repositories.
- * 
+ *
  * @author Vlastimil Elias <vlastimil.elias@worldonline.cz>
- * 
  */
 public class WatchedRepositoriesActivity extends ActivityBase implements LoginDialogListener, OnRefreshListener {
 
@@ -117,42 +119,46 @@ public class WatchedRepositoriesActivity extends ActivityBase implements LoginDi
     }
 
     switch (item.getItemId()) {
-    default:
-      return false;
+      default:
+        return false;
     }
   }
 
   public void refreshList(ViewDataReloadStrategy reloadStrateg, boolean supressErrorMessages) {
-    if (dataLoader == null)
-      (dataLoader = new DataLoaderTask(reloadStrateg, supressErrorMessages)).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    try {
+      if (dataLoader == null)
+        (dataLoader = new DataLoaderTask(reloadStrateg, supressErrorMessages)).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    } catch (RejectedExecutionException e) {
+      Toast.makeText(WatchedRepositoriesActivity.this, R.string.message_err_action_no_thread_available, Toast.LENGTH_SHORT).show();
+    }
   }
 
   private final class RepositoriesListItemMenuClickListener implements WatchedRepositoryListAdapter.OnItemMenuClickedListener {
     @Override
     public boolean onMenuItemClick(Repository repository, int menuItemId) {
       switch (menuItemId) {
-      case -10:
-        if (repository != null) {
-          if (repository.getHtmlUrl() != null) {
-            ActivityTracker.sendEvent(WatchedRepositoriesActivity.this, ActivityTracker.CAT_UI, "watched_repository_show", "", 0L);
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(repository.getHtmlUrl()));
-            startActivity(browserIntent);
-          } else {
-            Log.w(TAG, "html_url not present for repository " + repository.getRepositoryFullName());
+        case -10:
+          if (repository != null) {
+            if (repository.getHtmlUrl() != null) {
+              ActivityTracker.sendEvent(WatchedRepositoriesActivity.this, ActivityTracker.CAT_UI, "watched_repository_show", "", 0L);
+              Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(repository.getHtmlUrl()));
+              startActivity(browserIntent);
+            } else {
+              Log.w(TAG, "html_url not present for repository " + repository.getRepositoryFullName());
+            }
           }
-        }
-        return true;
-      case R.id.action_unwatch:
-        showUnwatchConfirmDialog(repository);
-        return true;
-      case R.id.action_pref_notifyFilter:
-        showPrefNotifFilterDialog(repository);
-        return true;
+          return true;
+        case R.id.action_unwatch:
+          showUnwatchConfirmDialog(repository);
+          return true;
+        case R.id.action_pref_notifyFilter:
+          showPrefNotifFilterDialog(repository);
+          return true;
         case R.id.action_pref_repoVisibility:
           showPrefRepoVisibilityDialog(repository);
           return true;
-      default:
-        return false;
+        default:
+          return false;
       }
     }
   }
@@ -285,10 +291,14 @@ public class WatchedRepositoriesActivity extends ActivityBase implements LoginDi
     builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
       @Override
       public void onClick(DialogInterface dialog, int id) {
-        new UnwatchRepositoryTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,repository.getId());
-        repositoriesListAdapter.removeRepositoryById(repository.getId());
-        ActivityTracker.sendEvent(WatchedRepositoriesActivity.this, ActivityTracker.CAT_UI, "repository_unwatch", "", 0L);
-        notifyDataSetChanged();
+        try {
+          new UnwatchRepositoryTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, repository.getId());
+          repositoriesListAdapter.removeRepositoryById(repository.getId());
+          ActivityTracker.sendEvent(WatchedRepositoriesActivity.this, ActivityTracker.CAT_UI, "repository_unwatch", "", 0L);
+          notifyDataSetChanged();
+        } catch (RejectedExecutionException e) {
+          Toast.makeText(WatchedRepositoriesActivity.this, R.string.message_err_action_no_thread_available, Toast.LENGTH_SHORT).show();
+        }
       }
     });
     builder.setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
