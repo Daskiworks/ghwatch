@@ -253,7 +253,8 @@
 
   <!-- New Version dialog -->
   <string name="dialog_nv_title">New version</string>
-  <string name="dialog_nv_intro_text">Version 1.23 brings new features and minor bugfix. Most important changes:
+  <string name="dialog_nv_intro_text">Version 1.24 brings minor GUI improvements and fixes.
+    \n\nVersion 1.23 brought new features and minor bugfix. Most important changes:
     \n* Bundled notifications style for Nougat+ devices with actions for individual notifications.
     \n* Improved quality of the icon used in the app widget and notification.
     \n* Patched two rare crashes.

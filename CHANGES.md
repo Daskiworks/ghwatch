@@ -1,7 +1,7 @@
 GH::watch changelog
 ===================
 
-## v1.24 (ToDo)
+## v1.24 (Nov 28th, 2017)
 - \#103 notification and watched repository action titles updated to match GitHub
 - minor android notification improvements (color, priority, category) 
 - widget preview image updated
