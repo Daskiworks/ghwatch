@@ -125,6 +125,12 @@ public class SettingsActivity extends ActivityBase implements OnSharedPreference
       notifFilterPref.setSummary(notifFilterPref.getEntry());
       ActivityTracker.sendEvent(this, ActivityTracker.CAT_PREF, "repo_visibility", notifFilterPref.getEntry().toString(), 0L);
       MainActivity.refreshInNextResume();
+    } else if (key.equals(PreferencesUtils.PREF_APP_NIGHT_MODE)) {
+      ListPreference pref = (ListPreference) sf.findPreference(key);
+      pref.setSummary(pref.getEntry());
+      ActivityTracker.sendEvent(this, ActivityTracker.CAT_PREF, "app_night_mode", pref.getEntry().toString(), 0L);
+      PreferencesUtils.setAppNightMode(this);
+      recreate();
     }
     mBackupManager.dataChanged();
   }
@@ -157,6 +163,7 @@ public class SettingsActivity extends ActivityBase implements OnSharedPreference
       initListPrefSummary(PreferencesUtils.PREF_NOTIFY_FILTER);
       initListPrefSummary(PreferencesUtils.PREF_REPO_VISIBILITY);
       initListPrefSummary(PreferencesUtils.PREF_MARK_READ_ON_SHOW);
+      initListPrefSummary(PreferencesUtils.PREF_APP_NIGHT_MODE);
 
       Preference userAccountPref = findPreference(PreferencesUtils.PREF_SERVER_ACCOUNT);
       GHUserLoginInfo currentUser = ((SettingsActivity) getActivity()).authenticationManager.loadCurrentUser(getActivity());

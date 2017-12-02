@@ -28,6 +28,7 @@
     <uses-permission android:name="com.android.vending.BILLING" />
 
     <application
+        android:name=".GhWatchApplication"
         android:allowBackup="true"
         android:backupAgent="MyBackupAgent"
         android:icon="@drawable/ic_launcher"

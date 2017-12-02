@@ -18,6 +18,13 @@
     android:key="pref_cat_generalSettings"
     android:title="@string/pref_generalSettings_title">
     <ListPreference
+      android:defaultValue="@string/pref_appNightMode_default"
+      android:dialogTitle="@string/pref_appNightMode"
+      android:entries="@array/pref_appNightMode_entries"
+      android:entryValues="@array/pref_appNightMode_values"
+      android:key="pref_appNightMode"
+      android:title="@string/pref_appNightMode"/>
+    <ListPreference
       android:defaultValue="@string/pref_repoVisibility_default"
       android:dialogTitle="@string/pref_repoVisibility"
       android:entries="@array/pref_repoVisibility_entries"

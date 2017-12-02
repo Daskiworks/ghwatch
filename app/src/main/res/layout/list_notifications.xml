@@ -79,8 +79,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:contentDescription="@string/repo_thumb_img_descrition"
-        app:civ_border_color="#f1f1f1"
-        app:civ_border_width="2dp"/>
+        app:civ_border_width="0dp"/>
 
       <ProgressBar
         android:id="@android:id/progress"

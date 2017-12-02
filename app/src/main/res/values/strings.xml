@@ -108,6 +108,20 @@
 
 
   <!-- Preferences related strings -->
+  <string name="pref_appNightMode">Application theme</string>
+  <string-array name="pref_appNightMode_entries">
+    <item>Follow System</item>
+    <item>Automatic</item>
+    <item>Light</item>
+    <item>Dark</item>
+  </string-array>
+  <string-array name="pref_appNightMode_values">
+    <item>-1</item>
+    <item>0</item>
+    <item>1</item>
+    <item>2</item>
+  </string-array>
+  <string name="pref_appNightMode_default">-1</string>
   <string name="activity_settings_title">Settings</string>
   <string name="pref_generalSettings_title">General settings</string>
   <string name="pref_markReadOnShow">Mark notification as read on show</string>

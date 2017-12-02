@@ -19,6 +19,7 @@ import android.app.backup.BackupManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatDelegate;
 
 import com.daskiworks.ghwatch.ActivityTracker;
 import com.daskiworks.ghwatch.Utils;
@@ -47,6 +48,10 @@ public class PreferencesUtils {
   public static final String PREF_NOTIFY_VIBRATE = "pref_notifyVibrate";
   public static final String PREF_NOTIFY_SOUND = "pref_notifySound";
   public static final String PREF_NOTIFY_FILTER = "pref_notifyFilter";
+  /**
+   * Preference used to store night mode setting of the app, some of AppCompatDelegate.MODE_NIGHT_xx constants.
+   */
+  public static final String PREF_APP_NIGHT_MODE = "pref_appNightMode";
 
   public static final String PREF_NOTIFY_FILTER_INHERITED = "0";
   public static final String PREF_NOTIFY_FILTER_ALL = "1";
@@ -75,6 +80,12 @@ public class PreferencesUtils {
   /* Set to true if at least one widget for unread notifications exists */
   public static final String PREF_WIDGET_UNREAD_EXISTS = "pref_widget_unread_exists";
   public static final String PREF_WIDGET_UNREAD_HIGHLIGHT = "pref_widget_unread_highlight";
+
+  public static int setAppNightMode(Context context) {
+    int m = Integer.parseInt(PreferencesUtils.getString(context, PREF_APP_NIGHT_MODE, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM + ""));
+    AppCompatDelegate.setDefaultNightMode(m);
+    return m;
+  }
 
   /**
    * Get string preference.

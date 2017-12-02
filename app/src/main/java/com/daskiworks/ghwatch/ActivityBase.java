@@ -17,7 +17,9 @@ package com.daskiworks.ghwatch;
 
 import android.app.DialogFragment;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -28,6 +30,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -37,6 +40,7 @@ import android.widget.TextView;
 
 import com.daskiworks.ghwatch.backend.AuthenticationManager;
 import com.daskiworks.ghwatch.backend.DonationService;
+import com.daskiworks.ghwatch.backend.PreferencesUtils;
 import com.daskiworks.ghwatch.image.ImageLoader;
 import com.daskiworks.ghwatch.model.GHUserInfo;
 
@@ -55,9 +59,6 @@ public abstract class ActivityBase extends AppCompatActivity {
 
   protected static final String FRAGMENT_DIALOG = "dialogFragment";
 
-  protected static final int COLOR_BACKGROUND_DRAWER = 0xFFEEEEEE;
-
-  protected View mDrawerView;
   protected DrawerLayout mDrawerLayout;
   protected ActionBarDrawerToggle mDrawerToggle;
   protected NavigationView mDrawerNavigationView;
@@ -70,6 +71,8 @@ public abstract class ActivityBase extends AppCompatActivity {
   protected SwipeRefreshLayout swipeLayout;
   protected SwipeRefreshLayout swipeLayout2;
   protected View initialProgressBar;
+
+  protected int nightTheme;
 
   /**
    * Init SwipeRefreshLayout in the activity. A {@link #swipeLayout} is filled with object.
@@ -89,7 +92,7 @@ public abstract class ActivityBase extends AppCompatActivity {
       swipeLayout2.setColorSchemeResources(android.R.color.holo_red_light, R.color.apptheme_colorPrimary, android.R.color.holo_orange_light, R.color.apptheme_colorPrimary);
     }
 
-    initialProgressBar = (View) findViewById(R.id.initial_progress);
+    initialProgressBar = findViewById(R.id.initial_progress);
   }
 
   protected void hideInitialProgressBar() {
@@ -141,6 +144,13 @@ public abstract class ActivityBase extends AppCompatActivity {
                   return true;
                 }
               });
+
+      if ((getResources().getConfiguration().uiMode
+              & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES) {
+        ColorStateList ndcl = ColorStateList.valueOf(getResources().getColor(R.color.light_grey));
+        mDrawerNavigationView.setItemTextColor(ndcl);
+        mDrawerNavigationView.setItemIconTintList(ndcl);
+      }
       navDrawerMenuSelectedItem = selectedItem;
       if (getSupportActionBar() != null) {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -158,7 +168,7 @@ public abstract class ActivityBase extends AppCompatActivity {
       mDrawerHeaderView = mDrawerNavigationView.getHeaderView(0);
       try {
         (new ShowUserInfoTask()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-      } catch (RejectedExecutionException e){
+      } catch (RejectedExecutionException e) {
         //nothing to do
       }
     }
@@ -225,6 +235,7 @@ public abstract class ActivityBase extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    nightTheme = PreferencesUtils.setAppNightMode(this);
   }
 
   protected boolean checkUserLoggedIn() {
@@ -241,6 +252,13 @@ public abstract class ActivityBase extends AppCompatActivity {
   @Override
   protected void onResume() {
     super.onResume();
+
+    //recreate me if app theme changed in meantime
+    int currentNightTheme = PreferencesUtils.setAppNightMode(this);
+    if (nightTheme != currentNightTheme) {
+      recreate();
+      nightTheme = currentNightTheme;
+    }
     navigationDrawerClose();
   }
 

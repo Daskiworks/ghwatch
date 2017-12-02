@@ -30,6 +30,7 @@ import android.widget.Button;
 import com.daskiworks.ghwatch.LoginDialogFragment.LoginDialogListener;
 import com.daskiworks.ghwatch.alarm.AlarmBroadcastReceiver;
 import com.daskiworks.ghwatch.backend.AuthenticationManager;
+import com.daskiworks.ghwatch.backend.PreferencesUtils;
 
 /**
  * Activity used to show list of Notifications.
@@ -46,6 +47,8 @@ public class StartActivity extends AppCompatActivity implements LoginDialogListe
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    PreferencesUtils.setAppNightMode(this);
 
     // set default preferences first time app is started
     PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
