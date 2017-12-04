@@ -686,6 +686,7 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
 
   private void showRepositoryFilterDialog() {
     ListOfNotificationsByRepositoriesFilterDialog bottomSheetDialogFragment = new ListOfNotificationsByRepositoriesFilterDialog();
+    //bottomSheetDialogFragment.setStyle();
     bottomSheetDialogFragment.show(getSupportFragmentManager(), "Bottom Sheet Dialog Fragment");
   }
 

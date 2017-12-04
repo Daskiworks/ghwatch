@@ -32,6 +32,7 @@
     android:paddingLeft="16dp"
     android:paddingStart="16dp"
     android:paddingRight="8dp"
+    android:paddingEnd="8dp"
     android:paddingTop="12dp"
     android:scrollHorizontally="true"
     android:singleLine="true"
@@ -45,9 +46,11 @@
     android:gravity="end"
     android:paddingBottom="12dp"
     android:paddingLeft="8dp"
+    android:paddingStart="8dp"
     android:paddingRight="16dp"
     android:paddingEnd="16dp"
     android:paddingTop="12dp"
+    android:singleLine="true"
     />
 
 </LinearLayout>

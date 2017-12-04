@@ -68,7 +68,7 @@ public class ListOfNotificationsByRepositoriesFilterDialog extends BottomSheetDi
 
   @Override
   public void setupDialog(Dialog dialog, int style) {
-    super.setupDialog(dialog, style);
+    //super.setupDialog(dialog, style);
     //Get the content View
     View contentView = View.inflate(getContext(), R.layout.dialog_list_repositories_for_notifications_content, null);
     dialog.setContentView(contentView);

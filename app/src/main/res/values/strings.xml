@@ -93,7 +93,7 @@
   <string name="message_no_unread_notifications">No unread notifications available. Pull down to refresh.</string>
   <string name="message_staled_data">Displayed data may be outdated!</string>
   <string name="message_confirm_notifications_all_mark_read_title">Mark all notifications as read on GitHub?</string>
-  <string name="message_confirm_notifications_all_mark_read">Do you really want to mark all notifications as read? This can\'t be undone!\n\nYou can mark particular notification as read by swiping it out to the right or using it's context menu.</string>
+  <string name="message_confirm_notifications_all_mark_read">Do you really want to mark all notifications as read? This can\'t be undone!\n\nYou can mark particular notification as read by swiping it out to the right or using its context menu.</string>
   <string name="message_confirm_notifications_all_mark_read_repo">Do you really want to mark all notifications from the selected repository as read? This can\'t be undone!\n\nYou can mark particular notification as read by swiping it out to the right.</string>
   <string name="message_notification_marked_read">Notification marked as read.</string>
   <string name="message_notification_thread_muted">Notification thread unsubscribed.</string>
