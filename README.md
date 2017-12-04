@@ -27,6 +27,10 @@ to allow access for gh::watch application.
 Main features
 -------------
 
+### GUI
+* Material design
+* Light and Dark/Night theme (manual or [automatic](https://developer.android.com/reference/android/support/v7/app/AppCompatDelegate.html#MODE_NIGHT_AUTO) switching) - **new in 1.25**
+
 ### Authentication
 * OAuth used
 * No GithHub password stored on device

@@ -1,7 +1,7 @@
 GH::watch changelog
 ===================
 
-## v1.25 (ToDo)
+## v1.25 (Dec 4th, 2017)
 - \#90 Dark theme implemented - it is available in app settings
 
 ## v1.24 (Nov 28th, 2017)

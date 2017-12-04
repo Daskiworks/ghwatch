@@ -111,7 +111,7 @@
   <string name="pref_appNightMode">Application theme</string>
   <string-array name="pref_appNightMode_entries">
     <item>Follow System</item>
-    <item>Automatic</item>
+    <item>Automatic Switching</item>
     <item>Light</item>
     <item>Dark</item>
   </string-array>
@@ -267,11 +267,7 @@
 
   <!-- New Version dialog -->
   <string name="dialog_nv_title">New version</string>
-  <string name="dialog_nv_intro_text">Version 1.24 brings minor GUI improvements and fixes.
-    \n\nVersion 1.23 brought new features and minor bugfix. Most important changes:
-    \n* Bundled notifications style for Nougat+ devices with actions for individual notifications.
-    \n* Improved quality of the icon used in the app widget and notification.
-    \n* Patched two rare crashes.
+  <string name="dialog_nv_intro_text">Version 1.25 is dedicated to Bluscream, it brings Dark/Night theme for him finally. Visit Settings to set theme behavior.
   </string>
 
   <!-- About dialog -->
