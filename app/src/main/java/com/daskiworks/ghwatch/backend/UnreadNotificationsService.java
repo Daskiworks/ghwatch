@@ -157,22 +157,22 @@ public class UnreadNotificationsService {
         }
       } catch (InvalidObjectException e) {
         nswd.loadingStatus = LoadingStatus.DATA_ERROR;
-        Log.w(TAG, "NotificationStream loading failed due data format problem: " + e.getMessage(), e);
+        Log.w(TAG, "NotificationStream loading failed due to data format problem: " + e.getMessage(), e);
       } catch (NoRouteToHostException e) {
         nswd.loadingStatus = LoadingStatus.CONN_UNAVAILABLE;
-        Log.d(TAG, "NotificationStream loading failed due connection not available.");
+        Log.d(TAG, "NotificationStream loading failed due to connection not available.");
       } catch (AuthenticationException e) {
         nswd.loadingStatus = LoadingStatus.AUTH_ERROR;
-        Log.d(TAG, "NotificationStream loading failed due authentication problem: " + e.getMessage());
+        Log.d(TAG, "NotificationStream loading failed due to authentication problem: " + e.getMessage());
       } catch (IOException e) {
         nswd.loadingStatus = LoadingStatus.CONN_ERROR;
-        Log.w(TAG, "NotificationStream loading failed due connection problem: " + e.getMessage());
+        Log.w(TAG, "NotificationStream loading failed due to connection problem: " + e.getMessage());
       } catch (JSONException e) {
         nswd.loadingStatus = LoadingStatus.DATA_ERROR;
-        Log.w(TAG, "NotificationStream loading failed due data format problem: " + e.getMessage());
+        Log.w(TAG, "NotificationStream loading failed due to data format problem: " + e.getMessage());
       } catch (Exception e) {
         nswd.loadingStatus = LoadingStatus.UNKNOWN_ERROR;
-        Log.e(TAG, "NotificationStream loading failed due: " + e.getMessage(), e);
+        Log.e(TAG, "NotificationStream loading failed due to: " + e.getMessage(), e);
       }
 
       // Show content from store because we are unable to read new one but want to show something
@@ -214,10 +214,10 @@ public class UnreadNotificationsService {
     } catch (AuthenticationException e) {
       nswd.loadingStatus = LoadingStatus.AUTH_ERROR;
     } catch (IOException e) {
-      Log.w(TAG, "NotificationRead marking failed due connection problem: " + e.getMessage());
+      Log.w(TAG, "NotificationRead marking failed due to connection problem: " + e.getMessage());
       nswd.loadingStatus = LoadingStatus.CONN_ERROR;
     } catch (Exception e) {
-      Log.e(TAG, "NotificationRead marking failed due: " + e.getMessage(), e);
+      Log.e(TAG, "NotificationRead marking failed due to: " + e.getMessage(), e);
       nswd.loadingStatus = LoadingStatus.UNKNOWN_ERROR;
     }
     return nswd;
@@ -234,10 +234,10 @@ public class UnreadNotificationsService {
     } catch (AuthenticationException e) {
       nswd.loadingStatus = LoadingStatus.AUTH_ERROR;
     } catch (IOException e) {
-      Log.w(TAG, "Notification thread mute failed due connection problem: " + e.getMessage());
+      Log.w(TAG, "Notification thread mute failed due to connection problem: " + e.getMessage());
       nswd.loadingStatus = LoadingStatus.CONN_ERROR;
     } catch (Exception e) {
-      Log.e(TAG, "Notification thread mute failed due: " + e.getMessage(), e);
+      Log.e(TAG, "Notification thread mute failed due to: " + e.getMessage(), e);
       nswd.loadingStatus = LoadingStatus.UNKNOWN_ERROR;
     }
     return nswd;
@@ -256,10 +256,10 @@ public class UnreadNotificationsService {
     } catch (AuthenticationException e) {
       nswd.loadingStatus = LoadingStatus.AUTH_ERROR;
     } catch (IOException e) {
-      Log.w(TAG, "NotificationRead marking failed due connection problem: " + e.getMessage());
+      Log.w(TAG, "NotificationRead marking failed due to connection problem: " + e.getMessage());
       nswd.loadingStatus = LoadingStatus.CONN_ERROR;
     } catch (Exception e) {
-      Log.e(TAG, "NotificationRead marking failed due: " + e.getMessage(), e);
+      Log.e(TAG, "NotificationRead marking failed due to: " + e.getMessage(), e);
       nswd.loadingStatus = LoadingStatus.UNKNOWN_ERROR;
     }
     return nswd;
@@ -321,7 +321,7 @@ public class UnreadNotificationsService {
       }
       if (nswd.data == null) {
         nswd.loadingStatus = LoadingStatus.DATA_ERROR;
-        Log.w(TAG, "Notification html view URL loading failed due data format problem: no 'html_url' field in response");
+        Log.w(TAG, "Notification html view URL loading failed due to data format problem: no 'html_url' field in response");
       }
     } else {
       nswd.loadingStatus = LoadingStatus.DATA_ERROR;
@@ -424,9 +424,9 @@ public class UnreadNotificationsService {
         }
       }
     } catch (NoRouteToHostException e) {
-      Log.d(TAG, "Notification check failed due: " + e.getMessage());
+      Log.d(TAG, "Notification check failed due to: " + e.getMessage());
     } catch (Exception e) {
-      Log.w(TAG, "Notification check failed due: " + e.getMessage());
+      Log.w(TAG, "Notification check failed due to: " + e.getMessage());
     } finally {
       PreferencesUtils.storeLong(context, PreferencesUtils.INT_SERVERINFO_LASTUNREADNOTIFBACKREQUESTTIMESTAMP, System.currentTimeMillis());
       Log.d(TAG, "Notification check finished");

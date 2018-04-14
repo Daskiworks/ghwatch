@@ -60,7 +60,7 @@ public class NotificationDetailLoader extends RemoteJSONObjectGetTemplate<Notifi
     if (inputObject != null) {
       inputObject.setSubjectDetailHtmlUrl(Utils.trimToNull(remoteResponse.getString("html_url")));
       if (inputObject.getSubjectDetailHtmlUrl() == null) {
-        Log.w(TAG, "Notification detail loading problem due data format problem: no 'html_url' field in response");
+        Log.w(TAG, "Notification detail loading problem due to data format problem: no 'html_url' field in response");
       }
 
       if (remoteResponse.has("merged") && remoteResponse.getBoolean("merged")) {

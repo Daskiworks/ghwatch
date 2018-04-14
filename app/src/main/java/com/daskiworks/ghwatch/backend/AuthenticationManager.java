@@ -169,30 +169,30 @@ public class AuthenticationManager {
       nswd.loadingStatus = LoadingStatus.AUTH_ERROR;
       nswd.isOtp = true;
       nswd.otpType = e.getOtpType();
-      Log.d(TAG, "Login failed due OTP required: " + e.getMessage());
+      Log.d(TAG, "Login failed due to OTP required: " + e.getMessage());
       trackLabel = "OTP_REQUESTED";
     } catch (InvalidObjectException e) {
       nswd.loadingStatus = LoadingStatus.DATA_ERROR;
-      Log.w(TAG, "Login failed due data format problem: " + e.getMessage(), e);
+      Log.w(TAG, "Login failed due to data format problem: " + e.getMessage(), e);
       trackLabel = "ERR_DATA";
     } catch (NoRouteToHostException e) {
       nswd.loadingStatus = LoadingStatus.CONN_UNAVAILABLE;
       trackLabel = "ERR_CONN_NOT_AVAILABLE";
     } catch (AuthenticationException e) {
       nswd.loadingStatus = LoadingStatus.AUTH_ERROR;
-      Log.d(TAG, "Login failed due authentication problem: " + e.getMessage());
+      Log.d(TAG, "Login failed due to authentication problem: " + e.getMessage());
       trackLabel = "ERR_AUTH";
     } catch (IOException e) {
       nswd.loadingStatus = LoadingStatus.CONN_ERROR;
-      Log.w(TAG, "Login failed due connection problem: " + e.getMessage());
+      Log.w(TAG, "Login failed due to connection problem: " + e.getMessage());
       trackLabel = "ERR_CONN";
     } catch (JSONException e) {
       nswd.loadingStatus = LoadingStatus.DATA_ERROR;
-      Log.w(TAG, "Login failed due data format problem: " + e.getMessage());
+      Log.w(TAG, "Login failed due to data format problem: " + e.getMessage());
       trackLabel = "ERR_DATA";
     } catch (Exception e) {
       nswd.loadingStatus = LoadingStatus.UNKNOWN_ERROR;
-      Log.e(TAG, "Login failed due: " + e.getMessage(), e);
+      Log.e(TAG, "Login failed due to: " + e.getMessage(), e);
       trackLabel = "ERR_UNKNOWN";
     }
     ActivityTracker.sendEvent(context, ActivityTracker.CAT_BE, "login", trackLabel, 0L);

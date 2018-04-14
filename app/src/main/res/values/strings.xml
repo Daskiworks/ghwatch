@@ -83,10 +83,10 @@
 
   <!-- Notification loading error messages -->
   <string name="message_err_comm_error_conn_unavailable">Communication with GitHub server failed. Network is not available. Enable/check internet connection please.</string>
-  <string name="message_err_comm_error_auth">Communication with GitHub server failed due authentication problem. Check your account settings please.</string>
-  <string name="message_err_comm_error_conn_error">Communication with GitHub server failed due network error. Try later please.</string>
-  <string name="message_err_comm_error_data_error">Communication with GitHub server failed due invalid data format. Try later please.</string>
-  <string name="message_err_comm_error_unknown">Communication with GitHub server failed due unknown error. Try later please.</string>
+  <string name="message_err_comm_error_auth">Communication with GitHub server failed due to authentication problem. Check your account settings please.</string>
+  <string name="message_err_comm_error_conn_error">Communication with GitHub server failed due to network error. Try later please.</string>
+  <string name="message_err_comm_error_data_error">Communication with GitHub server failed due to invalid data format. Try later please.</string>
+  <string name="message_err_comm_error_unknown">Communication with GitHub server failed due to unknown error. Try later please.</string>
 
   <!-- Notifications list page -->
   <string name="notifications_list_title">Unread Notifications</string>

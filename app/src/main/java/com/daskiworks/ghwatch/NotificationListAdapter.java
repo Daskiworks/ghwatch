@@ -168,7 +168,7 @@ public class NotificationListAdapter extends BaseAdapter {
         olddl.cancel(true);
       }
 
-      // we can't reuse view due problems with item height (list item is not resized correctly if data from new notification require another size)
+      // we can't reuse view due to problems with item height (list item is not resized correctly if data from new notification require another size)
       //listItem = convertView;
       listItem = layoutInflater.inflate(R.layout.list_notifications, parent, false);
     }

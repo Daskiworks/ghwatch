@@ -90,19 +90,19 @@ public abstract class RemoteJSONObjectGetTemplate<T extends BaseViewData, U> {
         processData(resp.data, ret, inputObject);
       } catch (InvalidObjectException e) {
         ret.loadingStatus = LoadingStatus.DATA_ERROR;
-        Log.w(TAG, logName + " loading failed due data format problem: " + e.getMessage(), e);
+        Log.w(TAG, logName + " loading failed due to data format problem: " + e.getMessage(), e);
       } catch (NoRouteToHostException e) {
         ret.loadingStatus = LoadingStatus.CONN_UNAVAILABLE;
       } catch (AuthenticationException e) {
         ret.loadingStatus = LoadingStatus.AUTH_ERROR;
       } catch (IOException e) {
-        Log.w(TAG, logName + " loading failed due connection problem: " + e.getMessage());
+        Log.w(TAG, logName + " loading failed due to connection problem: " + e.getMessage());
         ret.loadingStatus = LoadingStatus.CONN_ERROR;
       } catch (JSONException e) {
         ret.loadingStatus = LoadingStatus.DATA_ERROR;
-        Log.w(TAG, logName + " loading failed due data format problem: " + e.getMessage());
+        Log.w(TAG, logName + " loading failed due to data format problem: " + e.getMessage());
       } catch (Exception e) {
-        Log.e(TAG, logName + " loading failed due unexpected error: " + e.getMessage(), e);
+        Log.e(TAG, logName + " loading failed due to unexpected error: " + e.getMessage(), e);
         ret.loadingStatus = LoadingStatus.UNKNOWN_ERROR;
       }
     } else {

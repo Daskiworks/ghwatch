@@ -204,7 +204,7 @@ public class ImageLoader {
         bitmap = decodeFile(f);
         return bitmap;
       } catch (Throwable ex) {
-        Log.w(TAG, "Can't load image from server for URL " + url + " due exception: " + ex.getMessage(), ex);
+        Log.w(TAG, "Can't load image from server for URL " + url + " due to exception: " + ex.getMessage(), ex);
         if (ex instanceof OutOfMemoryError)
           memoryCache.clear();
       } finally {
@@ -255,7 +255,7 @@ public class ImageLoader {
       return bitmap;
 
     } catch (Exception e) {
-      Log.w(TAG, "Can't decode cached image file due exception: " + e.getMessage(), e);
+      Log.w(TAG, "Can't decode cached image file due to exception: " + e.getMessage(), e);
     } finally {
       Utils.closeStream(stream1);
       Utils.closeStream(stream2);

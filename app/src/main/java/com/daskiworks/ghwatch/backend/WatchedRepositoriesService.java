@@ -109,22 +109,22 @@ public class WatchedRepositoriesService {
         }
       } catch (InvalidObjectException e) {
         nswd.loadingStatus = LoadingStatus.DATA_ERROR;
-        Log.w(TAG, "Watched Repositories loading failed due data format problem: " + e.getMessage(), e);
+        Log.w(TAG, "Watched Repositories loading failed due to data format problem: " + e.getMessage(), e);
       } catch (NoRouteToHostException e) {
         nswd.loadingStatus = LoadingStatus.CONN_UNAVAILABLE;
-        Log.d(TAG, "Watched Repositories loading failed due connection not available.");
+        Log.d(TAG, "Watched Repositories loading failed due to connection not available.");
       } catch (AuthenticationException e) {
         nswd.loadingStatus = LoadingStatus.AUTH_ERROR;
-        Log.d(TAG, "Watched Repositories loading failed due authentication problem: " + e.getMessage());
+        Log.d(TAG, "Watched Repositories loading failed due to authentication problem: " + e.getMessage());
       } catch (IOException e) {
         nswd.loadingStatus = LoadingStatus.CONN_ERROR;
-        Log.w(TAG, "Watched Repositories loading failed due connection problem: " + e.getMessage());
+        Log.w(TAG, "Watched Repositories loading failed due to connection problem: " + e.getMessage());
       } catch (JSONException e) {
         nswd.loadingStatus = LoadingStatus.DATA_ERROR;
-        Log.w(TAG, "Watched Repositories loading failed due data format problem: " + e.getMessage());
+        Log.w(TAG, "Watched Repositories loading failed due to data format problem: " + e.getMessage());
       } catch (Exception e) {
         nswd.loadingStatus = LoadingStatus.UNKNOWN_ERROR;
-        Log.e(TAG, "Watched Repositories loading failed due: " + e.getMessage(), e);
+        Log.e(TAG, "Watched Repositories loading failed due to: " + e.getMessage(), e);
       }
 
       // Show content from store because we are unable to read new one but want to show something
@@ -159,10 +159,10 @@ public class WatchedRepositoriesService {
     } catch (AuthenticationException e) {
       nswd.loadingStatus = LoadingStatus.AUTH_ERROR;
     } catch (IOException e) {
-      Log.w(TAG, "Repository unwatch failed due connection problem: " + e.getMessage());
+      Log.w(TAG, "Repository unwatch failed due to connection problem: " + e.getMessage());
       nswd.loadingStatus = LoadingStatus.CONN_ERROR;
     } catch (Exception e) {
-      Log.e(TAG, "Repository unwatch failed due: " + e.getMessage(), e);
+      Log.e(TAG, "Repository unwatch failed due to: " + e.getMessage(), e);
       nswd.loadingStatus = LoadingStatus.UNKNOWN_ERROR;
     }
     return nswd;
