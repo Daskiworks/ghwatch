@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
   compileSdkVersion 25
-  buildToolsVersion '26.0.2'
+  buildToolsVersion '27.0.3'
   useLibrary 'org.apache.http.legacy'
 
   defaultConfig {
@@ -29,14 +29,14 @@ repositories {
 }
 
 dependencies {
-  compile 'com.android.support:support-v4:25.4.0'
-  compile 'com.google.android.gms:play-services-wallet:11.6.2'
-  compile 'com.google.android.gms:play-services-analytics:11.6.2'
-  compile 'me.leolin:ShortcutBadger:1.1.19@aar'
-  compile 'com.github.fiskurgit:ChipCloud:2.2.3'
-  androidTestCompile 'com.android.support:support-v4:25.4.0'
-  compile 'com.android.support:animated-vector-drawable:25.4.0'
-  compile 'com.android.support:appcompat-v7:25.4.0'
-  compile 'com.android.support:design:25.4.0'
-  compile 'de.hdodenhof:circleimageview:2.2.0'
+  implementation 'com.android.support:support-v4:25.4.0'
+  implementation 'com.google.android.gms:play-services-wallet:11.6.2'
+  implementation 'com.google.android.gms:play-services-analytics:11.6.2'
+  implementation 'me.leolin:ShortcutBadger:1.1.19@aar'
+  implementation 'com.github.fiskurgit:ChipCloud:2.2.3'
+  androidTestImplementation 'com.android.support:support-v4:25.4.0'
+  implementation 'com.android.support:animated-vector-drawable:25.4.0'
+  implementation 'com.android.support:appcompat-v7:25.4.0'
+  implementation 'com.android.support:design:25.4.0'
+  implementation 'de.hdodenhof:circleimageview:2.2.0'
 }
