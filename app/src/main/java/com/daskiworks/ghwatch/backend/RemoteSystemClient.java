@@ -1,6 +1,6 @@
 /*
  * Copyright 2014 contributors as indicated by the @authors tag.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -172,10 +172,10 @@ public class RemoteSystemClient {
     Log.d(TAG, "Going to perform GET request to " + url);
 
     URI uri = new URI(url);
-    DefaultHttpClient httpClient = prepareHttpClient(uri, apiCredentials);
+    DefaultHttpClient httpClient = prepareHttpClient(uri);
 
     HttpGet httpGet = new HttpGet(uri);
-
+    setAuthenticationHeader(httpGet, apiCredentials);
     setHeaders(httpGet, requestGzipCompression(headers));
 
     // create response object here to measure request duration
@@ -261,10 +261,10 @@ public class RemoteSystemClient {
       throw new NoRouteToHostException("Network not available");
     Log.d(TAG, "Going to perform POST request to " + url);
     URI uri = new URI(url);
-    DefaultHttpClient httpClient = prepareHttpClient(uri, apiCredentials);
+    DefaultHttpClient httpClient = prepareHttpClient(uri);
 
     HttpPost httpPost = new HttpPost(uri);
-
+    setAuthenticationHeader(httpPost, apiCredentials);
     setHeaders(httpPost, headers);
 
     // create response object here to measure request duration
@@ -281,6 +281,16 @@ public class RemoteSystemClient {
     return ret;
   }
 
+
+  protected static void setAuthenticationHeader(HttpRequestBase request, GHCredentials apiCredentials) {
+    if (apiCredentials != null)
+      request.addHeader(BasicScheme.authenticate(new UsernamePasswordCredentials(apiCredentials.getUsername(), apiCredentials.getPassword()), "UTF-8", false));
+  }
+
+  protected static void setJsonContentTypeHeader(HttpRequestBase request){
+    request.setHeader("Content-Type", "application/json; charset=utf-8");
+  }
+
   public static Response<String> putToURL(Context context, GHCredentials apiCredentials, String url, Map<String, String> headers, String content)
           throws NoRouteToHostException, URISyntaxException, IOException, ClientProtocolException, AuthenticationException {
     if (!Utils.isInternetConnectionAvailable(context))
@@ -289,10 +299,13 @@ public class RemoteSystemClient {
     Log.d(TAG, "Going to perform PUT request to " + url);
 
     URI uri = new URI(url);
-    DefaultHttpClient httpClient = prepareHttpClient(uri, apiCredentials);
+    DefaultHttpClient httpClient = prepareHttpClient(uri);
+
 
     HttpPut httpPut = new HttpPut(uri);
 
+    setAuthenticationHeader(httpPut, apiCredentials);
+    setJsonContentTypeHeader(httpPut);
     setHeaders(httpPut, requestGzipCompression(headers));
 
     if (content != null)
@@ -321,10 +334,10 @@ public class RemoteSystemClient {
       throw new NoRouteToHostException("Network not available");
 
     URI uri = new URI(url);
-    DefaultHttpClient httpClient = prepareHttpClient(uri, apiCredentials);
+    DefaultHttpClient httpClient = prepareHttpClient(uri);
 
     HttpDelete httpPut = new HttpDelete(uri);
-
+    setAuthenticationHeader(httpPut, apiCredentials);
     setHeaders(httpPut, requestGzipCompression(headers));
 
     // create response object here to measure request duration
@@ -362,17 +375,11 @@ public class RemoteSystemClient {
     }
   }
 
-  protected static DefaultHttpClient prepareHttpClient(URI uri, GHCredentials apiCredentials) {
+  protected static DefaultHttpClient prepareHttpClient(URI uri) {
     DefaultHttpClient httpClient = new DefaultHttpClient();
     HttpParams params = httpClient.getParams();
     HttpConnectionParams.setConnectionTimeout(params, 30000);
     HttpConnectionParams.setSoTimeout(params, 30000);
-    httpClient.addRequestInterceptor(preemptiveAuth, 0);
-
-    if (apiCredentials != null) {
-      httpClient.getCredentialsProvider().setCredentials(new AuthScope(uri.getHost(), uri.getPort(), AuthScope.ANY_SCHEME),
-              new UsernamePasswordCredentials(apiCredentials.getUsername(), apiCredentials.getPassword()));
-    }
     return httpClient;
   }
 

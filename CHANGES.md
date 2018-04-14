@@ -1,6 +1,9 @@
 GH::watch changelog
 ===================
 
+- \#109 fixed login when password contains utf-8 characters
+- patched typo "due" to "due to" in distinct texts 
+
 ## v1.25 (Dec 4th, 2017)
 - \#90 Dark theme implemented - it is available in app settings
 
