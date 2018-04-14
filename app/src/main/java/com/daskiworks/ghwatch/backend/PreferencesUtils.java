@@ -77,6 +77,8 @@ public class PreferencesUtils {
   public static final String INT_SERVERINFO_LASTREQUESTDURATION = "pref_serverInfo_lastRequestDuration";
   public static final String INT_SERVERINFO_LASTUNREADNOTIFBACKREQUESTTIMESTAMP = "pref_serverInfo_lastUnredNotifBackRequestTimestamp";
 
+  public static final String PREF_LOG_GITHUB_API_CALL_ERROR_TO_FILE = "pref_logGithubAPiCallErrorToFile";
+
   /* Set to true if at least one widget for unread notifications exists */
   public static final String PREF_WIDGET_UNREAD_EXISTS = "pref_widget_unread_exists";
   public static final String PREF_WIDGET_UNREAD_HIGHLIGHT = "pref_widget_unread_highlight";

@@ -15,20 +15,15 @@
  */
 package com.daskiworks.ghwatch.backend;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.InvalidObjectException;
-import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
-import java.net.NoRouteToHostException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.zip.GZIPInputStream;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.text.format.DateFormat;
+import android.util.Log;
+
+import com.daskiworks.ghwatch.Utils;
+import com.daskiworks.ghwatch.model.GHCredentials;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -43,7 +38,6 @@ import org.apache.http.auth.AuthState;
 import org.apache.http.auth.AuthenticationException;
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
@@ -62,14 +56,25 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.util.Log;
-
-import com.daskiworks.ghwatch.Utils;
-import com.daskiworks.ghwatch.model.GHCredentials;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.InvalidObjectException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.Serializable;
+import java.net.NoRouteToHostException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.zip.GZIPInputStream;
 
 /**
  * Helper class used to communicate with server.
@@ -118,6 +123,40 @@ public class RemoteSystemClient {
 
   private static final String TAG = "RemoteSystemClient";
 
+  private static File errorLogFile;
+
+
+  /**
+   * Get file where Github API call error are logged.
+   *
+   * @param context to be used
+   * @return file instance
+   */
+  public synchronized static File getErrorLogFile(Context context) {
+    if (errorLogFile == null)
+      errorLogFile = new File(context.getExternalCacheDir(), "githubApiCallErrors.txt");
+    return errorLogFile;
+  }
+
+  protected synchronized static void logGithubAPiCallError(Context context, IOException exception) {
+    if (!PreferencesUtils.getBoolean(context, PreferencesUtils.PREF_LOG_GITHUB_API_CALL_ERROR_TO_FILE, false)) {
+      return;
+    }
+    File f = getErrorLogFile(context);
+    PrintWriter output = null;
+    try {
+      output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f, true), "UTF-8")));
+      output.println(DateFormat.format("yyyy-MM-dd HH:mm:ss", System.currentTimeMillis()) + " - " + exception.getMessage());
+      output.flush();
+    } catch (IOException e) {
+      Log.w(TAG, "Can't write Github API call error into log file due to: " + e.getMessage());
+    } finally {
+      if (output != null) {
+        output.close();
+      }
+    }
+  }
+
   /**
    * Get JSON array from specified url. It is contained in <code>list</code> item of output JSO
    *
@@ -131,7 +170,7 @@ public class RemoteSystemClient {
    * @throws URISyntaxException      if url is invalid
    */
   public static Response<JSONArray> getJSONArrayFromUrl(Context context, GHCredentials apiCredentials, String url, Map<String, String> headers)
-          throws NoRouteToHostException, AuthenticationException, IOException, JSONException, URISyntaxException {
+          throws AuthenticationException, IOException, JSONException, URISyntaxException {
     Response<String> wr = readInternetDataGet(context, apiCredentials, url, headers);
     Response<JSONArray> ret = new Response<JSONArray>();
     wr.fill(ret);
@@ -154,7 +193,7 @@ public class RemoteSystemClient {
    * @throws URISyntaxException      if url is invalid
    */
   public static Response<JSONObject> getJSONObjectFromUrl(Context context, GHCredentials apiCredentials, String url, Map<String, String> headers)
-          throws NoRouteToHostException, AuthenticationException, IOException, JSONException, URISyntaxException {
+          throws AuthenticationException, IOException, JSONException, URISyntaxException {
     Response<String> wr = readInternetDataGet(context, apiCredentials, url, headers);
     Response<JSONObject> ret = new Response<JSONObject>();
     wr.fill(ret);
@@ -165,41 +204,45 @@ public class RemoteSystemClient {
   }
 
   private static Response<String> readInternetDataGet(Context context, GHCredentials apiCredentials, String url, Map<String, String> headers)
-          throws NoRouteToHostException, URISyntaxException, IOException, ClientProtocolException, AuthenticationException, UnsupportedEncodingException {
+          throws URISyntaxException, IOException, AuthenticationException {
     if (!Utils.isInternetConnectionAvailable(context))
       throw new NoRouteToHostException("Network not available");
 
     Log.d(TAG, "Going to perform GET request to " + url);
 
-    URI uri = new URI(url);
-    DefaultHttpClient httpClient = prepareHttpClient(uri);
+    try {
+      URI uri = new URI(url);
+      DefaultHttpClient httpClient = prepareHttpClient(uri);
 
-    HttpGet httpGet = new HttpGet(uri);
-    setAuthenticationHeader(httpGet, apiCredentials);
-    setHeaders(httpGet, requestGzipCompression(headers));
+      HttpGet httpGet = new HttpGet(uri);
+      setAuthenticationHeader(httpGet, apiCredentials);
+      setHeaders(httpGet, requestGzipCompression(headers));
 
-    // create response object here to measure request duration
-    Response<String> ret = new Response<String>();
-    ret.requestStartTime = System.currentTimeMillis();
+      // create response object here to measure request duration
+      Response<String> ret = new Response<String>();
+      ret.requestStartTime = System.currentTimeMillis();
 
-    HttpResponse httpResponse = httpClient.execute(httpGet);
-    int code = httpResponse.getStatusLine().getStatusCode();
+      HttpResponse httpResponse = httpClient.execute(httpGet);
+      int code = httpResponse.getStatusLine().getStatusCode();
 
-    parseResponseHeaders(context, httpResponse, ret);
-    Log.d(TAG, "Response http code: " + code);
-    if (code == HttpStatus.SC_NOT_MODIFIED) {
-      ret.notModified = true;
+      parseResponseHeaders(context, httpResponse, ret);
+      Log.d(TAG, "Response http code: " + code);
+      if (code == HttpStatus.SC_NOT_MODIFIED) {
+        ret.notModified = true;
+        ret.snapRequestDuration();
+        writeReponseInfo(ret, context);
+        return ret;
+      }
+      processStandardHttpResponseCodes(httpResponse);
+
+      ret.data = getResponseContentAsString(httpResponse);
       ret.snapRequestDuration();
       writeReponseInfo(ret, context);
       return ret;
+    } catch (IOException e) {
+      logGithubAPiCallError(context, e);
+      throw e;
     }
-    processStandardHttpResponseCodes(httpResponse);
-
-    ret.data = getResponseContentAsString(httpResponse);
-    ret.snapRequestDuration();
-    writeReponseInfo(ret, context);
-    return ret;
-
   }
 
   /**
@@ -217,7 +260,7 @@ public class RemoteSystemClient {
     return headers;
   }
 
-  protected static String getResponseContentAsString(HttpResponse httpResponse) throws IOException, UnsupportedEncodingException {
+  protected static String getResponseContentAsString(HttpResponse httpResponse) throws IOException {
     if (httpResponse == null)
       return null;
     HttpEntity httpEntity = httpResponse.getEntity();
@@ -255,30 +298,36 @@ public class RemoteSystemClient {
     }
   }
 
-  public static Response<?> postNoData(Context context, GHCredentials apiCredentials, String url, Map<String, String> headers) throws NoRouteToHostException,
-          URISyntaxException, IOException, ClientProtocolException, AuthenticationException, UnsupportedEncodingException {
+  public static Response<?> postNoData(Context context, GHCredentials apiCredentials, String url, Map<String, String> headers) throws
+          URISyntaxException, IOException, AuthenticationException {
     if (!Utils.isInternetConnectionAvailable(context))
       throw new NoRouteToHostException("Network not available");
     Log.d(TAG, "Going to perform POST request to " + url);
-    URI uri = new URI(url);
-    DefaultHttpClient httpClient = prepareHttpClient(uri);
 
-    HttpPost httpPost = new HttpPost(uri);
-    setAuthenticationHeader(httpPost, apiCredentials);
-    setHeaders(httpPost, headers);
+    try {
+      URI uri = new URI(url);
+      DefaultHttpClient httpClient = prepareHttpClient(uri);
 
-    // create response object here to measure request duration
-    Response<String> ret = new Response<String>();
-    ret.requestStartTime = System.currentTimeMillis();
+      HttpPost httpPost = new HttpPost(uri);
+      setAuthenticationHeader(httpPost, apiCredentials);
+      setHeaders(httpPost, headers);
 
-    HttpResponse httpResponse = httpClient.execute(httpPost);
-    parseResponseHeaders(context, httpResponse, ret);
+      // create response object here to measure request duration
+      Response<String> ret = new Response<String>();
+      ret.requestStartTime = System.currentTimeMillis();
 
-    processStandardHttpResponseCodes(httpResponse);
+      HttpResponse httpResponse = httpClient.execute(httpPost);
+      parseResponseHeaders(context, httpResponse, ret);
 
-    ret.snapRequestDuration();
-    writeReponseInfo(ret, context);
-    return ret;
+      processStandardHttpResponseCodes(httpResponse);
+
+      ret.snapRequestDuration();
+      writeReponseInfo(ret, context);
+      return ret;
+    } catch (IOException e) {
+      logGithubAPiCallError(context, e);
+      throw e;
+    }
   }
 
 
@@ -287,74 +336,84 @@ public class RemoteSystemClient {
       request.addHeader(BasicScheme.authenticate(new UsernamePasswordCredentials(apiCredentials.getUsername(), apiCredentials.getPassword()), "UTF-8", false));
   }
 
-  protected static void setJsonContentTypeHeader(HttpRequestBase request){
+  protected static void setJsonContentTypeHeader(HttpRequestBase request) {
     request.setHeader("Content-Type", "application/json; charset=utf-8");
   }
 
   public static Response<String> putToURL(Context context, GHCredentials apiCredentials, String url, Map<String, String> headers, String content)
-          throws NoRouteToHostException, URISyntaxException, IOException, ClientProtocolException, AuthenticationException {
+          throws URISyntaxException, IOException, AuthenticationException {
     if (!Utils.isInternetConnectionAvailable(context))
       throw new NoRouteToHostException("Network not available");
 
     Log.d(TAG, "Going to perform PUT request to " + url);
 
-    URI uri = new URI(url);
-    DefaultHttpClient httpClient = prepareHttpClient(uri);
+    try {
+      URI uri = new URI(url);
+      DefaultHttpClient httpClient = prepareHttpClient(uri);
 
 
-    HttpPut httpPut = new HttpPut(uri);
+      HttpPut httpPut = new HttpPut(uri);
 
-    setAuthenticationHeader(httpPut, apiCredentials);
-    setJsonContentTypeHeader(httpPut);
-    setHeaders(httpPut, requestGzipCompression(headers));
+      setAuthenticationHeader(httpPut, apiCredentials);
+      setJsonContentTypeHeader(httpPut);
+      setHeaders(httpPut, requestGzipCompression(headers));
 
-    if (content != null)
-      httpPut.setEntity(new StringEntity(content, "UTF-8"));
+      if (content != null)
+        httpPut.setEntity(new StringEntity(content, "UTF-8"));
 
-    // create response object here to measure request duration
-    Response<String> ret = new Response<String>();
-    ret.requestStartTime = System.currentTimeMillis();
+      // create response object here to measure request duration
+      Response<String> ret = new Response<String>();
+      ret.requestStartTime = System.currentTimeMillis();
 
-    HttpResponse httpResponse = httpClient.execute(httpPut);
+      HttpResponse httpResponse = httpClient.execute(httpPut);
 
-    parseResponseHeaders(context, httpResponse, ret);
+      parseResponseHeaders(context, httpResponse, ret);
 
-    processStandardHttpResponseCodes(httpResponse);
+      processStandardHttpResponseCodes(httpResponse);
 
-    ret.data = getResponseContentAsString(httpResponse);
+      ret.data = getResponseContentAsString(httpResponse);
 
-    ret.snapRequestDuration();
-    writeReponseInfo(ret, context);
-    return ret;
+      ret.snapRequestDuration();
+      writeReponseInfo(ret, context);
+      return ret;
+    } catch (IOException e) {
+      logGithubAPiCallError(context, e);
+      throw e;
+    }
   }
 
   public static Response<String> deleteToURL(Context context, GHCredentials apiCredentials, String url, Map<String, String> headers)
-          throws NoRouteToHostException, URISyntaxException, IOException, ClientProtocolException, AuthenticationException {
+          throws URISyntaxException, IOException, AuthenticationException {
     if (!Utils.isInternetConnectionAvailable(context))
       throw new NoRouteToHostException("Network not available");
 
-    URI uri = new URI(url);
-    DefaultHttpClient httpClient = prepareHttpClient(uri);
+    try {
+      URI uri = new URI(url);
+      DefaultHttpClient httpClient = prepareHttpClient(uri);
 
-    HttpDelete httpPut = new HttpDelete(uri);
-    setAuthenticationHeader(httpPut, apiCredentials);
-    setHeaders(httpPut, requestGzipCompression(headers));
+      HttpDelete httpPut = new HttpDelete(uri);
+      setAuthenticationHeader(httpPut, apiCredentials);
+      setHeaders(httpPut, requestGzipCompression(headers));
 
-    // create response object here to measure request duration
-    Response<String> ret = new Response<String>();
-    ret.requestStartTime = System.currentTimeMillis();
+      // create response object here to measure request duration
+      Response<String> ret = new Response<String>();
+      ret.requestStartTime = System.currentTimeMillis();
 
-    HttpResponse httpResponse = httpClient.execute(httpPut);
+      HttpResponse httpResponse = httpClient.execute(httpPut);
 
-    parseResponseHeaders(context, httpResponse, ret);
+      parseResponseHeaders(context, httpResponse, ret);
 
-    processStandardHttpResponseCodes(httpResponse);
+      processStandardHttpResponseCodes(httpResponse);
 
-    ret.data = getResponseContentAsString(httpResponse);
+      ret.data = getResponseContentAsString(httpResponse);
 
-    ret.snapRequestDuration();
-    writeReponseInfo(ret, context);
-    return ret;
+      ret.snapRequestDuration();
+      writeReponseInfo(ret, context);
+      return ret;
+    } catch (IOException e) {
+      logGithubAPiCallError(context, e);
+      throw e;
+    }
   }
 
   protected static void processStandardHttpResponseCodes(HttpResponse httpResponse) throws AuthenticationException, IOException {

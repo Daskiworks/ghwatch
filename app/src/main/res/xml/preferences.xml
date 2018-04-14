@@ -133,6 +133,10 @@
       <com.daskiworks.ghwatch.view.preference.ShowTimestampPreference
         android:key="pref_serverInfo_lastUnredNotifBackRequestTimestamp"
         android:title="@string/pref_serverInfo_lastUnredNotifBackRequestTimestamp"/>
+
+      <SwitchPreference android:key="pref_logGithubAPiCallErrorToFile"
+                        android:title="@string/pref_logGithubAPiCallErrorToFile"
+                        android:defaultValue="false"/>
     </PreferenceScreen>
   </PreferenceCategory>
 

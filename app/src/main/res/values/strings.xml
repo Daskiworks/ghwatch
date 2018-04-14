@@ -210,6 +210,7 @@
   <string name="pref_serverInfo_APILimitResetTimestamp">API request limit reset (X-RateLimit-Reset)</string>
   <string name="pref_serverInfo_lastRequestDuration">Last response time [ms]</string>
   <string name="pref_serverInfo_lastUnredNotifBackRequestTimestamp">Last Unread Notifications check</string>
+  <string name="pref_logGithubAPiCallErrorToFile">Log Github API call errors to file</string>
 
   <string-array name="pref_serverCheckPeriod_entries">
     <item>1 minute</item>

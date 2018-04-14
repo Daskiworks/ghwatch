@@ -37,6 +37,7 @@ import com.daskiworks.ghwatch.LoginDialogFragment.LoginDialogListener;
 import com.daskiworks.ghwatch.alarm.AlarmBroadcastReceiver;
 import com.daskiworks.ghwatch.backend.AuthenticationManager;
 import com.daskiworks.ghwatch.backend.PreferencesUtils;
+import com.daskiworks.ghwatch.backend.RemoteSystemClient;
 import com.daskiworks.ghwatch.model.GHUserLoginInfo;
 
 /**
@@ -205,6 +206,8 @@ public class SettingsActivity extends ActivityBase implements OnSharedPreference
       } else {
         notificationSoundPref.setSummary(getString(R.string.notificationSoundDisabled));
       }
+
+      findPreference(PreferencesUtils.PREF_LOG_GITHUB_API_CALL_ERROR_TO_FILE).setSummary(RemoteSystemClient.getErrorLogFile(getActivity()).getAbsolutePath());
 
     }
 

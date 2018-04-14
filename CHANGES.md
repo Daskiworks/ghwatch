@@ -1,7 +1,9 @@
 GH::watch changelog
 ===================
 
+
 - \#109 fixed login when password contains utf-8 characters
+- \#108 added ability to log Github API call errors into file to better diagnose cause - must be enabled in app settings
 - patched typo "due" to "due to" in distinct texts 
 
 ## v1.25 (Dec 4th, 2017)
