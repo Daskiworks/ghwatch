@@ -268,7 +268,7 @@
 
   <!-- New Version dialog -->
   <string name="dialog_nv_title">New version</string>
-  <string name="dialog_nv_intro_text">Version 1.26 brings bugfix of login if password contains utf-8 characters. It also allows to log Github API call errors into file for easier troubleshooting (must be enabled in \'Settings\' > \'GitHub API request info\').</string>
+  <string name="dialog_nv_intro_text">Version 1.27 brings bugfix of connection error during huge unread notifications list loading.</string>
 
   <!-- About dialog -->
   <string name="dialog_about_waranty_info">DISCLAIMER OF WARRANTY: The Software is provided \"AS IS\" and \"WITH ALL FAULTS,\" without warranty of any kind, including without limitation the warranties of merchantability, fitness for a particular purpose and non-infringement. The Licensor makes no warranty that the Software is free of defects or is suitable for any particular purpose. In no event shall the Licensor be responsible for loss or damages arising from the installation or use of the Software, including but not limited to any indirect, punitive, special, incidental or consequential damages of any character including, without limitation, damages for loss of goodwill, work stoppage, computer failure or malfunction, or any and all other commercial damages or losses. The entire risk as to the quality and performance of the Software is borne by you. Should the Software prove defective, you and not the Licensor assume the entire cost of any service and repair.</string>

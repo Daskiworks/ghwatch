@@ -1,7 +1,7 @@
 GH::watch changelog
 ===================
 
-
+## v1.27 (Apr 23th, 2018)
 - \#110 patched notifications loading error due to wrong pagination header parsing 
 
 ## v1.26 (Apr 14th, 2018)
