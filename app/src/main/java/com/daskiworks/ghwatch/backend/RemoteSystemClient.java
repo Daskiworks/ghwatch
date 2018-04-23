@@ -473,7 +473,8 @@ public class RemoteSystemClient {
     if (linkH != null) {
       for (String linkPart : linkH.split(",")) {
         if (linkPart != null && linkPart.contains("rel=\"next\"")) {
-          ret.linkNext = Utils.trimToNull(linkPart.substring(1, linkPart.indexOf(">;")));
+          linkPart = linkPart.trim();
+          ret.linkNext = Utils.trimToNull(linkPart.substring(linkPart.indexOf("<")+1, linkPart.indexOf(">;")));
         }
       }
     }
