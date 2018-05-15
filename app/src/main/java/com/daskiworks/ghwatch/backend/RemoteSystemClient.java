@@ -45,6 +45,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.protocol.ClientContext;
+import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -60,7 +61,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -75,6 +75,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.zip.GZIPInputStream;
+
+import javax.net.ssl.SSLSocketFactory;
 
 /**
  * Helper class used to communicate with server.
@@ -436,6 +438,8 @@ public class RemoteSystemClient {
 
   protected static DefaultHttpClient prepareHttpClient(URI uri) {
     DefaultHttpClient httpClient = new DefaultHttpClient();
+    Scheme https = new Scheme("https", new TlsSniSocketFactory(), 443);
+    httpClient.getConnectionManager().getSchemeRegistry().register(https);
     HttpParams params = httpClient.getParams();
     HttpConnectionParams.setConnectionTimeout(params, 30000);
     HttpConnectionParams.setSoTimeout(params, 30000);
