@@ -15,8 +15,8 @@
  -->
  <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.daskiworks.ghwatch"
-    android:versionCode="1280"
-    android:versionName="1.28" >
+    android:versionCode="1290"
+    android:versionName="1.29" >
 
     <uses-sdk />
 
