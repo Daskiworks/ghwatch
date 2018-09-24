@@ -1,6 +1,9 @@
 GH::watch changelog
 ===================
 
+## v1.28 (Sep 24th, 2018)
+- `targetSdkVersion` updated to 27, support libraries updated to latest versions
+
 ## v1.27 (Apr 23th, 2018)
 - \#110 patched notifications loading error due to wrong pagination header parsing 
 
