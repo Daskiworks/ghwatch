@@ -22,6 +22,7 @@
                                                  android:layout_height="match_parent"
                                                  android:fitsSystemWindows="true"
                                                  tools:context=".MainActivity">
+
   <LinearLayout
     android:id="@+id/initial_progress"
     android:layout_width="match_parent"
@@ -35,19 +36,41 @@
       android:indeterminate="true"/>
   </LinearLayout>
 
-  <android.support.v4.widget.SwipeRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/swipe_container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:visibility="gone">
+  <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:id="@+id/swipe_around"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:visibility="gone">
 
-    <ListView
-      android:id="@+id/list"
+    <android.support.v4.widget.SwipeRefreshLayout
+      xmlns:android="http://schemas.android.com/apk/res/android"
+      android:id="@+id/swipe_container"
       android:layout_width="match_parent"
-      android:layout_height="match_parent">
-    </ListView>
-  </android.support.v4.widget.SwipeRefreshLayout>
+      android:layout_height="match_parent"
+      android:layout_above="@id/toolbar_bottom">
+
+      <ListView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+      </ListView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <android.support.v7.widget.Toolbar
+      android:id="@+id/toolbar_bottom"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
+      android:background="?attr/colorPrimary"
+      android:minHeight="?attr/actionBarSize">
+
+      <!--<android.support.v7.widget.SwitchCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/ic_clear_all_white_36dp"
+        android:text="Order asc"/>-->
+    </android.support.v7.widget.Toolbar>
+  </RelativeLayout>
 
   <android.support.v4.widget.SwipeRefreshLayout
     android:id="@+id/swipe_container_2"

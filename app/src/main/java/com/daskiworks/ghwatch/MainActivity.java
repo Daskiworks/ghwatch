@@ -1,6 +1,6 @@
 /*
  * Copyright 2014 contributors as indicated by the @authors tag.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -24,6 +24,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -122,6 +123,18 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
     // we don't look for swipes.
     notificationsListView.setOnScrollListener(touchListener.makeScrollListener());
 
+    Toolbar toolbarBottom = (Toolbar) findViewById(R.id.toolbar_bottom);
+    if (toolbarBottom != null) {
+      toolbarBottom.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+          //TODO change this once we remove action bar menu
+          return onOptionsItemSelected(item);
+        }
+      });
+      toolbarBottom.inflateMenu(R.menu.main_activity_toolbar);
+    }
+
     initSwipeLayout(this);
   }
 
@@ -193,6 +206,7 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
     return super.onCreateOptionsMenu(menu);
   }
 
+
   protected void setDebugMenuItemVisibility(Menu menu, int id) {
     MenuItem mi = menu.findItem(id);
     if (mi != null) {
@@ -202,8 +216,8 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
 
   @Override
   public boolean onPrepareOptionsMenu(Menu menu) {
-    menu.findItem(R.id.action_open_filter_dialog).setVisible(repositoriesListViewTablet == null && notificationsListAdapter != null && !notificationsListAdapter.isEmpty());
-    menu.findItem(R.id.action_all_read).setVisible(notificationsListAdapter != null && !notificationsListAdapter.isEmpty());
+    //menu.findItem(R.id.action_open_filter_dialog).setVisible(repositoriesListViewTablet == null && notificationsListAdapter != null && !notificationsListAdapter.isEmpty());
+    //menu.findItem(R.id.action_all_read).setVisible(notificationsListAdapter != null && !notificationsListAdapter.isEmpty());
     return super.onPrepareOptionsMenu(menu);
   }
 
@@ -252,6 +266,7 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
         }
         PreferencesUtils.storeDonationTimestamp(this, l);
         Toast.makeText(MainActivity.this, "Donation status toggled to " + (l != null ? "on" : "off"), Toast.LENGTH_SHORT).show();
+        return true;
       default:
         return false;
     }
@@ -521,10 +536,10 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
 
           if (viewData.notificationStream.size() == 0) {
             swipeLayout2.setVisibility(View.VISIBLE);
-            swipeLayout.setVisibility(View.GONE);
+            contentExistsLayout.setVisibility(View.GONE);
           } else {
             swipeLayout2.setVisibility(View.GONE);
-            swipeLayout.setVisibility(View.VISIBLE);
+            contentExistsLayout.setVisibility(View.VISIBLE);
           }
         }
       } finally {

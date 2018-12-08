@@ -68,6 +68,7 @@ public abstract class ActivityBase extends AppCompatActivity {
   /**
    * Swipe layout support. A {@link #initSwipeLayout(OnRefreshListener)} must be called in {@link #onCreate(Bundle)} of activity.
    */
+  protected View contentExistsLayout;
   protected SwipeRefreshLayout swipeLayout;
   protected SwipeRefreshLayout swipeLayout2;
   protected View initialProgressBar;
@@ -80,7 +81,10 @@ public abstract class ActivityBase extends AppCompatActivity {
    * @param listener called on refresh swipe
    */
   protected void initSwipeLayout(OnRefreshListener listener) {
+    contentExistsLayout = (View) findViewById(R.id.swipe_around);
     swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+    if(contentExistsLayout == null)
+      contentExistsLayout = swipeLayout;
     if (swipeLayout != null) {
       swipeLayout.setOnRefreshListener(listener);
       swipeLayout.setColorSchemeResources(android.R.color.holo_red_light, R.color.apptheme_colorPrimary, android.R.color.holo_orange_light, R.color.apptheme_colorPrimary);

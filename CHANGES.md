@@ -1,6 +1,8 @@
 GH::watch changelog
 ===================
 
+- \#115 action buttons moved from top action bar to bottom toolbar
+
 ## v1.28 (Sep 24th, 2018)
 - `targetSdkVersion` updated to 27, support libraries updated to latest versions
 

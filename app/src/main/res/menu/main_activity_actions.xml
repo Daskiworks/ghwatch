@@ -18,17 +18,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-      android:id="@+id/action_open_filter_dialog"
-      android:icon="@drawable/ic_filter_list_white_36dp"
-      app:showAsAction="always"
-      android:title="@string/action_filter_by_repo"/>
-    <item
-        android:id="@+id/action_all_read"
-        android:icon="@drawable/ic_clear_all_white_36dp"
-        app:showAsAction="ifRoom"
-        android:title="@string/action_all_read"/>
-    <item
+     <item
         android:id="@+id/action_notifCheck"
         android:orderInCategory="103"
         app:showAsAction="never"
