@@ -7,11 +7,11 @@ GitHub fires it's notifications for repositories you are watching or for actions
 This application periodically checks GitHub server for new unread notifications and fire Android notification 
 with configurable sound and vibration to alert you. You can show list of unread GitHub notifications, filter 
 them by repositories, mark one or all notifications as read, mute selected notification thread, or view detail 
-informations about notified event. You can also show list of Watched repositories and unwatch them or view 
-detailed informations.
+information about notified event. You can also show list of Watched repositories and unwatch them or view 
+detailed information.
 
 <a href="https://play.google.com/store/apps/details?id=com.daskiworks.ghwatch" alt="Download from Google Play">
-  <img src="http://www.android.com/images/brand/android_app_on_play_large.png">
+  <img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/>
 </a>
 
 Tip: You can lighten your email box thanks to this application also. 
