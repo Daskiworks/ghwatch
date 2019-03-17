@@ -15,6 +15,7 @@
  */
 package com.daskiworks.ghwatch.backend;
 
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -24,6 +25,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -96,9 +98,13 @@ public class UnreadNotificationsService {
    */
   public static final int ANDROID_NOTIFICATION_MAIN_ID = 0;
   /**
-   * Group key for Bundlen Android notification used for Noughat+
+   * Group key for Bundled Android notification used for Noughat+
    */
   private static final String ANDROID_NOTIFICATION_GROUP_KEY = "GHWatch";
+  /**
+   * ID of the notification channel used for github notifications
+   */
+  private static final String CHANNEL_ID = "nch_github_not";
 
   // few fields initialized in constructor
   private Context context;
@@ -120,6 +126,7 @@ public class UnreadNotificationsService {
     this.persistFile = context.getFileStreamPath(persistFileName);
     this.authenticationManager = AuthenticationManager.getInstance();
     this.notificationColor = context.getResources().getColor(R.color.apptheme_colorPrimary);
+    createNotificationChannel();
   }
 
   /**
@@ -329,7 +336,6 @@ public class UnreadNotificationsService {
     return nswd;
   }
 
-  ;
 
   /**
    * Switch if we will use optimized pooling or not.
@@ -613,7 +619,7 @@ public class UnreadNotificationsService {
   private static final String NUM_OF_BADGED_ANDROID_NOTIFICATIONS = "NUM_OF_BADGED_ANDROID_NOTIFICATIONS";
 
   private android.app.Notification buildAndroidNotificationBundledStyleSummary(Date timestamp) {
-    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
+    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
             .setContentTitle(context.getString(R.string.app_name))
             .setContentText(context.getString(R.string.an_title_more))
             .setSmallIcon(R.drawable.notification)
@@ -632,8 +638,25 @@ public class UnreadNotificationsService {
     return mBuilder.build();
   }
 
+  private void createNotificationChannel() {
+    // Create the NotificationChannel, but only on API 26+ because
+    // the NotificationChannel class is new and not in the support library
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      CharSequence name = context.getString(R.string.an_channel_name);
+      String description = context.getString(R.string.an_channel_description);
+      int importance = NotificationManager.IMPORTANCE_DEFAULT;
+      NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+      channel.setDescription(description);
+      // Register the channel with the system; you can't change the importance
+      // or other notification behaviors after this
+      NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+      notificationManager.createNotificationChannel(channel);
+    }
+  }
+
+
   private android.app.Notification buildAndroidNotificationBundledStyleDetail(Notification n) {
-    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
+    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
             .setContentTitle(n.getRepositoryFullName())
             .setContentText(n.getSubjectTitle())
             .setSmallIcon(R.drawable.notification)
@@ -662,7 +685,7 @@ public class UnreadNotificationsService {
   protected void fireAndroidNotificationInboxStyle(NotificationStream newStream) {
     Log.i(TAG, "Going to fire pre Noughat inbox style notification");
 
-    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.notification)
+    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context,CHANNEL_ID).setSmallIcon(R.drawable.notification)
             .setContentTitle(context.getString(R.string.an_title_more)).setPriority(NotificationCompat.PRIORITY_DEFAULT);
     mBuilder.setAutoCancel(true);
 

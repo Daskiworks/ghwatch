@@ -1,7 +1,10 @@
 GH::watch changelog
 ===================
 
-- \#115 action buttons moved from top action bar to bottom toolbar
+## v1.29 (Mar 17th, 2019)
+- \#116 patched android notification firing on android P
+- \#115 action buttons moved from top action bar to bottom toolbar to better support modern tall displays. 
+  It also allows to add additional list controls (filters, ordering) in the future. 
 
 ## v1.28 (Sep 24th, 2018)
 - `targetSdkVersion` updated to 27, support libraries updated to latest versions
