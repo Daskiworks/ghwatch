@@ -1,6 +1,9 @@
 GH::watch changelog
 ===================
 
+## v1.30 (Mar 18th, 2019)
+- \#117 patched main window crash on tablets
+
 ## v1.29 (Mar 17th, 2019)
 - \#116 patched android notification firing on android P
 - \#115 action buttons moved from top action bar to bottom toolbar to better support modern tall displays. 

@@ -128,11 +128,14 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
       toolbarBottom.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
         @Override
         public boolean onMenuItemClick(MenuItem item) {
-          //TODO change this once we remove action bar menu
           return onOptionsItemSelected(item);
         }
       });
-      toolbarBottom.inflateMenu(R.menu.main_activity_toolbar);
+      if (repositoriesListViewTablet == null)
+        toolbarBottom.inflateMenu(R.menu.main_activity_toolbar);
+      else
+        toolbarBottom.inflateMenu(R.menu.main_activity_toolbar_tablet);
+
     }
 
     initSwipeLayout(this);
@@ -201,7 +204,9 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
     setDebugMenuItemVisibility(menu, R.id.action_notifCheck);
     setDebugMenuItemVisibility(menu, R.id.action_donationTogle);
     if (repositoriesListViewTablet != null) {
-      menu.findItem(R.id.action_open_filter_dialog).setVisible(false);
+      if (menu.findItem(R.id.action_open_filter_dialog) != null) {
+        menu.findItem(R.id.action_open_filter_dialog).setVisible(false);
+      }
     }
     return super.onCreateOptionsMenu(menu);
   }

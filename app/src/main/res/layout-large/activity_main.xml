@@ -23,20 +23,26 @@
                                         tools:context=".MainActivity">
 
   <!-- The main content view -->
-  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="top"
-                android:orientation="vertical">
-
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="top"
+    android:orientation="vertical">
     <include
       android:id="@+id/main_appbar"
       layout="@layout/activity_appbar"/>
+
+  <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:gravity="top"
+                  android:visibility="visible">
 
     <LinearLayout
       android:id="@+id/main_content"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:layout_above="@id/toolbar_bottom"
       android:fitsSystemWindows="true"
       android:orientation="horizontal">
 
@@ -69,6 +75,17 @@
 
       <include layout="@layout/activity_main_main"/>
     </LinearLayout>
+
+    <android.support.v7.widget.Toolbar
+      android:id="@+id/toolbar_bottom"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
+      android:background="?attr/colorPrimary"
+      android:minHeight="?attr/actionBarSize"
+      >
+    </android.support.v7.widget.Toolbar>
+  </RelativeLayout>
   </LinearLayout>
   <!-- The navigation drawer -->
   <include
