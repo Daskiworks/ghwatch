@@ -18,4 +18,5 @@
     <color name="apptheme_colorPrimaryDark">#5d4037</color>
     <color name="apptheme_colorAccent">#fb8c00</color>
     <color name="start_page_text_color">#5d4037</color>
+    <color name="light_grey">#ffaaaaaa</color>
 </resources>

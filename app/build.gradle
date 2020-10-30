@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-  compileSdkVersion 27
-  buildToolsVersion '28.0.3'
+  compileSdkVersion 28
+  buildToolsVersion '30.0.0'
   useLibrary 'org.apache.http.legacy'
 
   defaultConfig {
     applicationId "com.daskiworks.ghwatch"
     minSdkVersion 16
-    targetSdkVersion 27
+    targetSdkVersion 28
 
     testApplicationId "com.daskiworks.ghwatch.test"
     testInstrumentationRunner "android.test.InstrumentationTestRunner"
@@ -22,21 +22,15 @@ android {
   }
 }
 
-repositories {
-  maven {
-    url "https://jitpack.io"
-  }
-}
-
 dependencies {
-  implementation 'com.android.support:support-v4:27.1.1'
+  implementation 'com.android.support:support-v4:28.0.0'
   implementation 'com.google.android.gms:play-services-wallet:16.0.0'
   implementation 'com.google.android.gms:play-services-analytics:16.0.3'
   implementation 'me.leolin:ShortcutBadger:1.1.19@aar'
-  implementation 'com.github.fiskurgit:ChipCloud:2.2.3'
-  androidTestImplementation 'com.android.support:support-v4:27.1.1'
-  implementation 'com.android.support:animated-vector-drawable:27.1.1'
-  implementation 'com.android.support:appcompat-v7:27.1.1'
-  implementation 'com.android.support:design:27.1.1'
+  /* implementation 'com.github.fiskurgit:ChipCloud:2.2.3' */
+  androidTestImplementation 'com.android.support:support-v4:28.0.0'
+  implementation 'com.android.support:animated-vector-drawable:28.0.0'
+  implementation 'com.android.support:appcompat-v7:28.0.0'
+  implementation 'com.android.support:design:28.0.0'
   implementation 'de.hdodenhof:circleimageview:2.2.0'
 }

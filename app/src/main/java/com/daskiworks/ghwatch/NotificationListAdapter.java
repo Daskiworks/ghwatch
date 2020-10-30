@@ -46,7 +46,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.RejectedExecutionException;
 
-import eu.fiskur.chipcloud.ChipCloud;
+//import eu.fiskur.chipcloud.ChipCloud;
 
 /**
  * {@link ListView} adapter used to show list of notifications from {@link NotificationStream}.
@@ -141,6 +141,7 @@ public class NotificationListAdapter extends BaseAdapter {
       tvStatus.setBackgroundColor(Color.TRANSPARENT);
     }
 
+    /*
     ChipCloud tagGroup = (ChipCloud) listItem.findViewById(R.id.chip_cloud);
     List<Label> ll = notification.getSubjectLabels();
     if (PreferencesUtils.getBoolean(listItem.getContext(), PreferencesUtils.PREF_SERVER_LABELS_LOADING) && ll != null && !ll.isEmpty()) {
@@ -152,6 +153,7 @@ public class NotificationListAdapter extends BaseAdapter {
     } else {
       tagGroup.setVisibility(View.GONE);
     }
+    */
   }
 
   @Override

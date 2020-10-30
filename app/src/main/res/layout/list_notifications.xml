@@ -138,7 +138,7 @@
         android:layout_toStartOf="@id/button_menu"/>
 
     </RelativeLayout>
-
+<!--
     <eu.fiskur.chipcloud.ChipCloud
       xmlns:chipcloud="http://schemas.android.com/apk/res-auto"
       android:id="@+id/chip_cloud"
@@ -148,7 +148,7 @@
       android:layout_marginTop="4dp"
       android:visibility="gone"
       chipcloud:selectMode="none"/>
-
+-->
   </LinearLayout>
 
 </LinearLayout>
