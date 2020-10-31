@@ -40,8 +40,8 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.daskiworks.ghwatch.backend.AuthenticationManager;
-import com.daskiworks.ghwatch.backend.AuthenticationManager.LoginViewData;
+import com.daskiworks.ghwatch.auth.AuthenticationManager;
+import com.daskiworks.ghwatch.auth.AuthenticationManager.LoginViewData;
 import com.daskiworks.ghwatch.model.BaseViewData;
 import com.daskiworks.ghwatch.model.GHUserLoginInfo;
 import com.daskiworks.ghwatch.model.LoadingStatus;

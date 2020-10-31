@@ -16,19 +16,13 @@
 package com.daskiworks.ghwatch.backend;
 
 import android.content.Context;
-import android.util.Log;
 
-import com.daskiworks.ghwatch.Utils;
-import com.daskiworks.ghwatch.model.Label;
+import com.daskiworks.ghwatch.auth.AuthenticationManager;
 import com.daskiworks.ghwatch.model.Notification;
-import com.daskiworks.ghwatch.model.NotificationStream;
 import com.daskiworks.ghwatch.model.NotificationViewData;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.File;
 
 /**
  * Loader used to load Labels for Pull Requests during notification detail loading.

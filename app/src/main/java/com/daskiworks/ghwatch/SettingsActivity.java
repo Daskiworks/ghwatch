@@ -15,7 +15,6 @@
  */
 package com.daskiworks.ghwatch;
 
-import android.app.ActionBar;
 import android.app.backup.BackupManager;
 import android.content.Context;
 import android.content.Intent;
@@ -35,7 +34,7 @@ import android.view.MenuItem;
 
 import com.daskiworks.ghwatch.LoginDialogFragment.LoginDialogListener;
 import com.daskiworks.ghwatch.alarm.AlarmBroadcastReceiver;
-import com.daskiworks.ghwatch.backend.AuthenticationManager;
+import com.daskiworks.ghwatch.auth.AuthenticationManager;
 import com.daskiworks.ghwatch.backend.PreferencesUtils;
 import com.daskiworks.ghwatch.backend.RemoteSystemClient;
 import com.daskiworks.ghwatch.model.GHUserLoginInfo;

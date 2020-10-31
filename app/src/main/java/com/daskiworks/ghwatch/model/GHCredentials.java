@@ -17,7 +17,7 @@ package com.daskiworks.ghwatch.model;
 
 import java.io.Serializable;
 
-import com.daskiworks.ghwatch.backend.AuthenticationManager;
+import com.daskiworks.ghwatch.auth.AuthenticationManager;
 import com.daskiworks.ghwatch.backend.RemoteSystemClient;
 
 /**

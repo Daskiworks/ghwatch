@@ -15,9 +15,10 @@
  */
 package com.daskiworks.ghwatch;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.DialogFragment;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
@@ -30,7 +31,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -38,7 +38,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.daskiworks.ghwatch.backend.AuthenticationManager;
+import com.daskiworks.ghwatch.auth.AuthenticationManager;
+import com.daskiworks.ghwatch.auth.GithubAccountAuthenticator;
 import com.daskiworks.ghwatch.backend.DonationService;
 import com.daskiworks.ghwatch.backend.PreferencesUtils;
 import com.daskiworks.ghwatch.image.ImageLoader;
@@ -243,7 +244,13 @@ public abstract class ActivityBase extends AppCompatActivity {
   }
 
   protected boolean checkUserLoggedIn() {
-    if (AuthenticationManager.getInstance().loadCurrentUser(this) == null) {
+
+    AccountManager accountManager = AccountManager.get(this);
+    Account[] accs = accountManager.getAccountsByType(GithubAccountAuthenticator.ACCOUNT_TYPE);
+
+    Log.d(TAG, "Existing accounts: " + accs);
+
+    if (accs == null || accs.length == 0) {
       Intent intent = new Intent(this, StartActivity.class);
       intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import android.content.Context;
 
 import com.daskiworks.ghwatch.Utils;
+import com.daskiworks.ghwatch.auth.AuthenticationManager;
 import com.daskiworks.ghwatch.model.LoadingStatus;
 import com.daskiworks.ghwatch.model.StringViewData;
 

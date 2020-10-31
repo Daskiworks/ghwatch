@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.daskiworks.ghwatch.backend;
+package com.daskiworks.ghwatch.auth;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,6 +37,9 @@ import android.util.Log;
 
 import com.daskiworks.ghwatch.ActivityTracker;
 import com.daskiworks.ghwatch.Utils;
+import com.daskiworks.ghwatch.backend.GHConstants;
+import com.daskiworks.ghwatch.backend.OTPAuthenticationException;
+import com.daskiworks.ghwatch.backend.RemoteSystemClient;
 import com.daskiworks.ghwatch.backend.RemoteSystemClient.Response;
 import com.daskiworks.ghwatch.model.AccountType;
 import com.daskiworks.ghwatch.model.BaseViewData;
@@ -108,7 +111,6 @@ public class AuthenticationManager {
   /**
    * Get instance of manager for use.
    * 
-   * @param context
    * @return
    */
   public static AuthenticationManager getInstance() {
@@ -197,6 +199,11 @@ public class AuthenticationManager {
     }
     ActivityTracker.sendEvent(context, ActivityTracker.CAT_BE, "login", trackLabel, 0L);
     return nswd;
+  }
+
+  public void storeAuthTokenTmp(Context context, String username, String token){
+    GHUserLoginInfo ui = new GHUserLoginInfo(AccountType.LOCAL, username, token);
+    storeCurrentUserLogin(context, ui);
   }
 
   private String remoteLogin(Context context, GHCredentials cred, String otp) throws JSONException, NoRouteToHostException, AuthenticationException,

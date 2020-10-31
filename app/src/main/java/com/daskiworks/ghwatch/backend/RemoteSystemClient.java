@@ -181,7 +181,7 @@ public class RemoteSystemClient {
   }
 
   /**
-   * Get JSON object from specified url. It is contained in <code>list</code> item of output JSO
+   * Get JSON object from specified url. It is contained in <code>list</code> item of output JSON
    *
    * @param context used to get services over
    * @param url     to load data from

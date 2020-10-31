@@ -29,6 +29,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.daskiworks.ghwatch.Utils;
+import com.daskiworks.ghwatch.auth.AuthenticationManager;
 import com.daskiworks.ghwatch.backend.RemoteSystemClient.Response;
 import com.daskiworks.ghwatch.model.BaseViewData;
 import com.daskiworks.ghwatch.model.LoadingStatus;

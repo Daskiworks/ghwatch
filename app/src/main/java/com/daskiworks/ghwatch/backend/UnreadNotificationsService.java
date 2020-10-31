@@ -36,6 +36,7 @@ import com.daskiworks.ghwatch.R;
 import com.daskiworks.ghwatch.UnreadAppWidgetProvider;
 import com.daskiworks.ghwatch.Utils;
 import com.daskiworks.ghwatch.alarm.AndroidNotifiationActionsReceiver;
+import com.daskiworks.ghwatch.auth.AuthenticationManager;
 import com.daskiworks.ghwatch.backend.RemoteSystemClient.Response;
 import com.daskiworks.ghwatch.image.ImageLoader;
 import com.daskiworks.ghwatch.model.BaseViewData;

@@ -19,6 +19,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.daskiworks.ghwatch.Utils;
+import com.daskiworks.ghwatch.auth.AuthenticationManager;
 import com.daskiworks.ghwatch.model.Label;
 import com.daskiworks.ghwatch.model.Notification;
 import com.daskiworks.ghwatch.model.NotificationStream;

@@ -21,7 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.daskiworks.ghwatch.Utils;
-import com.daskiworks.ghwatch.backend.AuthenticationManager;
+import com.daskiworks.ghwatch.auth.AuthenticationManager;
 
 /**
  * Info about GH user. See {@link AuthenticationManager}.

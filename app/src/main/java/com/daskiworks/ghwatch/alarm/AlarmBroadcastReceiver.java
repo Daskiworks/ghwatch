@@ -25,7 +25,7 @@ import android.util.Log;
 
 import com.daskiworks.ghwatch.R;
 import com.daskiworks.ghwatch.Utils;
-import com.daskiworks.ghwatch.backend.AuthenticationManager;
+import com.daskiworks.ghwatch.auth.AuthenticationManager;
 import com.daskiworks.ghwatch.backend.PreferencesUtils;
 import com.daskiworks.ghwatch.backend.UnreadNotificationsService;
 
