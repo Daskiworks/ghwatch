@@ -8,6 +8,11 @@ import android.accounts.NetworkErrorException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.widget.Toast;
+
+import com.daskiworks.ghwatch.R;
 
 /**
  * Github OAuth authenticator.
@@ -16,15 +21,19 @@ import android.os.Bundle;
  */
 public class GithubAccountAuthenticator extends AbstractAccountAuthenticator {
 
+  private static final String TAG = "GithubAccountAuthentica";
+
   public static final String ACCOUNT_TYPE = "com.daskiworks.ghwatch.auth";
   public static final String AUTH_TOKEN_TYPE_ACCESS_TOKEN = "accessToken";
-
+  private static final int ERROR_CODE_ONE_ACCOUNT_ALLOWED = 4242;
 
   private final Context mContext;
+  private final Handler mHandler;
 
   public GithubAccountAuthenticator(Context context) {
     super(context);
     this.mContext = context;
+    this.mHandler = new Handler();
   }
 
   @Override
@@ -34,6 +43,28 @@ public class GithubAccountAuthenticator extends AbstractAccountAuthenticator {
 
   @Override
   public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType, String[] requiredFeatures, Bundle options) throws NetworkErrorException {
+
+    Log.d(TAG, "addAccount(" + accountType + "," + authTokenType + ")");
+
+    // allow only one account to be created
+    AccountManager accountManager = AccountManager.get(mContext);
+    Account[] accs = accountManager.getAccountsByType(GithubAccountAuthenticator.ACCOUNT_TYPE);
+    if (accs != null && accs.length > 0) {
+      final Bundle result = new Bundle();
+      result.putInt(AccountManager.KEY_ERROR_CODE, ERROR_CODE_ONE_ACCOUNT_ALLOWED);
+      result.putString(AccountManager.KEY_ERROR_MESSAGE, mContext.getString(R.string.auth_err_one_account_allowed));
+
+      mHandler.post(new Runnable() {
+        @Override
+        public void run() {
+
+          Toast.makeText(mContext.getApplicationContext(), R.string.auth_err_one_account_allowed, Toast.LENGTH_LONG).show();
+        }
+      });
+
+      return result;
+    }
+
     final Intent intent = new Intent(mContext, GithubAuthenticatorActivity.class);
     intent.putExtra(GithubAuthenticatorActivity.ARG_ACCOUNT_TYPE, accountType);
     intent.putExtra(GithubAuthenticatorActivity.ARG_AUTH_TYPE, authTokenType);
@@ -52,6 +83,7 @@ public class GithubAccountAuthenticator extends AbstractAccountAuthenticator {
 
   @Override
   public Bundle getAuthToken(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) throws NetworkErrorException {
+    Log.d(TAG, "getAuthToken(" + authTokenType + ")");
     return null;
   }
 

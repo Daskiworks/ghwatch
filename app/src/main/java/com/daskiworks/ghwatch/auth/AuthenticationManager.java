@@ -240,11 +240,15 @@ public class AuthenticationManager {
       return credentials;
     GHUserLoginInfo ui = loadCurrentUser(context);
     if (ui != null) {
-      credentials = new GHCredentials(ui.getT(), "x-oauth-basic");
+      credentials = createGHCredentials(ui.getT());
       return credentials;
     } else {
       return null;
     }
+  }
+
+  public GHCredentials createGHCredentials(String token){
+    return new GHCredentials(token, "x-oauth-basic");
   }
 
   /**
@@ -270,16 +274,18 @@ public class AuthenticationManager {
     }
   }
 
-  protected void loadUserInfoFromServer(Context context, GHCredentials ghCredentials) {
+  public GHUserInfo loadUserInfoFromServer(Context context, GHCredentials ghCredentials) {
     try {
       Response<JSONObject> r = RemoteSystemClient.getJSONObjectFromUrl(context, ghCredentials, GH_USER_REQ_URL, null);
       if (r.data != null) {
         currentUserInfo = new GHUserInfo(r.data);
         Utils.writeToStore(TAG, context, getCuFile(context), currentUserInfo);
+        return currentUserInfo;
       }
     } catch (Throwable th) {
-      Log.e(TAG, "User informations loading error: " + th.getMessage(), th);
+      Log.e(TAG, "User information loading error: " + th.getMessage(), th);
     }
+    return null;
   }
 
   private class UserInfoLoaderTask implements Runnable {

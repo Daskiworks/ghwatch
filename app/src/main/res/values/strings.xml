@@ -69,8 +69,11 @@
   <string name="start_activity_text3">Tip: You can lighten your email box thanks to this application. Simply go to the GitHub.com > \'Settings\' > \'Notifications\' and disable Emails for notifications there because you are notified directly by this app.</string>
   <string name="button_login_github">Login GitHub</string>
 
-  <!-- GithubAuthenticator activity-->
+  <!-- GithubAuthenticator and its activity-->
+  <string name="auth_label">GH::watch GitHub</string>
   <string name="auth_activity_label">GH::watch is logging in to GitHub ...</string>
+  <string name="auth_err_one_account_allowed">GH::watch supports only one GitHub account.</string>
+  <string name="auth_err_comm">GitHub login failed</string>
 
   <!-- Login dialog -->
   <string name="dialog_login">Login GitHub</string>

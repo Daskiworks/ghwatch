@@ -1,6 +1,6 @@
 /*
  * Copyright 2014 contributors as indicated by the @authors tag.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -25,7 +25,7 @@ import com.daskiworks.ghwatch.auth.AuthenticationManager;
 
 /**
  * Info about GH user. See {@link AuthenticationManager}.
- * 
+ *
  * @author Vlastimil Elias <vlastimil.elias@worldonline.cz>
  */
 public class GHUserInfo implements Serializable {
@@ -71,4 +71,14 @@ public class GHUserInfo implements Serializable {
     return Utils.trimToNull(htmlUrl);
   }
 
+  @Override
+  public String toString() {
+    return "GHUserInfo{" +
+            "username='" + username + '\'' +
+            ", name='" + name + '\'' +
+            ", avatarUrl='" + avatarUrl + '\'' +
+            ", htmlUrl='" + htmlUrl + '\'' +
+            ", updateTimestamp=" + updateTimestamp +
+            '}';
+  }
 }

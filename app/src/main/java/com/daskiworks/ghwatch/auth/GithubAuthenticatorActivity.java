@@ -7,10 +7,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.daskiworks.ghwatch.R;
 import com.daskiworks.ghwatch.backend.GHConstants;
+import com.daskiworks.ghwatch.model.GHCredentials;
+import com.daskiworks.ghwatch.model.GHUserInfo;
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.auth.oauth2.BearerToken;
 import com.google.api.client.auth.oauth2.ClientParametersAuthentication;
@@ -60,7 +64,7 @@ public class GithubAuthenticatorActivity extends AccountAuthenticatorActivity {
   private static final String AUTHORIZATION_SERVER_URL = "https://github.com/login/oauth/authorize";
   private static String API_KEY;
   private static String API_SECRET;
-  private static final String[] SCOPES = new String[]{ "notifications","repo" };
+  private static final String[] SCOPES = new String[]{"notifications", "repo"};
   private static final String REDIRECT_URI = "com.daskiworks.ghwatch.auth://login";
 
   private AccountManager accountManager;
@@ -114,7 +118,7 @@ public class GithubAuthenticatorActivity extends AccountAuthenticatorActivity {
 
       if (!isRedirect(getIntent())) {
         String authorizationUrl = flow.newAuthorizationUrl().setRedirectUri(REDIRECT_URI).build();
-        Log.d(TAG, "redirecting to authorizationUrl=" + authorizationUrl );
+        Log.d(TAG, "redirecting to authorizationUrl=" + authorizationUrl);
         // Open the login page in the native browser
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(authorizationUrl));
         startActivity(browserIntent);
@@ -125,29 +129,25 @@ public class GithubAuthenticatorActivity extends AccountAuthenticatorActivity {
   }
 
   @Override
-  protected void onNewIntent (Intent intent) {
+  protected void onNewIntent(Intent intent) {
     super.onNewIntent(intent);
 
-    if(isRedirect(intent)) {
+    if (isRedirect(intent)) {
       String authorizationCode = extractAuthorizationCode(intent);
-      Log.d(TAG, "executing get code for authorizationCode=" + authorizationCode );
+      Log.d(TAG, "Executing GetTokens for authorizationCode=" + authorizationCode);
       new GetTokens(flow).execute(authorizationCode);
     }
   }
 
   private boolean isRedirect(Intent intent) {
     String data = intent.getDataString();
-
     return Intent.ACTION_VIEW.equals(intent.getAction()) && data != null;
   }
 
-  private String extractAuthorizationCode(Intent intent){
+  private String extractAuthorizationCode(Intent intent) {
     String data = intent.getDataString();
-
-    Log.d(TAG, "extractAuthorizationCode from data=" + data );
-
+    Log.d(TAG, "ExtractAuthorizationCode from data=" + data);
     Uri uri = Uri.parse(data);
-
     return uri.getQueryParameter("code");
   }
 
@@ -170,26 +170,46 @@ public class GithubAuthenticatorActivity extends AccountAuthenticatorActivity {
                 });
 
         return IdTokenResponse.execute(request);
-      }
-      catch(IOException ex) {
-        Log.e(TAG, ex.getMessage());
-        return null;
-      }
-      catch (Exception ex) {
-        Log.e(TAG, ex.getMessage());
+      } catch (Exception ex) {
+        Log.e(TAG, "AccessTokenObtainingError: " + ex.getMessage());
         return null;
       }
     }
 
     protected void onPostExecute(IdTokenResponse result) {
-      try {
-        Log.d(TAG, "accessToken="+ result.getAccessToken());
-        //IdToken idToken = result.parseIdToken();
-        //TODO load username and other user info from the user endpoint
-        String userName = "testuser";
+      //DO NOT LOG accessToken in PROD code!!!!
+      if (GHConstants.DEBUG && result != null) {
+        Log.d(TAG, "Obtained accessToken=" + result.getAccessToken());
+      }
+      new GetUserInfo(result).execute();
+    }
 
+  }
+
+  private class GetUserInfo extends AsyncTask<String, Integer, GHUserInfo> {
+
+    IdTokenResponse result;
+
+    public GetUserInfo(IdTokenResponse result) {
+      this.result = result;
+    }
+
+    protected GHUserInfo doInBackground(String... params) {
+      if (result == null)
+        return null;
+      AuthenticationManager am = AuthenticationManager.getInstance();
+      return am.loadUserInfoFromServer(GithubAuthenticatorActivity.this, am.createGHCredentials(result.getAccessToken()));
+    }
+
+    protected void onPostExecute(GHUserInfo userInfo) {
+
+      Log.d(TAG, "userInfo=" + userInfo);
+
+      if (userInfo == null) {
+        Toast.makeText(GithubAuthenticatorActivity.this.getApplicationContext(), R.string.auth_err_comm, Toast.LENGTH_LONG).show();
+      } else {
+        String userName = userInfo.getUsername();
         Account account = new Account(userName, GithubAccountAuthenticator.ACCOUNT_TYPE);
-
         accountManager.addAccountExplicitly(account, null, null);
         accountManager.setAuthToken(account, GithubAccountAuthenticator.AUTH_TOKEN_TYPE_ACCESS_TOKEN, result.getAccessToken());
 
@@ -203,10 +223,8 @@ public class GithubAuthenticatorActivity extends AccountAuthenticatorActivity {
 
         setAccountAuthenticatorResult(intent.getExtras());
         setResult(RESULT_OK, intent);
-        finish();
-      } finally {
-
       }
+      finish();
 
     }
 

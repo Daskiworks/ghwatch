@@ -45,6 +45,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.protocol.ClientContext;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -439,6 +441,10 @@ public class RemoteSystemClient {
     HttpParams params = httpClient.getParams();
     HttpConnectionParams.setConnectionTimeout(params, 30000);
     HttpConnectionParams.setSoTimeout(params, 30000);
+    //patch strange exception on some devices
+    httpClient.getConnectionManager().getSchemeRegistry().register(
+            new Scheme("https", SSLSocketFactory.getSocketFactory(), 443)
+    );
     return httpClient;
   }
 

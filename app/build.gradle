@@ -2,8 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
   compileSdkVersion 28
-  buildToolsVersion '30.0.0'
-  useLibrary 'org.apache.http.legacy'
+  buildToolsVersion '30.0.2'
 
   defaultConfig {
     applicationId "com.daskiworks.ghwatch"
@@ -42,7 +41,7 @@ dependencies {
   /** dependencies for OAuth authenticator */
   implementation 'com.google.oauth-client:google-oauth-client:1.31.0'
   implementation 'com.google.http-client:google-http-client-jackson2:1.37.0'
-  implementation 'com.loopj.android:android-async-http:1.4.9'
+  implementation 'com.loopj.android:android-async-http:1.4.11'
   /** patch build problem with dex file */
   implementation 'com.android.support:multidex:1.0.3'
 
