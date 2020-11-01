@@ -32,6 +32,8 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Context;
 import android.util.Log;
 
@@ -57,33 +59,6 @@ public class AuthenticationManager {
 
   private static final String TAG = "AuthenticationManager";
 
-  private static String client_s;
-  private static String client_i;
-
-  static {
-    InputStream in = GHConstants.class.getResourceAsStream("clients.properties");
-    try {
-      Properties props = new Properties();
-      if (in != null)
-        props.load(in);
-      else
-        Log.e(TAG, "clients.properties file not found to get Github API keys from");
-      client_s = props.getProperty("clients");
-      client_i = props.getProperty("clienti");
-    } catch (IOException e) {
-      Log.e(TAG, "Unable to load secrets for github authentication " + e.getMessage());
-    } finally {
-      if (in != null)
-        try {
-          in.close();
-        } catch (IOException e) {
-          // OK
-        }
-    }
-
-  }
-
-  private static final String GH_AUTH_REQ_URL = GHConstants.URL_BASE + "/authorizations/clients/" + client_i;
   private static final String GH_USER_REQ_URL = GHConstants.URL_BASE + "/user";
 
   /**
@@ -93,9 +68,6 @@ public class AuthenticationManager {
 
   private static final String culiFileName = "cui.td";
   private static final String cuFileName = "cu.td";
-
-  private static final String GH_AUTH_REQ_CONTENT = "{\"client_secret\":\"" + client_s
-      + "\",\"scopes\":[\"notifications\",\"repo\"],\"note\":\"GH:watch android app\", \"fingerprint\":\"*fp*\"}";
 
   private File culiFile;
   private File cuFile;
@@ -136,6 +108,22 @@ public class AuthenticationManager {
     super();
   }
 
+
+  /**
+   * Take existing account from the system {@link AccountManager}
+   * @param context to be used
+   * @return account or null if no one exists
+   */
+  public Account getAccountFromSystemAccountManager(Context context){
+    AccountManager accountManager = AccountManager.get(context);
+    Account[] accs = accountManager.getAccountsByType(GithubAccountAuthenticator.ACCOUNT_TYPE);
+    if (accs != null && accs.length > 0) {
+      return accs[0];
+    }
+    return null;
+  }
+
+
   /**
    * Get info about current user logged in this application.
    * 
@@ -145,87 +133,16 @@ public class AuthenticationManager {
     return Utils.readFromStore(TAG, context, getCuliFile(context));
   }
 
-  public static class LoginViewData extends BaseViewData {
-    public boolean isOtp;
-    public String otpType;
-  }
-
-  /**
-   * Login user for this application.
-   * 
-   * @param username for user
-   * @param password for user to login
-   * @param otp one time password for 2fact authentication
-   * @return info about login success
-   * 
-   */
-  public LoginViewData login(Context context, String username, String password, String otp) {
-    LoginViewData nswd = new LoginViewData();
-    String trackLabel = "OK";
-    try {
-      String token = remoteLogin(context, new GHCredentials(username, password), otp);
-      Log.d(TAG, "Login token: " + token);
-      GHUserLoginInfo ui = new GHUserLoginInfo(AccountType.LOCAL, username, token);
-      storeCurrentUserLogin(context, ui);
-    } catch (OTPAuthenticationException e) {
-      nswd.loadingStatus = LoadingStatus.AUTH_ERROR;
-      nswd.isOtp = true;
-      nswd.otpType = e.getOtpType();
-      Log.d(TAG, "Login failed due to OTP required: " + e.getMessage());
-      trackLabel = "OTP_REQUESTED";
-    } catch (InvalidObjectException e) {
-      nswd.loadingStatus = LoadingStatus.DATA_ERROR;
-      Log.w(TAG, "Login failed due to data format problem: " + e.getMessage(), e);
-      trackLabel = "ERR_DATA";
-    } catch (NoRouteToHostException e) {
-      nswd.loadingStatus = LoadingStatus.CONN_UNAVAILABLE;
-      trackLabel = "ERR_CONN_NOT_AVAILABLE";
-    } catch (AuthenticationException e) {
-      nswd.loadingStatus = LoadingStatus.AUTH_ERROR;
-      Log.d(TAG, "Login failed due to authentication problem: " + e.getMessage());
-      trackLabel = "ERR_AUTH";
-    } catch (IOException e) {
-      nswd.loadingStatus = LoadingStatus.CONN_ERROR;
-      Log.w(TAG, "Login failed due to connection problem: " + e.getMessage());
-      trackLabel = "ERR_CONN";
-    } catch (JSONException e) {
-      nswd.loadingStatus = LoadingStatus.DATA_ERROR;
-      Log.w(TAG, "Login failed due to data format problem: " + e.getMessage());
-      trackLabel = "ERR_DATA";
-    } catch (Exception e) {
-      nswd.loadingStatus = LoadingStatus.UNKNOWN_ERROR;
-      Log.e(TAG, "Login failed due to: " + e.getMessage(), e);
-      trackLabel = "ERR_UNKNOWN";
-    }
-    ActivityTracker.sendEvent(context, ActivityTracker.CAT_BE, "login", trackLabel, 0L);
-    return nswd;
-  }
-
-  public void storeAuthTokenTmp(Context context, String username, String token){
+  public void storeAuthToken(Context context, String username, String token){
     GHUserLoginInfo ui = new GHUserLoginInfo(AccountType.LOCAL, username, token);
     storeCurrentUserLogin(context, ui);
   }
 
-  private String remoteLogin(Context context, GHCredentials cred, String otp) throws JSONException, NoRouteToHostException, AuthenticationException,
-      ClientProtocolException, URISyntaxException, IOException {
-    Map<String, String> headers = null;
-    otp = Utils.trimToNull(otp);
-    if (otp != null) {
-      headers = new HashMap<String, String>();
-      headers.put("X-GitHub-OTP", otp);
-    }
-    String content = GH_AUTH_REQ_CONTENT.replace("*fp*", System.currentTimeMillis() + "");
-    Response<String> resp = RemoteSystemClient.putToURL(context, cred, GH_AUTH_REQ_URL, headers, content);
-    JSONObject jo = new JSONObject(resp.data);
-    return jo.getString("token");
-  }
 
   private void storeCurrentUserLogin(Context context, GHUserLoginInfo currentUserLoginInfo) {
     Utils.writeToStore(TAG, context, getCuliFile(context), currentUserLoginInfo);
     if (currentUserInfo == null || (currentUserLoginInfo != null && !currentUserLoginInfo.getUsername().equals(currentUserInfo.getUsername()))) {
-      currentUserInfo = null;
-      Utils.deleteFromStore(context, getCuFile(context));
-      loadUserInfoFromServer(context, getGhApiCredentials(context));
+      loadUserInfoFromServerAsync(context);
     }
     this.credentials = null;
   }
@@ -279,7 +196,7 @@ public class AuthenticationManager {
       Response<JSONObject> r = RemoteSystemClient.getJSONObjectFromUrl(context, ghCredentials, GH_USER_REQ_URL, null);
       if (r.data != null) {
         currentUserInfo = new GHUserInfo(r.data);
-        Utils.writeToStore(TAG, context, getCuFile(context), currentUserInfo);
+        Utils.writeToStore(TAG, context.getApplicationContext(), getCuFile(context), currentUserInfo);
         return currentUserInfo;
       }
     } catch (Throwable th) {

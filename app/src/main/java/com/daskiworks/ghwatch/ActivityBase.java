@@ -244,13 +244,9 @@ public abstract class ActivityBase extends AppCompatActivity {
   }
 
   protected boolean checkUserLoggedIn() {
-
-    AccountManager accountManager = AccountManager.get(this);
-    Account[] accs = accountManager.getAccountsByType(GithubAccountAuthenticator.ACCOUNT_TYPE);
-
-    Log.d(TAG, "Existing accounts: " + accs);
-
-    if (accs == null || accs.length == 0) {
+    Account account = AuthenticationManager.getInstance().getAccountFromSystemAccountManager(this);
+    Log.d(TAG, "Existing account: " + account);
+    if (account == null) {
       Intent intent = new Intent(this, StartActivity.class);
       intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

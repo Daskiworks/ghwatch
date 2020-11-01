@@ -71,7 +71,7 @@
 
   <!-- GithubAuthenticator and its activity-->
   <string name="auth_label">GH::watch GitHub</string>
-  <string name="auth_activity_label">GH::watch is logging in to GitHub ...</string>
+  <string name="auth_activity_label">GH::watch is logging in to GitHub, finish authentication flow in the browser, refresh/reload browser tab pointing \'github.com/login/oauth\' if process got stuck ...</string>
   <string name="auth_err_one_account_allowed">GH::watch supports only one GitHub account.</string>
   <string name="auth_err_comm">GitHub login failed</string>
 
@@ -198,7 +198,6 @@
   <string name="pref_notifyVibrate">Vibrate</string>
   <string name="pref_notifyVibrate_summ">Vibrate when new GitHub notification is available</string>
   <string name="pref_serverSettings_title">GitHub server call settings</string>
-  <string name="pref_serverAccount">GitHub user account</string>
   <string name="pref_serverCheckPeriod">New notifications check period</string>
   <string name="pref_serverCheckPeriod_default">60</string>
   <string name="pref_serverCheckWifiOnly">Check over Wifi only</string>

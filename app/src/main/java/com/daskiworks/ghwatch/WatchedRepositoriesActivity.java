@@ -30,7 +30,6 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.daskiworks.ghwatch.LoginDialogFragment.LoginDialogListener;
 import com.daskiworks.ghwatch.backend.PreferencesUtils;
 import com.daskiworks.ghwatch.backend.ViewDataReloadStrategy;
 import com.daskiworks.ghwatch.backend.WatchedRepositoriesService;
@@ -47,7 +46,7 @@ import java.util.concurrent.RejectedExecutionException;
  *
  * @author Vlastimil Elias <vlastimil.elias@worldonline.cz>
  */
-public class WatchedRepositoriesActivity extends ActivityBase implements LoginDialogListener, OnRefreshListener {
+public class WatchedRepositoriesActivity extends ActivityBase implements OnRefreshListener {
 
   private static final String TAG = WatchedRepositoriesActivity.class.getSimpleName();
 
@@ -307,11 +306,6 @@ public class WatchedRepositoriesActivity extends ActivityBase implements LoginDi
       }
     });
     builder.create().show();
-  }
-
-  @Override
-  public void afterLoginSuccess(LoginDialogFragment dialog) {
-    refreshList(ViewDataReloadStrategy.ALWAYS, false);
   }
 
   protected void notifyDataSetChanged() {

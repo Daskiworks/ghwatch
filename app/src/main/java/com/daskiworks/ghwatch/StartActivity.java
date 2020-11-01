@@ -19,8 +19,10 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.backup.BackupManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -31,7 +33,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-import com.daskiworks.ghwatch.LoginDialogFragment.LoginDialogListener;
 import com.daskiworks.ghwatch.alarm.AlarmBroadcastReceiver;
 import com.daskiworks.ghwatch.auth.AuthenticationManager;
 import com.daskiworks.ghwatch.auth.GithubAccountAuthenticator;
@@ -42,7 +43,7 @@ import com.daskiworks.ghwatch.backend.PreferencesUtils;
  *
  * @author Vlastimil Elias <vlastimil.elias@worldonline.cz>
  */
-public class StartActivity extends AppCompatActivity implements LoginDialogListener {
+public class StartActivity extends AppCompatActivity {
 
   private static final String TAG = StartActivity.class.getSimpleName();
 
@@ -72,13 +73,12 @@ public class StartActivity extends AppCompatActivity implements LoginDialogListe
       (new BackupManager(this)).dataChanged();
     }
 
-    AccountManager accountManager = AccountManager.get(this);
-    Account[] accs = accountManager.getAccountsByType(GithubAccountAuthenticator.ACCOUNT_TYPE);
-
-    Log.d(TAG, "Existing accounts: " + accs);
-
-    if (accs != null && accs.length > 0) {
-      accountManager.getAuthToken(accs[0], GithubAccountAuthenticator.AUTH_TOKEN_TYPE_ACCESS_TOKEN, null, this, new AccountManagerCallback<Bundle>() {
+    //check account, handle auth token if available
+    Account account = AuthenticationManager.getInstance().getAccountFromSystemAccountManager(this);
+    Log.d(TAG, "Existing account: " + account);
+    if (account != null) {
+      AccountManager accountManager = AccountManager.get(this);
+      accountManager.getAuthToken(account, GithubAccountAuthenticator.AUTH_TOKEN_TYPE_ACCESS_TOKEN, null, this, new AccountManagerCallback<Bundle>() {
         @Override
         public void run(AccountManagerFuture<Bundle> future) {
           try {
@@ -86,9 +86,8 @@ public class StartActivity extends AppCompatActivity implements LoginDialogListe
             String username = result.getString(AccountManager.KEY_ACCOUNT_NAME);
             String authToken = result.getString(AccountManager.KEY_AUTHTOKEN);
             Log.d(TAG, "username: " + username + " and token:" + authToken);
-            //TODO store auth token for use better way
-            AuthenticationManager.getInstance().storeAuthTokenTmp(StartActivity.this, username, authToken);
-            showMainPage(false);
+            AuthenticationManager.getInstance().storeAuthToken(StartActivity.this, username, authToken);
+            showMainPage(StartActivity.this,false);
           } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
           }
@@ -109,16 +108,16 @@ public class StartActivity extends AppCompatActivity implements LoginDialogListe
 
   }
 
-  protected void showMainPage(boolean showAnimation) {
-    Intent intent = new Intent(this, MainActivity.class);
+  public static void showMainPage(Activity context, boolean showAnimation) {
+    Intent intent = new Intent(context, MainActivity.class);
     if (!showAnimation) {
-      this.startActivity(intent);
-      finish();
-      overridePendingTransition(0, 0);
+      context.startActivity(intent);
+      context.finish();
+      context.overridePendingTransition(0, 0);
     } else {
       intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-      this.startActivity(intent);
+      context.startActivity(intent);
     }
   }
 
@@ -134,7 +133,7 @@ public class StartActivity extends AppCompatActivity implements LoginDialogListe
 
           //no intent so account exists already
           if (intent == null) {
-            showMainPage(true);
+            showMainPage(StartActivity.this,true);
           } else {
             StartActivity.this.startActivityForResult(intent, CHOOSE_ACCOUNT_ACCESSTOKEN_REQUEST);
           }
@@ -193,9 +192,5 @@ public class StartActivity extends AppCompatActivity implements LoginDialogListe
     ActivityTracker.sendView(this, TAG);
   }
 
-  @Override
-  public void afterLoginSuccess(LoginDialogFragment dialog) {
-    showMainPage(true);
-  }
 
 }

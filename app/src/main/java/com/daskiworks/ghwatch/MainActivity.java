@@ -37,7 +37,6 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.daskiworks.ghwatch.LoginDialogFragment.LoginDialogListener;
 import com.daskiworks.ghwatch.backend.GHConstants;
 import com.daskiworks.ghwatch.backend.PreferencesUtils;
 import com.daskiworks.ghwatch.backend.UnreadNotificationsService;
@@ -60,7 +59,7 @@ import me.leolin.shortcutbadger.ShortcutBadger;
  *
  * @author Vlastimil Elias <vlastimil.elias@worldonline.cz>
  */
-public class MainActivity extends ActivityBase implements LoginDialogListener, OnRefreshListener {
+public class MainActivity extends ActivityBase implements OnRefreshListener {
 
   private static final String STATE_FILTER_REPOSITORY = "STATE_FILTER_REPOSITORY";
 
@@ -736,11 +735,6 @@ public class MainActivity extends ActivityBase implements LoginDialogListener, O
       }
     });
     builder.create().show();
-  }
-
-  @Override
-  public void afterLoginSuccess(LoginDialogFragment dialog) {
-    refreshList(ViewDataReloadStrategy.ALWAYS, false);
   }
 
   protected void notifyDataSetChanged() {

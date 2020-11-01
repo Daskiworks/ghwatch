@@ -1,6 +1,9 @@
 GH::watch changelog
 ===================
 
+## v1.31 (Nov 1st, 2020)
+- \#122 login using browser and OAuth2
+
 ## v1.30 (Mar 18th, 2019)
 - \#117 patched main window crash on tablets
 

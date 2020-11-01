@@ -8,10 +8,13 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Browser;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.daskiworks.ghwatch.ActivityTracker;
 import com.daskiworks.ghwatch.R;
+import com.daskiworks.ghwatch.StartActivity;
 import com.daskiworks.ghwatch.backend.GHConstants;
 import com.daskiworks.ghwatch.model.GHCredentials;
 import com.daskiworks.ghwatch.model.GHUserInfo;
@@ -98,33 +101,60 @@ public class GithubAuthenticatorActivity extends AccountAuthenticatorActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_authenticator);
-
+    Log.d(TAG, "onCreate");
     accountManager = AccountManager.get(getBaseContext());
 
-    try {
-      flow = new AuthorizationCodeFlow.Builder(
-              BearerToken.authorizationHeaderAccessMethod(),
-              HTTP_TRANSPORT,
-              JSON_FACTORY,
-              new GenericUrl(TOKEN_SERVER_URL),
-              new ClientParametersAuthentication(API_KEY, API_SECRET),
-              API_KEY,
-              AUTHORIZATION_SERVER_URL)
-              .setScopes(Arrays.asList(SCOPES))
-              .setDataStoreFactory(DATA_STORE_FACTORY)
-              //.setDataStoreFactory(DATA_STORE_FACTORY)
-              .build();
+    //check existing accounts so we can handle refresh in browser tab
+    Account account = AuthenticationManager.getInstance().getAccountFromSystemAccountManager(this);
+    Log.d(TAG, "Existing account: " + account);
+    if (account != null) {
+      StartActivity.showMainPage(this, true);
+    } else {
+      setContentView(R.layout.activity_authenticator);
 
-      if (!isRedirect(getIntent())) {
-        String authorizationUrl = flow.newAuthorizationUrl().setRedirectUri(REDIRECT_URI).build();
-        Log.d(TAG, "redirecting to authorizationUrl=" + authorizationUrl);
-        // Open the login page in the native browser
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(authorizationUrl));
-        startActivity(browserIntent);
+      try {
+        flow = new AuthorizationCodeFlow.Builder(
+                BearerToken.authorizationHeaderAccessMethod(),
+                HTTP_TRANSPORT,
+                JSON_FACTORY,
+                new GenericUrl(TOKEN_SERVER_URL),
+                new ClientParametersAuthentication(API_KEY, API_SECRET),
+                API_KEY,
+                AUTHORIZATION_SERVER_URL)
+                .setScopes(Arrays.asList(SCOPES))
+                .setDataStoreFactory(DATA_STORE_FACTORY)
+                //.setDataStoreFactory(DATA_STORE_FACTORY)
+                .build();
+
+        if (!isRedirect(getIntent())) {
+          String authorizationUrl = flow.newAuthorizationUrl().setRedirectUri(REDIRECT_URI).build();
+          Log.d(TAG, "redirecting to authorizationUrl=" + authorizationUrl);
+          // Open the login page in the native browser
+          //TODO OAUTH2 how to make sure browser's tab is closed after the auth flow finishes?
+          Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(authorizationUrl));
+          //browserIntent.putExtra(Browser.EXTRA_APPLICATION_ID, this.getPackageName());
+          browserIntent.putExtra(Browser.EXTRA_CREATE_NEW_TAB, Boolean.TRUE);
+          browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+          browserIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+          browserIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+          browserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+          startActivity(browserIntent);
+        }
+      } catch (Exception ex) {
+        Log.e(TAG, ex.getMessage());
       }
-    } catch (Exception ex) {
-      Log.e(TAG, ex.getMessage());
+    }
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    Log.d(TAG, "onResume");
+    //check existing accounts so we can handle refresh in browser tab
+    Account account = AuthenticationManager.getInstance().getAccountFromSystemAccountManager(this);
+    Log.d(TAG, "Existing account: " + account);
+    if (account != null) {
+      StartActivity.showMainPage(this, true);
     }
   }
 
@@ -202,10 +232,10 @@ public class GithubAuthenticatorActivity extends AccountAuthenticatorActivity {
     }
 
     protected void onPostExecute(GHUserInfo userInfo) {
-
       Log.d(TAG, "userInfo=" + userInfo);
-
+      String trackLabel = "OK";
       if (userInfo == null) {
+        trackLabel = "ERROR";
         Toast.makeText(GithubAuthenticatorActivity.this.getApplicationContext(), R.string.auth_err_comm, Toast.LENGTH_LONG).show();
       } else {
         String userName = userInfo.getUsername();
@@ -224,6 +254,7 @@ public class GithubAuthenticatorActivity extends AccountAuthenticatorActivity {
         setAccountAuthenticatorResult(intent.getExtras());
         setResult(RESULT_OK, intent);
       }
+      ActivityTracker.sendEvent(GithubAuthenticatorActivity.this.getApplicationContext(), ActivityTracker.CAT_BE, "loginOauth2", trackLabel, 0L);
       finish();
 
     }

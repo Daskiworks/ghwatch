@@ -32,7 +32,6 @@ import android.preference.RingtonePreference;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.daskiworks.ghwatch.LoginDialogFragment.LoginDialogListener;
 import com.daskiworks.ghwatch.alarm.AlarmBroadcastReceiver;
 import com.daskiworks.ghwatch.auth.AuthenticationManager;
 import com.daskiworks.ghwatch.backend.PreferencesUtils;
@@ -44,7 +43,7 @@ import com.daskiworks.ghwatch.model.GHUserLoginInfo;
  *
  * @author Vlastimil Elias <vlastimil.elias@worldonline.cz>
  */
-public class SettingsActivity extends ActivityBase implements OnSharedPreferenceChangeListener, LoginDialogListener {
+public class SettingsActivity extends ActivityBase implements OnSharedPreferenceChangeListener {
 
   private static final String TAG = SettingsActivity.class.getSimpleName();
 
@@ -165,22 +164,6 @@ public class SettingsActivity extends ActivityBase implements OnSharedPreference
       initListPrefSummary(PreferencesUtils.PREF_MARK_READ_ON_SHOW);
       initListPrefSummary(PreferencesUtils.PREF_APP_NIGHT_MODE);
 
-      Preference userAccountPref = findPreference(PreferencesUtils.PREF_SERVER_ACCOUNT);
-      GHUserLoginInfo currentUser = ((SettingsActivity) getActivity()).authenticationManager.loadCurrentUser(getActivity());
-      setCurrentUserPreferenceSummary(getActivity(), userAccountPref, currentUser);
-      userAccountPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-
-        @Override
-        public boolean onPreferenceClick(Preference preference) {
-          LoginDialogFragment ldf = new LoginDialogFragment();
-          Bundle arg = new Bundle();
-          arg.putBoolean(LoginDialogFragment.ARG_CANCELABLE, true);
-          ldf.setArguments(arg);
-          ldf.show(getFragmentManager(), "LOGIN_DIALOG");
-          return true;
-        }
-      });
-
       final RingtonePreference notificationSoundPref = (RingtonePreference) findPreference(PreferencesUtils.PREF_NOTIFY_SOUND);
       notificationSoundPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 
@@ -210,13 +193,6 @@ public class SettingsActivity extends ActivityBase implements OnSharedPreference
 
     }
 
-  }
-
-  @Override
-  public void afterLoginSuccess(LoginDialogFragment dialog) {
-    Preference userAccountPref = sf.findPreference(PreferencesUtils.PREF_SERVER_ACCOUNT);
-    GHUserLoginInfo currentUser = authenticationManager.loadCurrentUser(getApplicationContext());
-    setCurrentUserPreferenceSummary(getApplicationContext(), userAccountPref, currentUser);
   }
 
   protected static void setCurrentUserPreferenceSummary(Context context, Preference userAccountPref, GHUserLoginInfo currentUser) {

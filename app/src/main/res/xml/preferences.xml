@@ -104,9 +104,6 @@
       android:summary="@string/pref_serverLabelsLoading_summ"
       android:title="@string/pref_serverLabelsLoading"/>
 
-    <Preference
-      android:key="pref_serverAccount"
-      android:title="@string/pref_serverAccount"/>
   </PreferenceCategory>
   <PreferenceCategory
     android:key="pref_cat_serverInfo"
