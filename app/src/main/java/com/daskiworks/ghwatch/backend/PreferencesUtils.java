@@ -19,7 +19,7 @@ import android.app.backup.BackupManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatDelegate;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.daskiworks.ghwatch.ActivityTracker;
 import com.daskiworks.ghwatch.Utils;

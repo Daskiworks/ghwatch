@@ -138,7 +138,13 @@
         android:layout_toStartOf="@id/button_menu"/>
 
     </RelativeLayout>
-<!--
+    <!--
+        <com.google.android.material.chip.ChipGroup app:singleLine="true">
+
+        Chips can be declared here, or added dynamically. -->
+
+    <!--</com.google.android.material.chip.ChipGroup>
+
     <eu.fiskur.chipcloud.ChipCloud
       xmlns:chipcloud="http://schemas.android.com/apk/res-auto"
       android:id="@+id/chip_cloud"

@@ -32,9 +32,10 @@ Main features
 * Light and Dark/Night theme (manual or [automatic](https://developer.android.com/reference/android/support/v7/app/AppCompatDelegate.html#MODE_NIGHT_AUTO) switching) - **new in 1.25**
 
 ### Authentication
+* Android Account Manager used, account is visible in common Android Settings > Accounts - **new in 1.31**
+* No GithHub password entered to the app nor stored on device as browser and GitHub Login page is used - **new  in 1.31**
+* Full support for all GitHub two-factor authentications as GitHub Login page is used - **improved in 1.31**
 * OAuth used for both authentication and authorization
-* No GithHub password entered to the app nor stored on device
-* Support for GitHub two-factor authentication
 * You can revoke access from GitHub website at any time
 * Info about logged in user in navigation drawer
 

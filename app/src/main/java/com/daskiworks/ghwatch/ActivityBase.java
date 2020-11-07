@@ -16,7 +16,6 @@
 package com.daskiworks.ghwatch;
 
 import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Intent;
@@ -25,13 +24,13 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.navigation.NavigationView;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,7 +38,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.daskiworks.ghwatch.auth.AuthenticationManager;
-import com.daskiworks.ghwatch.auth.GithubAccountAuthenticator;
 import com.daskiworks.ghwatch.backend.DonationService;
 import com.daskiworks.ghwatch.backend.PreferencesUtils;
 import com.daskiworks.ghwatch.image.ImageLoader;

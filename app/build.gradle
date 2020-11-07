@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-  compileSdkVersion 28
+  compileSdkVersion 29
   buildToolsVersion '30.0.2'
 
   defaultConfig {
     applicationId "com.daskiworks.ghwatch"
     minSdkVersion 16
-    targetSdkVersion 28
+    targetSdkVersion 29
 
     testApplicationId "com.daskiworks.ghwatch.test"
     testInstrumentationRunner "android.test.InstrumentationTestRunner"
@@ -28,21 +28,20 @@ android {
 
 dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
-  implementation 'com.android.support:support-v4:28.0.0'
+  implementation 'androidx.legacy:legacy-support-v4:1.0.0'
   implementation 'com.google.android.gms:play-services-wallet:16.0.0'
   implementation 'com.google.android.gms:play-services-analytics:16.0.3'
   implementation 'me.leolin:ShortcutBadger:1.1.19@aar'
-  /* implementation 'com.github.fiskurgit:ChipCloud:2.2.3' */
-  androidTestImplementation 'com.android.support:support-v4:28.0.0'
-  implementation 'com.android.support:animated-vector-drawable:28.0.0'
-  implementation 'com.android.support:appcompat-v7:28.0.0'
-  implementation 'com.android.support:design:28.0.0'
+  androidTestImplementation 'androidx.legacy:legacy-support-v4:1.0.0'
+  implementation 'androidx.vectordrawable:vectordrawable-animated:1.0.0'
+  implementation 'androidx.appcompat:appcompat:1.0.0'
+  implementation 'com.google.android.material:material:1.0.0'
   implementation 'de.hdodenhof:circleimageview:2.2.0'
   /** dependencies for OAuth authenticator */
   implementation 'com.google.oauth-client:google-oauth-client:1.31.0'
   implementation 'com.google.http-client:google-http-client-jackson2:1.37.0'
   implementation 'com.loopj.android:android-async-http:1.4.11'
   /** patch build problem with dex file */
-  implementation 'com.android.support:multidex:1.0.3'
+  implementation 'androidx.multidex:multidex:2.0.0'
 
 }

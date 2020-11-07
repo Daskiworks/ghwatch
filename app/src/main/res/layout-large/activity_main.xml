@@ -14,7 +14,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
                                         xmlns:tools="http://schemas.android.com/tools"
                                         android:id="@+id/drawer_layout"
                                         android:layout_width="match_parent"
@@ -76,7 +76,7 @@
       <include layout="@layout/activity_main_main"/>
     </LinearLayout>
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
       android:id="@+id/toolbar_bottom"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -84,7 +84,7 @@
       android:background="?attr/colorPrimary"
       android:minHeight="?attr/actionBarSize"
       >
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
   </RelativeLayout>
   </LinearLayout>
   <!-- The navigation drawer -->
@@ -92,4 +92,4 @@
     android:id="@+id/navigation_drawer_view"
     layout="@layout/navigation_drawer_view"/>
 
-</android.support.v4.widget.DrawerLayout>
+</androidx.drawerlayout.widget.DrawerLayout>
