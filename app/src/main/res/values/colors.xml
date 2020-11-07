@@ -19,4 +19,6 @@
     <color name="apptheme_colorAccent">#fb8c00</color>
     <color name="start_page_text_color">#5d4037</color>
     <color name="light_grey">#ffaaaaaa</color>
+    <color name="notification_label_text_light">#ffeeeeee</color>
+    <color name="notification_label_text_dark">#ff606060</color>
 </resources>

@@ -142,18 +142,6 @@ public class StartActivity extends AppCompatActivity {
 
       }
     }, null);
-
-
-    /* TODO remove
-    if (getFragmentManager().findFragmentByTag(FRAGMENT_TAG_LOGIN_DIALOG) == null) {
-      LoginDialogFragment ldf = new LoginDialogFragment();
-      Bundle arg = new Bundle();
-      arg.putBoolean(LoginDialogFragment.ARG_CANCELABLE, true);
-      ldf.setArguments(arg);
-      ldf.show(getFragmentManager(), FRAGMENT_TAG_LOGIN_DIALOG);
-    }
-     */
-
   }
 
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {

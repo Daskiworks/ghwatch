@@ -1,6 +1,6 @@
 /*
  * Copyright 2014 contributors as indicated by the @authors tag.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -16,6 +16,7 @@
 package com.daskiworks.ghwatch;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -39,12 +40,16 @@ import com.daskiworks.ghwatch.model.LoadingStatus;
 import com.daskiworks.ghwatch.model.Notification;
 import com.daskiworks.ghwatch.model.NotificationStream;
 import com.daskiworks.ghwatch.model.NotificationViewData;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.RejectedExecutionException;
+
+import androidx.core.content.ContextCompat;
 
 //import eu.fiskur.chipcloud.ChipCloud;
 
@@ -132,7 +137,7 @@ public class NotificationListAdapter extends BaseAdapter {
     return getFilteredNotifications().get(position).getId();
   }
 
-  protected static void updateNotificationDetails(View listItem, Notification notification) {
+  protected void updateNotificationDetails(View listItem, Notification notification) {
     View tvStatus = listItem.findViewById(R.id.status);
     Integer statusColor = notification.getSubjectStatusColor();
     if (statusColor != null) {
@@ -141,19 +146,51 @@ public class NotificationListAdapter extends BaseAdapter {
       tvStatus.setBackgroundColor(Color.TRANSPARENT);
     }
 
-    /*
-    ChipCloud tagGroup = (ChipCloud) listItem.findViewById(R.id.chip_cloud);
+    ChipGroup tagGroup = (ChipGroup) listItem.findViewById(R.id.chip_cloud);
     List<Label> ll = notification.getSubjectLabels();
     if (PreferencesUtils.getBoolean(listItem.getContext(), PreferencesUtils.PREF_SERVER_LABELS_LOADING) && ll != null && !ll.isEmpty()) {
       tagGroup.setVisibility(View.VISIBLE);
       tagGroup.removeAllViews();
       for (Label l : ll) {
-        tagGroup.addChip(l.getName());
+        Chip chip = new Chip(context);
+        chip.setText(l.getName());
+        if (l.getColor() != null) {
+          try {
+            int color = Color.parseColor("#" + l.getColor());
+            int[][] states = new int[][]{
+                    new int[]{android.R.attr.state_enabled}, // enabled
+            };
+            int[] colors = new int[]{
+                    color,
+            };
+            ColorStateList myList = new ColorStateList(states, colors);
+            chip.setChipBackgroundColor(myList);
+            chip.setTextColor(getContrastColor(color));
+          } catch (Exception e) {
+            Log.e(TAG, "Invalid color string from github: " + l.getColor(), e);
+          }
+        }
+        tagGroup.addView(chip);
       }
     } else {
       tagGroup.setVisibility(View.GONE);
     }
-    */
+
+  }
+
+  public static int getComplementaryColor(int colorToInvert) {
+    float[] hsv = new float[3];
+    Color.RGBToHSV(Color.red(colorToInvert), Color.green(colorToInvert),
+            Color.blue(colorToInvert), hsv);
+    hsv[0] = (hsv[0] + 180) % 360;
+    return Color.HSVToColor(hsv);
+  }
+
+  public int getContrastColor(int color) {
+    double y = (299 * Color.red(color) + 587 * Color.green(color) + 114 * Color.blue(color)) / 1000;
+    int ret = y >= 128 ? ContextCompat.getColor(context,R.color.notification_label_text_dark) : ContextCompat.getColor(context,R.color.notification_label_text_light);
+    Log.d(TAG, "color Y="+y + " so return color="+ret);
+    return ret;
   }
 
   @Override

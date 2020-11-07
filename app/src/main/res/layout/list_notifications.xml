@@ -119,9 +119,8 @@
         android:layout_toLeftOf="@id/button_menu"
         android:layout_toRightOf="@id/thumb"
         android:layout_toStartOf="@id/button_menu"
-        android:ellipsize="marquee"
+        android:singleLine="true"
         android:marqueeRepeatLimit="marquee_forever"
-        android:maxLines="1"
         android:scrollHorizontally="true"
         android:textStyle="bold"/>
 
@@ -138,23 +137,16 @@
         android:layout_toStartOf="@id/button_menu"/>
 
     </RelativeLayout>
-    <!--
-        <com.google.android.material.chip.ChipGroup app:singleLine="true">
 
-        Chips can be declared here, or added dynamically. -->
-
-    <!--</com.google.android.material.chip.ChipGroup>
-
-    <eu.fiskur.chipcloud.ChipCloud
-      xmlns:chipcloud="http://schemas.android.com/apk/res-auto"
-      android:id="@+id/chip_cloud"
+    <com.google.android.material.chip.ChipGroup android:id="@+id/chip_cloud"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginBottom="0dp"
       android:layout_marginTop="4dp"
       android:visibility="gone"
-      chipcloud:selectMode="none"/>
--->
+      app:singleLine="false" >
+    </com.google.android.material.chip.ChipGroup>
+
   </LinearLayout>
 
 </LinearLayout>

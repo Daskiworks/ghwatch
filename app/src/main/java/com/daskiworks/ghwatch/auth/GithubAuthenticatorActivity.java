@@ -130,8 +130,8 @@ public class GithubAuthenticatorActivity extends AccountAuthenticatorActivity {
           String authorizationUrl = flow.newAuthorizationUrl().setRedirectUri(REDIRECT_URI).build();
           Log.d(TAG, "redirecting to authorizationUrl=" + authorizationUrl);
           // Open the login page in the native browser
-          //TODO OAUTH2 how to make sure browser's tab is closed after the auth flow finishes?
           Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(authorizationUrl));
+          //make sure browser's tab is closed after the auth flow finishes, new one used for next login. Chrome looks good, Firefox keeps tab open.
           //browserIntent.putExtra(Browser.EXTRA_APPLICATION_ID, this.getPackageName());
           browserIntent.putExtra(Browser.EXTRA_CREATE_NEW_TAB, Boolean.TRUE);
           browserIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
