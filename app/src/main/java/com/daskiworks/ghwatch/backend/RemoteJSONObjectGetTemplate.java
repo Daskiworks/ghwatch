@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.io.InvalidObjectException;
 import java.net.NoRouteToHostException;
 
-import org.apache.http.auth.AuthenticationException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -30,6 +29,8 @@ import com.daskiworks.ghwatch.auth.AuthenticationManager;
 import com.daskiworks.ghwatch.backend.RemoteSystemClient.Response;
 import com.daskiworks.ghwatch.model.BaseViewData;
 import com.daskiworks.ghwatch.model.LoadingStatus;
+
+import cz.msebera.android.httpclient.auth.AuthenticationException;
 
 /**
  * Template used to load JSON data from remote system. Error handling is covered.

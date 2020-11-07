@@ -21,7 +21,6 @@ import java.io.InvalidObjectException;
 import java.net.NoRouteToHostException;
 import java.net.URISyntaxException;
 
-import org.apache.http.auth.AuthenticationException;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -37,6 +36,8 @@ import com.daskiworks.ghwatch.model.Repository;
 import com.daskiworks.ghwatch.model.WatchedRepositories;
 import com.daskiworks.ghwatch.model.WatchedRepositoriesViewData;
 
+import cz.msebera.android.httpclient.auth.AuthenticationException;
+
 /**
  * Service used to work with watched repositories.
  * 
@@ -44,7 +45,7 @@ import com.daskiworks.ghwatch.model.WatchedRepositoriesViewData;
  */
 public class WatchedRepositoriesService {
 
-  private static final String TAG = "WatchedRepositoriesService";
+  private static final String TAG = "WatchedRepositoriesServ";
 
   /**
    * URL to load notifications from.

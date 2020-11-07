@@ -49,7 +49,7 @@ import com.daskiworks.ghwatch.model.Repository;
 import com.daskiworks.ghwatch.model.StringViewData;
 import com.daskiworks.ghwatch.model.WatchedRepositoriesViewData;
 
-import org.apache.http.auth.AuthenticationException;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -64,6 +64,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import cz.msebera.android.httpclient.auth.AuthenticationException;
 import me.leolin.shortcutbadger.ShortcutBadger;
 
 /**

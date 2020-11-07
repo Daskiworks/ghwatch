@@ -15,7 +15,8 @@
  */
 package com.daskiworks.ghwatch.backend;
 
-import org.apache.http.auth.AuthenticationException;
+
+import cz.msebera.android.httpclient.auth.AuthenticationException;
 
 /**
  * Exception thrown when two factor authentication is necessary
