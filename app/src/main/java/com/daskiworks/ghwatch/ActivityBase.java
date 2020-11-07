@@ -16,6 +16,7 @@
 package com.daskiworks.ghwatch;
 
 import android.accounts.Account;
+import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Intent;
@@ -275,7 +276,6 @@ public abstract class ActivityBase extends AppCompatActivity {
       mDrawerNavigationView.setCheckedItem(navDrawerMenuSelectedItem);
   }
 
-
   /**
    * Show dialog. Dialog is shown only if no other dialog is shown currently.
    *
@@ -283,9 +283,19 @@ public abstract class ActivityBase extends AppCompatActivity {
    * @return true if shown, false if not.
    */
   protected boolean showDialog(DialogFragment dialog) {
-    Fragment f = this.getFragmentManager().findFragmentByTag(FRAGMENT_DIALOG);
+    return showDialog(this, dialog);
+  }
+
+  /**
+   * Show dialog. Dialog is shown only if no other dialog is shown currently.
+   *
+   * @param dialog to show
+   * @return true if shown, false if not.
+   */
+  public static boolean showDialog(Activity context, DialogFragment dialog) {
+    Fragment f = context.getFragmentManager().findFragmentByTag(FRAGMENT_DIALOG);
     if (f == null) {
-      dialog.show(this.getFragmentManager(), FRAGMENT_DIALOG);
+      dialog.show(context.getFragmentManager(), FRAGMENT_DIALOG);
       return true;
     } else {
       return false;

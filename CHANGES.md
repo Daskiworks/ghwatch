@@ -1,8 +1,10 @@
 GH::watch changelog
 ===================
 
-## v1.31 (Nov 1st, 2020)
+## v1.31 (Nov 7th, 2020)
 - \#122 login using browser and OAuth2
+- \#120 - notification labels implemented using material design ChipGroup component
+- `targetSdkVersion` updated to 29, support libraries updated to androidx latest versions and new material Theme
 
 ## v1.30 (Mar 18th, 2019)
 - \#117 patched main window crash on tablets

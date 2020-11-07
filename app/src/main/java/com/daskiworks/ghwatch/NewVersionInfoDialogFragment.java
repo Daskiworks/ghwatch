@@ -41,7 +41,7 @@ public class NewVersionInfoDialogFragment extends DialogFragment {
 
   private static final String TAG = NewVersionInfoDialogFragment.class.getSimpleName();
 
-  private static final String VERSION_VALUE = "1.29";
+  private static final String VERSION_VALUE = "1.31";
 
   protected View view;
 
@@ -51,7 +51,7 @@ public class NewVersionInfoDialogFragment extends DialogFragment {
    * @param activity
    * @return true if should be shown
    */
-  public static boolean isShowScheduled(MainActivity activity) {
+  public static boolean isShowScheduled(Activity activity) {
     String lastShowedVersion = PreferencesUtils.getString(activity, NewVersionInfoDialogFragment.PREF_LAST_VERSION_INFO_SHOW_TAG, null);
     if(lastShowedVersion == null){
       //do not show for first version user has, but make sure it is shown for next version

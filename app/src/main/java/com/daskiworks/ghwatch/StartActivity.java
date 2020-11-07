@@ -21,6 +21,8 @@ import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DialogFragment;
+import android.app.Fragment;
 import android.app.backup.BackupManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -177,7 +179,12 @@ public class StartActivity extends AppCompatActivity {
   protected void onResume() {
     super.onResume();
     ActivityTracker.sendView(this, TAG);
+    if (NewVersionInfoDialogFragment.isShowScheduled(this)) {
+      ActivityBase.showDialog(this, new NewVersionInfoDialogFragment());
+    }
   }
+
+
 
 
 }

@@ -73,7 +73,7 @@ Main features
 * Shows notification type (Issue, Pull Request, ...) 
 * Shows reason why you received notification (subscribed, author, comment, ...)
 * Shows current status of Issue or Pull Request the notification is for by color bar on left side (open - green, closed - red, merged - purple) - this is a gift for users who support app development by small donation
-* Shows Labels of Issue or Pull Request the notification is for (if enabled in Preferences) - this is a gift for users who support app development by small donation
+* Shows Labels of Issue or Pull Request the notification is for (if enabled in Preferences) - this is a gift for users who support app development by small donation - **improved in 1.31**
 * Swipe down to refresh list
 * Swipe right to mark notification as read
 * Click notification to view details - Detail informations are shown by 
