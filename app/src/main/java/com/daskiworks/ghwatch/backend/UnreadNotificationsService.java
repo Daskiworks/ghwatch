@@ -23,9 +23,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import android.util.Log;
@@ -109,14 +107,14 @@ public class UnreadNotificationsService {
   private static final String CHANNEL_ID = "nch_github_not";
 
   // few fields initialized in constructor
-  private Context context;
-  private File persistFile;
-  private AuthenticationManager authenticationManager;
+  private final Context context;
+  private final File persistFile;
+  private final AuthenticationManager authenticationManager;
 
   // few data loaders - initialized lazily when necessary only
   private NotificationDetailLoader notificationDetailLoader;
   private NotificationViewUrlLoader notificationViewUrlLoader;
-  private int notificationColor;
+  private final int notificationColor;
 
   /**
    * Create service.
@@ -490,7 +488,7 @@ public class UnreadNotificationsService {
     WatchedRepositoriesService wrs = new WatchedRepositoriesService(context);
     WatchedRepositoriesViewData wr = wrs.getWatchedRepositoriesForView(ViewDataReloadStrategy.IF_TIMED_OUT);
     if (wr.loadingStatus == LoadingStatus.OK) {
-      Set<String> visibleRepos = new HashSet();
+      Set<String> visibleRepos = new HashSet<String>();
       for (Repository r : wr.repositories) {
         if (rva.isRepoVisibile(r.getRepositoryFullName())) {
           visibleRepos.add(r.getRepositoryFullName());
@@ -588,11 +586,8 @@ public class UnreadNotificationsService {
         newStream.addNotification(on2);
       }
 
-      if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.N) {
-        fireAndroidNotificationInboxStyle(newStream);
-      } else {
-        fireAndroidNotificationBundledStyle(newStream);
-      }
+      fireAndroidNotificationBundledStyle(newStream);
+
       ActivityTracker.sendEvent(context, ActivityTracker.CAT_NOTIF, "new_notif", "notif count: " + newStream.size(), Long.valueOf(newStream.size()));
     } else if (newStream.isEmpty()) {
       // #54 dismiss previous android notification if no any Github notification is available (as it was read on another device)
@@ -628,7 +623,6 @@ public class UnreadNotificationsService {
             .setGroup(ANDROID_NOTIFICATION_GROUP_KEY)
             .setGroupSummary(true)
             .setCategory(android.app.Notification.CATEGORY_SOCIAL)
-            .setPriority(android.app.Notification.PRIORITY_DEFAULT)
             .setColor(notificationColor)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT).setCategory(android.app.Notification.CATEGORY_SOCIAL);
     if (timestamp != null) {
@@ -641,21 +635,16 @@ public class UnreadNotificationsService {
   }
 
   private void createNotificationChannel() {
-    // Create the NotificationChannel, but only on API 26+ because
-    // the NotificationChannel class is new and not in the support library
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      CharSequence name = context.getString(R.string.an_channel_name);
-      String description = context.getString(R.string.an_channel_description);
-      int importance = NotificationManager.IMPORTANCE_DEFAULT;
-      NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-      channel.setDescription(description);
-      // Register the channel with the system; you can't change the importance
-      // or other notification behaviors after this
-      NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
-      notificationManager.createNotificationChannel(channel);
-    }
+    CharSequence name = context.getString(R.string.an_channel_name);
+    String description = context.getString(R.string.an_channel_description);
+    int importance = NotificationManager.IMPORTANCE_DEFAULT;
+    NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+    channel.setDescription(description);
+    // Register the channel with the system; you can't change the importance
+    // or other notification behaviors after this
+    NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+    notificationManager.createNotificationChannel(channel);
   }
-
 
   private android.app.Notification buildAndroidNotificationBundledStyleDetail(Notification n) {
     NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
@@ -663,7 +652,6 @@ public class UnreadNotificationsService {
             .setContentText(n.getSubjectTitle())
             .setSmallIcon(R.drawable.notification)
             .setCategory(android.app.Notification.CATEGORY_SOCIAL)
-            .setPriority(android.app.Notification.PRIORITY_DEFAULT)
             .setColor(notificationColor)
             .setGroup(ANDROID_NOTIFICATION_GROUP_KEY);
     NotificationCompat.BigTextStyle btStyle = new NotificationCompat.BigTextStyle();
@@ -684,69 +672,6 @@ public class UnreadNotificationsService {
     return mBuilder.build();
   }
 
-  protected void fireAndroidNotificationInboxStyle(NotificationStream newStream) {
-    Log.i(TAG, "Going to fire pre Noughat inbox style notification");
-
-    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context,CHANNEL_ID).setSmallIcon(R.drawable.notification)
-            .setContentTitle(context.getString(R.string.an_title_more)).setPriority(NotificationCompat.PRIORITY_DEFAULT);
-    mBuilder.setAutoCancel(true);
-
-    if (newStream.size() > 1)
-      mBuilder.setNumber(newStream.size());
-
-    boolean allFromOne = newStream.allNotificationsFromSameRepository();
-
-    if (newStream.size() == 1 || allFromOne) {
-      // only one repository
-      Notification n = newStream.get(0);
-      Bitmap b = ImageLoader.getInstance(context).loadImageWithFileLevelCache(n.getRepositoryAvatarUrl());
-      if (b != null) {
-        mBuilder.setLargeIcon(b);
-      } else {
-        mBuilder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher));
-      }
-      mBuilder.setContentText(n.getRepositoryFullName());
-    } else {
-      mBuilder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher));
-    }
-
-    if (newStream.size() == 1) {
-      mBuilder.setContentTitle(context.getString(R.string.an_title_one));
-      Notification n = newStream.get(0);
-      mBuilder.setContentText(n.getRepositoryFullName() + ": " + n.getSubjectTitle());
-      NotificationCompat.BigTextStyle btStyle = new NotificationCompat.BigTextStyle();
-      btStyle.bigText(n.getSubjectTitle());
-      btStyle.setSummaryText(n.getRepositoryFullName());
-      mBuilder.setStyle(btStyle);
-      buildNotificationActionMarkOneAsRead(mBuilder, n, false);
-      buildNotificationSetContetnIntentShowDetail(mBuilder, n, false);
-    } else {
-      NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-      for (Notification n : newStream) {
-        if (allFromOne) {
-          inboxStyle.addLine(n.getSubjectTitle());
-        } else {
-          inboxStyle.addLine(n.getRepositoryFullName() + ": " + n.getSubjectTitle());
-        }
-      }
-      if (allFromOne)
-        inboxStyle.setSummaryText(newStream.get(0).getRepositoryFullName());
-      else
-        inboxStyle.setSummaryText(" ");
-      mBuilder.setStyle(inboxStyle);
-      buildNotificationActionMarkAllAsRead(mBuilder);
-      buildNotificationAddContentIntentToOpenApp(mBuilder, new Intent(context, MainActivity.class));
-    }
-
-    buildNotificationAlerting(mBuilder);
-    mBuilder.setColor(notificationColor);
-    mBuilder.setCategory(android.app.Notification.CATEGORY_SOCIAL);
-    mBuilder.setPriority(android.app.Notification.PRIORITY_DEFAULT);
-    // mId allows you to update the notification later on.
-    Utils.getNotificationManager(context).notify(ANDROID_NOTIFICATION_MAIN_ID, mBuilder.build());
-  }
-
-  @NonNull
   protected void buildNotificationActionMarkOneAsRead(NotificationCompat.Builder mBuilder, Notification n, boolean bundled) {
     Intent actionIntent = new Intent(context, AndroidNotifiationActionsReceiver.class);
     actionIntent.putExtra(AndroidNotifiationActionsReceiver.INTENT_EXTRA_KEY_NOTIFICATION_ID, n.getId());
@@ -756,7 +681,6 @@ public class UnreadNotificationsService {
             PendingIntent.getBroadcast(context, generatePendingIntentRequestCode(), actionIntent, PendingIntent.FLAG_UPDATE_CURRENT));
   }
 
-  @NonNull
   protected void buildNotificationActionMuteThreadOne(NotificationCompat.Builder mBuilder, Notification n, boolean bundled) {
     Intent actionIntent = new Intent(context, AndroidNotifiationActionsReceiver.class);
     actionIntent.putExtra(AndroidNotifiationActionsReceiver.INTENT_EXTRA_KEY_NOTIFICATION_ID, n.getId());
@@ -766,7 +690,6 @@ public class UnreadNotificationsService {
             PendingIntent.getBroadcast(context, generatePendingIntentRequestCode(), actionIntent, PendingIntent.FLAG_UPDATE_CURRENT));
   }
 
-  @NonNull
   protected void buildNotificationDeletedIntent(NotificationCompat.Builder mBuilder, Notification n, boolean bundled) {
     Intent actionIntent = new Intent(context, AndroidNotifiationActionsReceiver.class);
     actionIntent.putExtra(AndroidNotifiationActionsReceiver.INTENT_EXTRA_KEY_NOTIFICATION_ID, n.getId());
@@ -775,7 +698,6 @@ public class UnreadNotificationsService {
     mBuilder.setDeleteIntent(PendingIntent.getBroadcast(context, generatePendingIntentRequestCode(), actionIntent, PendingIntent.FLAG_UPDATE_CURRENT));
   }
 
-  @NonNull
   protected void buildNotificationSetContetnIntentShowDetail(NotificationCompat.Builder mBuilder, Notification n, boolean bundled) {
     Intent actionIntent = new Intent(context, AndroidNotifiationActionsReceiver.class);
     actionIntent.putExtra(AndroidNotifiationActionsReceiver.INTENT_EXTRA_KEY_NOTIFICATION_ID, n.getId());
@@ -792,19 +714,10 @@ public class UnreadNotificationsService {
     return piid++;
   }
 
-  @NonNull
-  protected void buildNotificationActionMarkAllAsRead(NotificationCompat.Builder mBuilder) {
-    Intent actionIntent = new Intent(context, MainActivity.class);
-    actionIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-    actionIntent.setAction(MainActivity.INTENT_ACTION_DISMISS_ALL);
-    mBuilder
-            .addAction(R.drawable.ic_clear_all_white_36dp, context.getString(R.string.action_all_read), PendingIntent.getActivity(context, generatePendingIntentRequestCode(), actionIntent, 0));
-  }
-
   private void buildNotificationAddContentIntentToOpenApp(NotificationCompat.Builder mBuilder, Intent resultIntent) {
     resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
     resultIntent.setAction(MainActivity.INTENT_ACTION_SHOW);
-    PendingIntent resultPendingIntent = PendingIntent.getActivity(context, generatePendingIntentRequestCode(), resultIntent, 0);
+    PendingIntent resultPendingIntent = PendingIntent.getActivity(context, generatePendingIntentRequestCode(), resultIntent, PendingIntent.FLAG_IMMUTABLE);
     mBuilder.setContentIntent(resultPendingIntent);
   }
 
