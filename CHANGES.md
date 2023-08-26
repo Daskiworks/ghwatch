@@ -1,6 +1,9 @@
 GH::watch changelog
 ===================
 
+## v1.32 (Aug 26th, 2023)
+- `targetSdkVersion` updated to 33, libraries updated to latest versions
+
 ## v1.31 (Nov 7th, 2020)
 - \#122 login using browser and OAuth2
 - \#120 - notification labels implemented using material design ChipGroup component
