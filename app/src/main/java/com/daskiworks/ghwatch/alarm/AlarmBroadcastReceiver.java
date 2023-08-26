@@ -87,7 +87,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
 
   protected static PendingIntent prepareAlarmIntent(Context context) {
     Intent aintent = new Intent(context, AlarmBroadcastReceiver.class);
-    PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, aintent, 0);
+    PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, aintent, PendingIntent.FLAG_IMMUTABLE);
     return alarmIntent;
   }
 }

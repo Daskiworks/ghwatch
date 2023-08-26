@@ -14,7 +14,6 @@
    limitations under the License.
  -->
  <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.daskiworks.ghwatch"
     android:versionCode="1320"
     android:versionName="1.32" >
 
@@ -48,8 +47,8 @@
             android:value="AEdPqrEAAAAIWtyxxTQi0HXwj-q98ZaWCgU34m9nxI35NXxUHQ" />
         
         <activity android:name=".StartActivity"
-                  android:label="@string/app_name"
-                  android:theme="@style/Theme.MyTheme">
+                  android:theme="@style/Theme.MyTheme"
+                  android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -70,7 +69,8 @@
             android:name=".SettingsActivity"
             android:label="@string/activity_settings_title"
             android:theme="@style/Theme.MyTheme"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity"
+            android:exported="true">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
@@ -83,8 +83,10 @@
         </activity>
 
         <!-- Authenticator related activities and service needs to be declared here in order for the app to recognize them-->
-        <activity android:name="com.daskiworks.ghwatch.auth.GithubAuthenticatorActivity" android:label="@string/app_name"
-          android:launchMode="singleTop" android:theme="@style/Theme.MyTheme">
+        <activity android:name="com.daskiworks.ghwatch.auth.GithubAuthenticatorActivity"
+          android:launchMode="singleTop"
+          android:theme="@style/Theme.MyTheme"
+          android:exported="true">
           <intent-filter>
             <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.DEFAULT" />
@@ -93,7 +95,8 @@
             <data android:scheme="com.daskiworks.ghwatch.auth" android:host="login"/>
           </intent-filter>
         </activity>
-        <service android:name="com.daskiworks.ghwatch.auth.GithubAuthenticatorService">
+        <service android:name="com.daskiworks.ghwatch.auth.GithubAuthenticatorService"
+          android:exported="true">
           <intent-filter>
             <action android:name="android.accounts.AccountAuthenticator" />
           </intent-filter>
@@ -103,7 +106,8 @@
 
         <receiver
             android:name=".alarm.AlarmBroadcastReceiver"
-            android:enabled="true" >
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
@@ -114,7 +118,8 @@
         <receiver android:name=".alarm.AndroidNotifiationActionsReceiver"/>
         <receiver
             android:name=".UnreadAppWidgetProvider"
-            android:label="@string/widget_title_unread" >
+            android:label="@string/widget_title_unread"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>

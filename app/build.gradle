@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-  compileSdkVersion 29
-  buildToolsVersion '30.0.2'
+
 
   defaultConfig {
     applicationId "com.daskiworks.ghwatch"
-    minSdkVersion 16
-    targetSdkVersion 29
+    minSdkVersion 28
+    targetSdkVersion 33
+    compileSdk 33
 
     testApplicationId "com.daskiworks.ghwatch.test"
     testInstrumentationRunner "android.test.InstrumentationTestRunner"
@@ -20,32 +20,38 @@ android {
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
     }
   }
-
   packagingOptions {
-    exclude 'META-INF/DEPENDENCIES'
+    resources {
+      excludes += ['META-INF/DEPENDENCIES']
+    }
+  }
+
+  lint {
+    abortOnError false
+  }
+  namespace 'com.daskiworks.ghwatch'
+  buildFeatures {
+    aidl true
   }
 
   // ignore lint errors preventing apk build due to http-client and common-logging dependencies
-  lintOptions {
-    abortOnError false
-  }
 }
 
 dependencies {
   implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-  implementation 'com.google.android.gms:play-services-wallet:16.0.0'
-  implementation 'com.google.android.gms:play-services-analytics:16.0.3'
+  implementation 'com.google.android.gms:play-services-wallet:19.2.0'
+  implementation 'com.google.android.gms:play-services-analytics:18.0.3'
   implementation 'me.leolin:ShortcutBadger:1.1.22@aar'
   androidTestImplementation 'androidx.legacy:legacy-support-v4:1.0.0'
-  implementation 'androidx.vectordrawable:vectordrawable-animated:1.0.0'
-  implementation 'androidx.appcompat:appcompat:1.0.0'
-  implementation 'com.google.android.material:material:1.2.0'
+  implementation 'androidx.vectordrawable:vectordrawable-animated:1.1.0'
+  implementation 'androidx.appcompat:appcompat:1.6.1'
+  implementation 'com.google.android.material:material:1.9.0'
   implementation 'de.hdodenhof:circleimageview:3.1.0'
   /** dependencies for OAuth authenticator */
   implementation 'com.google.oauth-client:google-oauth-client:1.31.0'
   implementation 'com.google.http-client:google-http-client-jackson2:1.38.0'
   implementation 'com.loopj.android:android-async-http:1.4.11'
   /** patch build problem with dex file */
-  implementation 'androidx.multidex:multidex:2.0.0'
+  implementation 'androidx.multidex:multidex:2.0.1'
 
 }
