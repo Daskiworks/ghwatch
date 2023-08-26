@@ -20,19 +20,19 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.backup.BackupManager;
-import android.content.ComponentName;
+//import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
+//import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.IBinder;
+//import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 
-import com.android.vending.billing.IInAppBillingService;
-import com.daskiworks.ghwatch.backend.DonationService;
+//import com.android.vending.billing.IInAppBillingService;
+//import com.daskiworks.ghwatch.backend.DonationService;
 import com.daskiworks.ghwatch.backend.PreferencesUtils;
 
 /**
@@ -71,33 +71,33 @@ public class SupportAppDevelopmentDialogFragment extends DialogFragment {
     return false;
   }
 
-  IInAppBillingService mService;
+ // IInAppBillingService mService;
 
-  ServiceConnection mServiceConn = new ServiceConnection() {
-    @Override
-    public void onServiceDisconnected(ComponentName name) {
-      mService = null;
-    }
-
-    @Override
-    public void onServiceConnected(ComponentName name, IBinder service) {
-      mService = IInAppBillingService.Stub.asInterface(service);
-    }
-  };
+//  ServiceConnection mServiceConn = new ServiceConnection() {
+//    @Override
+//    public void onServiceDisconnected(ComponentName name) {
+//      mService = null;
+//    }
+//
+//    @Override
+//    public void onServiceConnected(ComponentName name, IBinder service) {
+//      mService = IInAppBillingService.Stub.asInterface(service);
+//    }
+//  };
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     Intent intent = new Intent(IabHelper.INTENT_ACTION_BIND);
     intent.setPackage(IabHelper.INTENT_PACKAGE);
-    getActivity().bindService(intent, mServiceConn, Context.BIND_AUTO_CREATE);
+    //getActivity().bindService(intent, mServiceConn, Context.BIND_AUTO_CREATE);
   };
 
   @Override
   public void onDestroy() {
-    if (mService != null) {
-      getActivity().unbindService(mServiceConn);
-    }
+//    if (mService != null) {
+//      getActivity().unbindService(mServiceConn);
+//    }
     super.onDestroy();
   }
 
@@ -145,40 +145,40 @@ public class SupportAppDevelopmentDialogFragment extends DialogFragment {
       }
     });
 
-    if (PreferencesUtils.readDonationTimestamp(getActivity()) != null) {
-      showDonatedInfo();
-    } else {
+//    if (PreferencesUtils.readDonationTimestamp(getActivity()) != null) {
+//      showDonatedInfo();
+//    } else {
 
-      view.findViewById(R.id.button_donate_1).setOnClickListener(new View.OnClickListener() {
+//      view.findViewById(R.id.button_donate_1).setOnClickListener(new View.OnClickListener() {
+//
+//        @Override
+//        public void onClick(View v) {
+//          if (DonationService.buyItem(getActivity(), SupportAppDevelopmentDialogFragment.this, mService, DonationService.INAPP_CODE_DONATION_1)) {
+//            writeActionPerformedTimestamp(getActivity());
+//          }
+//        }
+//      });
+//
+//      view.findViewById(R.id.button_donate_2).setOnClickListener(new View.OnClickListener() {
+//
+//        @Override
+//        public void onClick(View v) {
+//          if (DonationService.buyItem(getActivity(), SupportAppDevelopmentDialogFragment.this, mService, DonationService.INAPP_CODE_DONATION_2)) {
+//            writeActionPerformedTimestamp(getActivity());
+//          }
+//        }
+//      });
 
-        @Override
-        public void onClick(View v) {
-          if (DonationService.buyItem(getActivity(), SupportAppDevelopmentDialogFragment.this, mService, DonationService.INAPP_CODE_DONATION_1)) {
-            writeActionPerformedTimestamp(getActivity());
-          }
-        }
-      });
-
-      view.findViewById(R.id.button_donate_2).setOnClickListener(new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-          if (DonationService.buyItem(getActivity(), SupportAppDevelopmentDialogFragment.this, mService, DonationService.INAPP_CODE_DONATION_2)) {
-            writeActionPerformedTimestamp(getActivity());
-          }
-        }
-      });
-
-      view.findViewById(R.id.button_donate_restore).setOnClickListener(new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-          if (DonationService.restoreDonation(getActivity(), SupportAppDevelopmentDialogFragment.this, mService)) {
-            writeActionPerformedTimestamp(getActivity());
-          }
-        }
-      });
-    }
+//      view.findViewById(R.id.button_donate_restore).setOnClickListener(new View.OnClickListener() {
+//
+//        @Override
+//        public void onClick(View v) {
+//          if (DonationService.restoreDonation(getActivity(), SupportAppDevelopmentDialogFragment.this, mService)) {
+//            writeActionPerformedTimestamp(getActivity());
+//          }
+//        }
+//      });
+//    }
 
     view.findViewById(R.id.button_src).setOnClickListener(new View.OnClickListener() {
 
@@ -212,24 +212,24 @@ public class SupportAppDevelopmentDialogFragment extends DialogFragment {
     return builder.create();
   }
 
-  public void showDonatedInfo() {
-    if (view != null) {
-      view.findViewById(R.id.button_donate_1).setVisibility(View.GONE);
-      view.findViewById(R.id.button_donate_2).setVisibility(View.GONE);
-      view.findViewById(R.id.button_donate_restore).setVisibility(View.GONE);
-      view.findViewById(R.id.text_donated).setVisibility(View.VISIBLE);
-      view.findViewById(R.id.button_donate_3).setVisibility(View.VISIBLE);
-      view.findViewById(R.id.button_donate_3).setOnClickListener(new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-          if (DonationService.buyItem(getActivity(), SupportAppDevelopmentDialogFragment.this, mService, DonationService.INAPP_CODE_DONATION_3)) {
-            writeActionPerformedTimestamp(getActivity());
-          }
-        }
-      });
-    }
-  }
+//  public void showDonatedInfo() {
+//    if (view != null) {
+//      view.findViewById(R.id.button_donate_1).setVisibility(View.GONE);
+//      view.findViewById(R.id.button_donate_2).setVisibility(View.GONE);
+//      view.findViewById(R.id.button_donate_restore).setVisibility(View.GONE);
+//      view.findViewById(R.id.text_donated).setVisibility(View.VISIBLE);
+//      view.findViewById(R.id.button_donate_3).setVisibility(View.VISIBLE);
+//      view.findViewById(R.id.button_donate_3).setOnClickListener(new View.OnClickListener() {
+//
+//        @Override
+//        public void onClick(View v) {
+//          if (DonationService.buyItem(getActivity(), SupportAppDevelopmentDialogFragment.this, mService, DonationService.INAPP_CODE_DONATION_3)) {
+//            writeActionPerformedTimestamp(getActivity());
+//          }
+//        }
+//      });
+//    }
+//  }
 
   private void openBrowser(String url) {
     Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));

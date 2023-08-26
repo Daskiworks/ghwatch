@@ -309,12 +309,12 @@ public abstract class ActivityBase extends AppCompatActivity {
     showDialog(new SupportAppDevelopmentDialogFragment());
   }
 
-  @Override
-  public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    if (!DonationService.processBillingResult(this, this.getFragmentManager().findFragmentByTag(FRAGMENT_DIALOG), requestCode, resultCode, data)) {
-      super.onActivityResult(requestCode, resultCode, data);
-    }
-  }
+//  @Override
+//  public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//    if (!DonationService.processBillingResult(this, this.getFragmentManager().findFragmentByTag(FRAGMENT_DIALOG), requestCode, resultCode, data)) {
+//      super.onActivityResult(requestCode, resultCode, data);
+//    }
+//  }
 
 
   private final class ShowUserInfoTask extends AsyncTask<Object, String, GHUserInfo> {

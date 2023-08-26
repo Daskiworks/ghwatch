@@ -30,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/dialog_sad_intro_text" />
-        
+<!--
         <TextView
             android:id="@+id/text_donated"
             android:layout_width="match_parent"
@@ -71,7 +71,7 @@
             android:layout_height="fill_parent"
             android:layout_weight="1"
             android:text="@string/dialog_sad_button_donate_restore" />
-
+-->
         <TextView
             android:id="@+id/title_social"
             style="?android:listSeparatorTextViewStyle"

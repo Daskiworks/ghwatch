@@ -370,8 +370,10 @@ public class PreferencesUtils {
    * @return donation timestamp or null if not donated yet.
    */
   public static Long readDonationTimestamp(Context context) {
-    File file = context.getFileStreamPath(DTFN);
-    return Utils.readFromStore(TAG, context, file);
+    // TODO Give all features to everybody until donation mechanism is brought back
+//    File file = context.getFileStreamPath(DTFN);
+//    return Utils.readFromStore(TAG, context, file);
+      return 1000L;
   }
 
 }

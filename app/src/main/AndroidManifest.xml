@@ -14,7 +14,7 @@
    limitations under the License.
  -->
  <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    android:versionCode="1320"
+    android:versionCode="1323"
     android:versionName="1.32" >
 
     <uses-sdk />
@@ -24,7 +24,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="com.android.vending.BILLING" />
+<!--    <uses-permission android:name="com.android.vending.BILLING" /> -->
 
   <!-- Authenticator client -->
   <uses-permission android:name="android.permission.USE_CREDENTIALS"/>

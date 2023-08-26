@@ -30,16 +30,12 @@ android {
     abortOnError false
   }
   namespace 'com.daskiworks.ghwatch'
-  buildFeatures {
-    aidl true
-  }
 
   // ignore lint errors preventing apk build due to http-client and common-logging dependencies
 }
 
 dependencies {
   implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-  implementation 'com.google.android.gms:play-services-wallet:19.2.0'
   implementation 'com.google.android.gms:play-services-analytics:18.0.3'
   implementation 'me.leolin:ShortcutBadger:1.1.22@aar'
   androidTestImplementation 'androidx.legacy:legacy-support-v4:1.0.0'
